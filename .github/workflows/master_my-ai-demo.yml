@@ -28,13 +28,8 @@ jobs:
           npm install
           npm run build
 
-      - name: Copy public and static folders
-        run: |
-          cp -r ./public ./.next/standalone/
-          cp -r ./.next/static ./.next/standalone/.next/
-        
       - name: Zip artifact for deployment
-        run: zip release.zip ./.next/standalone -r
+        run: zip release.zip .next/standalone -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -71,6 +66,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'my-ai-demo'
-          slot-name: 'Production'
-          package: .
+          package: .next/standalone
+          clean: true
           
