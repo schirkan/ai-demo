@@ -16,7 +16,7 @@
 }
 
 .message {
-  white-space: pre-wrap;
+  /* overflow-x: auto; */
   margin-bottom: 1rem;
 }
 
@@ -24,7 +24,12 @@
   padding: 0.5rem;
   border-radius: 10px;
   border: 1px solid #bbb;
-  color: #18181b;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-style="bubbles"] .message {
+    border-color: #555;
+  }
 }
 
 [data-style="bubbles"] .message[data-is-own="true"] {
@@ -33,12 +38,22 @@
   background-color: #e2fdd5;
 }
 
-/* #204F46 */
+@media (prefers-color-scheme: dark) {
+  [data-style="bubbles"] .message[data-is-own="true"] {
+    background-color: #204f46;
+  }
+}
 
 [data-style="bubbles"] .message:not([data-is-own="true"]) {
   margin-right: 1rem;
   border-bottom-left-radius: 0;
   background-color: #f4f4f4;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-style="bubbles"] .message:not([data-is-own="true"]) {
+    background-color: #333;
+  }
 }
 
 .roleLabel {

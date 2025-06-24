@@ -3,16 +3,10 @@ import { MemoizedMarkdown } from '@/components/memoized-markdown';
 import ScrollIntoView from '@/components/ScrollIntoView';
 import styles from './ChatUI.module.css';
 import { ChangeEventHandler, FormEventHandler } from 'react';
-
-export interface Message {
-  id: string,
-  sender?: string,
-  isOwn?: boolean,
-  text: string,
-}
+import { Message } from 'ai';
 
 export interface ChatUIProps {
-  style: string,
+  style?: 'default' | 'bubbles',
   messages: Message[],
   onSubmit: (text: string) => void,
   placeholder: string,
@@ -34,12 +28,12 @@ export default function ChatUI(props: ChatUIProps) {
     <div className={styles.container} data-style={props.style ?? 'default'}>
       <div className={styles.messages}>
         {props.messages.map(message => (
-          <div key={message.id} className={styles.message} data-is-own={message.isOwn}>
+          <div key={message.id} className={styles.message} data-is-own={message.role === 'user'}>
             <div className={styles.roleLabel}>
-              {message.sender}
+              {message.role === 'user' ? 'User' : 'AI'}
             </div>
             <div className={styles.markdownContent}>
-              <MemoizedMarkdown id={message.id} content={message.text} />
+              <MemoizedMarkdown id={message.id} content={message.content} />
             </div>
           </div>
         ))}
