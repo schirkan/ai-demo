@@ -1,0 +1,10 @@
+.container {
+  display: block;
+  height: 500px;
+  max-height: 500px;
+  width: 300px;
+  max-width: 300px;
+  margin: 10px;
+  border: 50px solid blue;
+  box-sizing: content-box;
+}

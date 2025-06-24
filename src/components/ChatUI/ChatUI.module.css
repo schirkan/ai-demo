@@ -1,0 +1,76 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  padding-bottom: 3rem;
+  align-items: stretch;
+  overflow-y: auto;
+}
+
+.message {
+  white-space: pre-wrap;
+  margin-bottom: 1rem;
+}
+
+[data-style="bubbles"] .message {
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid #bbb;
+  color: #18181b;
+}
+
+[data-style="bubbles"] .message[data-is-own="true"] {
+  margin-left: 1rem;
+  border-bottom-right-radius: 0;
+  background-color: #e2fdd5;
+}
+
+/* #204F46 */
+
+[data-style="bubbles"] .message:not([data-is-own="true"]) {
+  margin-right: 1rem;
+  border-bottom-left-radius: 0;
+  background-color: #f4f4f4;
+}
+
+.roleLabel {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+[data-style="bubbles"] .roleLabel {
+  display: none;
+}
+
+.markdownContent {
+}
+
+.inputForm input {
+  position: absolute;
+  bottom: 0;
+  left: 1rem;
+  right: 2rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #d1d5db; /* zinc-300 */
+  border-radius: 0.5rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .inputForm input {
+    background-color: #18181b; /* zinc-900 */
+    border-color: #27272a; /* zinc-800 */
+  }
+}

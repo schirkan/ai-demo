@@ -9,7 +9,14 @@
     border: 1px solid black;
   }
 
+  @media (prefers-color-scheme: dark) {
+    th,
+    td {
+      border-color: #ededed;
+    }
+  }
+
   p {
-    line-height: 1.5;
+    /* line-height: 1.5; */
   }
 }

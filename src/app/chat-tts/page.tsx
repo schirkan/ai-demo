@@ -2,7 +2,7 @@
 import { useChat } from '@ai-sdk/react';
 import { MemoizedMarkdown } from '@/components/memoized-markdown';
 import ScrollIntoView from '@/components/ScrollIntoView';
-import styles from '../chat/chat.module.css';
+import styles from '../chat-basic/chat.module.css';
 
 export default function ChatTTS() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({

@@ -5,8 +5,10 @@ export default function Index() {
     <div>
       <h1>AI Demo</h1>
       <ol>
-        <li><a href='chat'>Chat</a></li>
-        <li><a href='game/familienduell'>Familienduell</a></li>
+        <li><a href='chat-ui-sample'>Chat UI Sample</a></li>
+        <li><a href='chat-basic'>AI Chat (Basic)</a></li>
+        <li><a href='chat-tts'>AI Chat (Voice)</a></li>
+        <li><a href='game/familienduell'>Game Familienduell</a></li>
       </ol>
     </div>
   );
