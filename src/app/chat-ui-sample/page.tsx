@@ -6,7 +6,7 @@ import styles from "./page.module.css"
 import { Message } from 'ai';
 
 export default function Page() {
-  const [style, setStyle] = useState<'default'|'bubbles'>('default');
+  const [style, setStyle] = useState<'default' | 'bubbles'>('default');
   const [input, setInput] = useState('');
 
   const [messages, setMessages] = useState<Message[]>([
@@ -21,25 +21,28 @@ export default function Page() {
   ]);
 
   const handleSubmit = (text: string) => {
-    messages.push({
+    setMessages(m => [...m, {
       id: 'User' + Date.now().toString(),
       role: 'user',
       content: text
-    });
-    messages.push({
-      id: 'AI' + Date.now().toString(),
-      role: 'assistant',
-      content: text.toUpperCase()
-    });
-    setMessages(messages);
+    }]);
     setInput('');
+    
+    // delay response to simulate AI processing
+    window.setTimeout(() => {
+      setMessages(m => [...m, {
+        id: 'AI' + Date.now().toString(),
+        role: 'assistant',
+        content: text.toUpperCase()
+      }]);
+    }, 1000);
   };
 
   return (
     <>
       <div>
         <label>Style:
-          <select value={style} onChange={e => setStyle(e.target.value)}>
+          <select value={style} onChange={e => setStyle(e.target.value as 'default' | 'bubbles')}>
             <option value="default">default</option>
             <option value="bubbles">bubbles</option>
           </select>
