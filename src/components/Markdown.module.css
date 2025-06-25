@@ -20,4 +20,14 @@
     /* line-height: 1.5; */
     margin-top: 1rem;
   }
+
+  ol {
+    list-style: decimal;
+    padding-left: revert;
+  }
+
+  ul {
+    list-style: disc;
+    padding-left: revert;
+  }
 }

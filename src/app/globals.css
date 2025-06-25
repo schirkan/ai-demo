@@ -40,8 +40,3 @@ a {
   color: inherit;
   text-decoration: none;
 }
-
-ol {
-  list-style: decimal;
-  padding-left: revert;
-}
