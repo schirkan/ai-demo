@@ -6,7 +6,7 @@ import styles from "./page.module.css"
 import { Message } from 'ai';
 
 export default function Page() {
-  const [style, setStyle] = useState('default');
+  const [style, setStyle] = useState<'default'|'bubbles'>('default');
   const [input, setInput] = useState('');
 
   const [messages, setMessages] = useState<Message[]>([
