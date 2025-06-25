@@ -6,7 +6,7 @@ import { ChangeEventHandler, FormEventHandler } from 'react';
 import { Message } from 'ai';
 
 export interface ChatUIProps {
-  style?: 'default' | 'bubbles',
+  style?: 'default' | 'bubbles' | undefined,
   messages: Message[],
   onSubmit: (text: string) => void,
   placeholder: string,
