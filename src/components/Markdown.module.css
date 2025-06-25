@@ -1,6 +1,9 @@
 .markdown {
   table {
     border-collapse: collapse;
+    display: inline-block;
+    max-width: 100%;
+    overflow-x: auto;
   }
 
   th,

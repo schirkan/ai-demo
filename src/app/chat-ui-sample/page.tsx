@@ -8,6 +8,7 @@ import { Message } from 'ai';
 export default function Page() {
   const [style, setStyle] = useState<'default' | 'bubbles'>('default');
   const [input, setInput] = useState('');
+  const [typing, setTyping] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([
     { id: "1", role: "user", content: "Hallo KI, ich überlege, eine Photovoltaikanlage auf meinem Dach zu installieren. Lohnt sich das überhaupt?" },
@@ -27,15 +28,20 @@ export default function Page() {
       content: text
     }]);
     setInput('');
-    
+
     // delay response to simulate AI processing
+    window.setTimeout(() => {
+      setTyping(true);
+    }, 500);
+
     window.setTimeout(() => {
       setMessages(m => [...m, {
         id: 'AI' + Date.now().toString(),
         role: 'assistant',
         content: text.toUpperCase()
       }]);
-    }, 1000);
+      setTyping(false);
+    }, 1500);
   };
 
   return (
@@ -53,10 +59,12 @@ export default function Page() {
           onSubmit={handleSubmit}
           messages={messages}
           input={input}
+          typing={typing}
           style={style}
           setInput={setInput}
           placeholder="Type your message..." />
       </div>
+      {typing}
     </>
   );
 }

@@ -32,26 +32,26 @@
   }
 }
 
-[data-style="bubbles"] .message[data-is-own="true"] {
+[data-style="bubbles"] .message[data-role="user"] {
   margin-left: 1rem;
   border-bottom-right-radius: 0;
   background-color: #e2fdd5;
 }
 
 @media (prefers-color-scheme: dark) {
-  [data-style="bubbles"] .message[data-is-own="true"] {
+  [data-style="bubbles"] .message[data-role="user"] {
     background-color: #204f46;
   }
 }
 
-[data-style="bubbles"] .message:not([data-is-own="true"]) {
+[data-style="bubbles"] .message:not([data-role="user"]) {
   margin-right: 1rem;
   border-bottom-left-radius: 0;
   background-color: #f4f4f4;
 }
 
 @media (prefers-color-scheme: dark) {
-  [data-style="bubbles"] .message:not([data-is-own="true"]) {
+  [data-style="bubbles"] .message:not([data-role="user"]) {
     background-color: #333;
   }
 }

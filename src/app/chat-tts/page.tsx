@@ -1,35 +1,38 @@
 'use client';
 import { useChat } from '@ai-sdk/react';
-import { MemoizedMarkdown } from '@/components/memoized-markdown';
-import ScrollIntoView from '@/components/ScrollIntoView';
-import styles from '../chat-basic/chat.module.css';
+import styles from './styles.module.css';
+import ChatUI from '@/components/ChatUI/ChatUI';
+import { useSpeech } from 'react-text-to-speech';
 
-export default function ChatTTS() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    // Throttle the messages and data updates to 50ms:
-    experimental_throttle: 50,
+export default function Chat() {
+  const { messages, input, setInput, append, status } = useChat({
+    experimental_throttle: 50
+  });
+  const lastMessage = status === 'ready' ? messages.findLast(x => x.role === 'assistant') : null;
+
+  const handleSubmit = (text: string) => {
+    append({ content: text, role: 'user' });
+    setInput('');
+  }
+
+  const { speechStatus } = useSpeech({
+    text: lastMessage?.content,
+    autoPlay: true,
+    lang: 'de-DE',
+    voiceURI: 'Microsoft Conrad Online (Natural) - German (Germany)'
   });
 
   return (
     <div className={styles.container}>
-      {messages.map(message => (
-        <div key={message.id} className={styles.message}>
-          <div className={styles.roleLabel}>
-            {message.role === 'user' ? 'User' : 'AI'}
-          </div>
-          <div className={styles.markdownContent}>
-            <MemoizedMarkdown id={message.id} content={message.content} />
-          </div>
-        </div>
-      ))}
-      <ScrollIntoView trigger={messages.length} />
-      <form onSubmit={handleSubmit} className={styles.inputForm}>
-        <input
-          value={input}
-          placeholder="Say something..."
-          onChange={handleInputChange}
-        />
-      </form>
+      <ChatUI
+        onSubmit={handleSubmit}
+        messages={messages}
+        input={input}
+        style='bubbles'
+        setInput={setInput}
+        typing={status === 'submitted' || status === 'streaming'}
+        placeholder="Type your message..." />
+      {speechStatus === 'started' || speechStatus === 'queued' ? 'Speaking... 📢' : ''}
     </div>
   );
 }
