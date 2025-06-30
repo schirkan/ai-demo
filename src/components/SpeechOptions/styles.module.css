@@ -1,0 +1,15 @@
+.container {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  button {
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.1rem;
+  }
+}

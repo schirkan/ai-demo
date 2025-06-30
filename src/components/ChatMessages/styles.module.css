@@ -16,7 +16,10 @@
 }
 
 .message {
-  /* overflow-x: auto; */
+  margin-bottom: 1rem;
+}
+
+.typingIndicator {
   margin-bottom: 1rem;
 }
 
@@ -63,29 +66,4 @@
 
 [data-style="bubbles"] .roleLabel {
   display: none;
-}
-
-.markdownContent {
-}
-
-.inputForm input {
-  position: absolute;
-  bottom: 0;
-  left: 1rem;
-  right: 2rem;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #d1d5db; /* zinc-300 */
-  border-radius: 0.5rem;
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-}
-
-@media (prefers-color-scheme: dark) {
-  .inputForm input {
-    background-color: #18181b; /* zinc-900 */
-    border-color: #27272a; /* zinc-800 */
-  }
 }

@@ -1,8 +1,9 @@
 'use client';
 import { useChat } from '@ai-sdk/react';
 import styles from './styles.module.css';
-import ChatUI from '@/components/ChatUI/ChatUI';
-import { useSpeech } from 'react-text-to-speech';
+import ChatMessages from '@/components/ChatMessages/ChatMessages';
+import ChatInput from '@/components/ChatInput/ChatInput';
+import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
 
 export default function Chat() {
   const { messages, input, setInput, append, status } = useChat({
@@ -15,24 +16,21 @@ export default function Chat() {
     setInput('');
   }
 
-  const { speechStatus } = useSpeech({
-    text: lastMessage?.content,
-    autoPlay: true,
-    lang: 'de-DE',
-    voiceURI: 'Microsoft Conrad Online (Natural) - German (Germany)'
-  });
-
   return (
     <div className={styles.container}>
-      <ChatUI
-        onSubmit={handleSubmit}
+      <SpeechOptions text={lastMessage?.content} />
+      <ChatMessages
         messages={messages}
-        input={input}
         style='bubbles'
-        setInput={setInput}
         typing={status === 'submitted' || status === 'streaming'}
-        placeholder="Type your message..." />
-      {speechStatus === 'started' || speechStatus === 'queued' ? 'Speaking... 📢' : ''}
+      />
+      <ChatInput
+        onSubmit={handleSubmit}
+        placeholder="Type your message..."
+        input={input}
+        setInput={setInput}
+        showVoiceInput={true}
+      />
     </div>
   );
 }

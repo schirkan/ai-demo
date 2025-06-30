@@ -1,7 +1,8 @@
 'use client';
 import { useChat } from '@ai-sdk/react';
 import styles from './styles.module.css';
-import ChatUI from '@/components/ChatUI/ChatUI';
+import ChatMessages from '@/components/ChatMessages/ChatMessages';
+import ChatInput from '@/components/ChatInput/ChatInput';
 
 export default function Chat() {
   const { messages, input, setInput, append, status } = useChat({
@@ -15,14 +16,17 @@ export default function Chat() {
 
   return (
     <div className={styles.container}>
-      <ChatUI
-        onSubmit={handleSubmit}
+      <ChatMessages
         messages={messages}
-        input={input}
         style='bubbles'
-        setInput={setInput}
         typing={status === 'submitted' || status === 'streaming'}
-        placeholder="Type your message..." />
+      />
+      <ChatInput
+        onSubmit={handleSubmit}
+        placeholder="Type your message..."
+        input={input}
+        setInput={setInput}
+      />
     </div>
   );
 }

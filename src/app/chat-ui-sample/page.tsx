@@ -1,9 +1,10 @@
 'use client';
 
-import ChatUI from "@/components/ChatUI/ChatUI";
+import ChatMessages from "@/components/ChatMessages/ChatMessages";
 import { useState } from "react";
-import styles from "./page.module.css"
+import styles from "./styles.module.css"
 import { Message } from 'ai';
+import ChatInput from "@/components/ChatInput/ChatInput";
 
 export default function Page() {
   const [style, setStyle] = useState<'default' | 'bubbles'>('default');
@@ -55,14 +56,17 @@ export default function Page() {
         </label>
       </div>
       <div className={styles.container}>
-        <ChatUI
-          onSubmit={handleSubmit}
+        <ChatMessages
           messages={messages}
-          input={input}
           typing={typing}
           style={style}
+        />
+        <ChatInput
+          onSubmit={handleSubmit}
+          placeholder="Type your message..."
+          input={input}
           setInput={setInput}
-          placeholder="Type your message..." />
+        />
       </div>
       {typing}
     </>
