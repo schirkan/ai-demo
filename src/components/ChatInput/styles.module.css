@@ -9,7 +9,7 @@
 
 .inputTextbox {
   width: -webkit-fill-available;
-  margin-right: 0.3rem;
+  min-width: 50px;
   padding: 0.5rem;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
@@ -21,52 +21,64 @@
 
 @media (prefers-color-scheme: dark) {
   .inputTextbox {
-    background-color: #18181b; /* zinc-900 */
-    border-color: #27272a; /* zinc-800 */
+    background-color: #18181b;
+    border-color: #27272a;
   }
 }
 
-.submitButton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 0.3rem;
-
+.submitButton,
+.micButton {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  /* background: #fff; */
-  border: 1px solid #ccc;
   border-radius: 50%;
   font-size: 1rem;
   cursor: pointer;
+  margin-left: 0.3rem;
   padding: 0.4rem 0.55rem;
+  border: 1px solid #d1d5db;
+  background-color: #eee;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+
+  &:disabled {
+    cursor: default;
+  }
+  &:not(:disabled):hover {
+    background-color: #e2e8f0;
+    border-color: #cbd5e1;
+  }
 }
 
-.mic {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+@media (prefers-color-scheme: dark) {
+  .submitButton,
+  .micButton {
+    background-color: #18181b;
+    border-color: #27272a;
+    &:not(:disabled):hover {
+      background-color: #27272a;
+      border-color: #3f3f46;
+    }
+  }
+}
 
-  /* background: #fff; */
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0.4rem 0.55rem;
+.micButton {
   transition:
+    color 0.2s,
     border-color 0.2s,
     background 0.2s;
 }
 
-.mic[data-active="true"] {
+.micButton[data-active="true"],
+.micButton[data-active="true"]:hover {
   background: #f55;
   border: 1px solid #c00;
   color: #fff;
   box-shadow: 0 0 8px 2px #f88;
 }
-
+/* 
 .listeningIndicator {
   color: #f55;
   font-weight: bold;
@@ -85,4 +97,4 @@
   100% {
     opacity: 1;
   }
-}
+} */

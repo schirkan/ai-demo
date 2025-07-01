@@ -10,6 +10,7 @@ export default function Page() {
   const [style, setStyle] = useState<'default' | 'bubbles'>('default');
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
+  const [showVoiceInput, setShowVoiceInput] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([
     { id: "1", role: "user", content: "Hallo KI, ich überlege, eine Photovoltaikanlage auf meinem Dach zu installieren. Lohnt sich das überhaupt?" },
@@ -47,13 +48,23 @@ export default function Page() {
 
   return (
     <>
-      <div>
+      <div className={styles.options}>
         <label>Style:
           <select value={style} onChange={e => setStyle(e.target.value as 'default' | 'bubbles')}>
             <option value="default">default</option>
             <option value="bubbles">bubbles</option>
           </select>
         </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={showVoiceInput}
+            onChange={e => setShowVoiceInput(e.target.checked)}
+          />
+          Voice Input
+        </label>
+        <button onClick={() => setMessages([])}>Clear</button>
+        <button onClick={() => setTyping(!typing)}>Toggle Typing</button>
       </div>
       <div className={styles.container}>
         <ChatMessages
@@ -66,6 +77,7 @@ export default function Page() {
           placeholder="Type your message..."
           input={input}
           setInput={setInput}
+          showVoiceInput={showVoiceInput}
         />
       </div>
       {typing}

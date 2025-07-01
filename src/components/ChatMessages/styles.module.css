@@ -24,6 +24,7 @@
 }
 
 [data-style="bubbles"] .message {
+  width: fit-content;
   padding: 0.5rem;
   border-radius: 10px;
   border: 1px solid #bbb;
@@ -39,6 +40,7 @@
   margin-left: 1rem;
   border-bottom-right-radius: 0;
   background-color: #e2fdd5;
+  align-self: end;
 }
 
 @media (prefers-color-scheme: dark) {

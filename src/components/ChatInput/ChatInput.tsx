@@ -1,6 +1,6 @@
 'use client';
 import styles from './styles.module.css';
-import { ChangeEventHandler, FormEventHandler, useEffect, useRef } from 'react';
+import { ChangeEventHandler, FormEventHandler, useCallback, useEffect, useRef } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { BsMicFill } from 'react-icons/bs';
 import { BsSendFill } from 'react-icons/bs';
@@ -26,14 +26,15 @@ export default function ChatInput(props: ChatInputProps) {
     props.setInput(event.target.value);
   };
 
-  const handleMicClick = () => {
+  const handleMicClick = useCallback(() => {
+    if (!props.showVoiceInput) return;
     if (listening) {
       SpeechRecognition.stopListening();
     } else {
       resetTranscript();
       SpeechRecognition.startListening();
     }
-  };
+  }, [props.showVoiceInput, listening, resetTranscript]);
 
   useEffect(() => {
     if (transcript) {
@@ -46,14 +47,13 @@ export default function ChatInput(props: ChatInputProps) {
     if (!listening) {
       inputRef.current?.focus();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listening]);
 
   useEffect(() => {
-    const handleSpace = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (document.activeElement !== inputRef.current) {
-        event.preventDefault();
         if (event.code === "Space") {
+          event.preventDefault();
           handleMicClick();
         } else {
           inputRef.current?.focus();
@@ -64,9 +64,9 @@ export default function ChatInput(props: ChatInputProps) {
         handleMicClick();
       }
     };
-    window.addEventListener("keydown", handleSpace);
-    return () => window.removeEventListener("keydown", handleSpace);
-  }, []);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleMicClick]);
 
   return (
     <form onSubmit={handleSubmit} className={styles.inputForm}>
@@ -79,7 +79,7 @@ export default function ChatInput(props: ChatInputProps) {
       {props.showVoiceInput &&
         <button
           onClick={handleMicClick}
-          className={styles.mic}
+          className={styles.micButton}
           data-active={listening}
           aria-label="Toggle voice input"
           type="button">

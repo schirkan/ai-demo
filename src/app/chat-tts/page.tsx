@@ -18,7 +18,6 @@ export default function Chat() {
 
   return (
     <div className={styles.container}>
-      <SpeechOptions text={lastMessage?.content} />
       <ChatMessages
         messages={messages}
         style='bubbles'
@@ -31,6 +30,7 @@ export default function Chat() {
         setInput={setInput}
         showVoiceInput={true}
       />
+      <SpeechOptions text={lastMessage?.content} />
     </div>
   );
 }

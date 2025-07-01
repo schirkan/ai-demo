@@ -1,3 +1,8 @@
+.options{
+  display: flex;  
+  gap: 10px;
+  margin: 10px;
+}
 .container {
   display: block;
   height: 500px;
