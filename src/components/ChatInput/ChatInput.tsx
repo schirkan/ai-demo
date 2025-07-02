@@ -1,5 +1,6 @@
 'use client';
 import styles from './styles.module.css';
+import buttonStyles from '../../css/buttonStyles.module.css';
 import { ChangeEventHandler, FormEventHandler, useCallback, useEffect, useRef } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { BsMicFill } from 'react-icons/bs';
@@ -36,6 +37,7 @@ export default function ChatInput(props: ChatInputProps) {
     }
   }, [props.showVoiceInput, listening, resetTranscript]);
 
+  // trigger input change when transcript updates
   useEffect(() => {
     if (transcript) {
       props.setInput(transcript);
@@ -43,12 +45,14 @@ export default function ChatInput(props: ChatInputProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transcript]);
 
+  // Focus input when listening stops
   useEffect(() => {
     if (!listening) {
       inputRef.current?.focus();
     }
   }, [listening]);
 
+  // Handle key down events for mic toggle or focus input
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (document.activeElement !== inputRef.current) {
@@ -79,7 +83,7 @@ export default function ChatInput(props: ChatInputProps) {
       {props.showVoiceInput &&
         <button
           onClick={handleMicClick}
-          className={styles.micButton}
+          className={styles.micButton + " " + buttonStyles.iconButton}
           data-active={listening}
           aria-label="Toggle voice input"
           type="button">
@@ -89,7 +93,7 @@ export default function ChatInput(props: ChatInputProps) {
       <button
         type="submit"
         disabled={!props.input}
-        className={styles.submitButton}>
+        className={styles.submitButton + " " + buttonStyles.iconButton}>
         <BsSendFill />
       </button>
     </form>

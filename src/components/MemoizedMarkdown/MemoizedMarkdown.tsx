@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from "remark-gfm";
-import styles from "./Markdown.module.css";
+import styles from "./styles.module.css";
 
 type MemoizedMarkdownProps = {
   content: string;

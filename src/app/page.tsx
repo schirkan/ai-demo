@@ -2,8 +2,8 @@
 
 export default function Index() {
   return (
-    <div>
-      <h1>AI Demo</h1>
+    <div style={{ width: 'fit-content', margin: '10rem auto 0' }}>
+      <h1 style={{ textAlign: 'center', margin: '1rem' }}>AI Demo</h1>
       <ol style={{ listStyle: 'decimal', paddingLeft: 'revert' }}>
         <li><a href='chat-ui-sample'>Chat UI Sample</a></li>
         <li><a href='chat-basic'>AI Chat (Basic)</a></li>

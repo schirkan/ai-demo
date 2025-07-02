@@ -1,10 +1,10 @@
 'use client';
 import { useChat } from '@ai-sdk/react';
-import { MemoizedMarkdown, MemoizedMarkdownBlock } from '@/components/memoized-markdown';
+import { MemoizedMarkdown, MemoizedMarkdownBlock } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
 import styles from './page.module.css';
 import { UIMessage, } from 'ai';
 import { QuizShowType } from '../../../schemas/quizShowSchema';
-import ScrollIntoView from '@/components/ScrollIntoView';
+import ScrollIntoView from '@/components/ScrollIntoView/ScrollIntoView';
 import { useSpeech } from 'react-text-to-speech';
 
 const getObject = (message: UIMessage): QuizShowType => {

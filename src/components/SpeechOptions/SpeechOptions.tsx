@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
+import buttonStyles from '../../css/buttonStyles.module.css';
 import styles from './styles.module.css';
 import { useState } from 'react';
 import { useSpeech, useVoices } from 'react-text-to-speech';
@@ -8,7 +9,7 @@ import { HiSpeakerWave } from "react-icons/hi2";
 import { HiSpeakerXMark } from "react-icons/hi2";
 
 export interface SpeechOptionsProps {
-text?: string
+  text?: string
 }
 
 export default function SpeechOptions(props: SpeechOptionsProps) {
@@ -28,13 +29,13 @@ export default function SpeechOptions(props: SpeechOptionsProps) {
   return (
     <div className={styles.container}>
       <div className={styles.buttons}>
-        <button onClick={() => setAutoPlay(!autoPlay)} title="Toggle Auto Play">
+        <button className={buttonStyles.iconButton} onClick={() => setAutoPlay(!autoPlay)} title="Toggle Auto Play">
           {autoPlay ? <HiSpeakerWave /> : <HiSpeakerXMark />}
         </button>
-        <button disabled={speechStatus === "stopped"} onClick={stop}>
+        <button className={buttonStyles.iconButton} disabled={speechStatus === "stopped"} onClick={stop}>
           <BsFillStopFill />
         </button>
-        <button onClick={() => setShowOptions(v => !v)} title="Optionen anzeigen/verbergen">
+        <button className={buttonStyles.iconButton} onClick={() => setShowOptions(v => !v)} title="Optionen anzeigen/verbergen">
           <BsFillGearFill />
         </button>
       </div>
