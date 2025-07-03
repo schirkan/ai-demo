@@ -1,0 +1,28 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  position: fixed;
+}
+
+.main {
+}
+
+.callForAction {
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* max-width: 28rem; */
+  /* padding-top: 6rem; */
+  padding-bottom: 6rem;
+  /* margin-left: auto;
+  margin-right: auto; */
+  align-items: stretch;
+  overflow-y: auto;
+  height: 100%;
+  box-sizing: border-box;
+}
+
