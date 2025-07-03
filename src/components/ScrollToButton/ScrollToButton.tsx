@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 import styles from './styles.module.css';
 import buttonStyles from '../../css/buttonStyles.module.css';
@@ -12,15 +12,14 @@ export default function ScrollToButton<T extends HTMLElement>({
   scrollRef: React.RefObject<T | null>
 }) {
   const [visible, setVisible] = useState(false);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
-
     const handleScroll = () => {
-      if (scrollTimeout) {
+      if (scrollTimeoutRef.current !== null) {
         return; // Prevent multiple timeouts from being set
       }
-      scrollTimeout = setTimeout(() => {
+      scrollTimeoutRef.current = setTimeout(() => {
         if (scrollRef.current) {
           const scrollHeight = scrollRef.current.scrollHeight;
           const clientHeight = scrollRef.current.clientHeight;
@@ -34,7 +33,7 @@ export default function ScrollToButton<T extends HTMLElement>({
             setVisible(false);
           }
         }
-        scrollTimeout = null;
+        scrollTimeoutRef.current = null;
       }, 1000);
     };
 
