@@ -55,6 +55,8 @@ export default function ChatInput(props: ChatInputProps) {
   // Handle key down events for mic toggle or focus input
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Tab") return; // Ignore Tab key to prevent focus issues
+
       if (document.activeElement !== inputRef.current) {
         if (event.code === "Space") {
           event.preventDefault();

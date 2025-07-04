@@ -30,13 +30,13 @@
   transition:
     color 0.2s,
     border-color 0.2s,
-    background 0.2s;
+    background-color 0.2s;
 }
 
 .micButton[data-active="true"],
 .micButton[data-active="true"]:hover {
-  background: #f55;
-  border: 1px solid #c00;
+  background-color: #f55 !important;
+  border-color: #c00 !important;
   color: #fff;
   box-shadow: 0 0 8px 2px #f88;
 }

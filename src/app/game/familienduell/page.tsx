@@ -1,12 +1,14 @@
 'use client';
 import { useChat } from '@ai-sdk/react';
-import { MemoizedMarkdownBlock } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
+import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
 import styles from './styles.module.css';
 import { UIMessage, } from 'ai';
 import { QuizShowType } from '../../../schemas/quizShowSchema';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
+import { useState } from 'react';
+import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
 const getObject = (message: UIMessage): QuizShowType => {
   const text = message.parts[0].type === 'text' && message.parts[0].text || '{}';
@@ -20,6 +22,8 @@ const mapMessage = (message: UIMessage): UIMessage => {
 }
 
 export default function Game() {
+  const [showSecret, setShowSecret] = useState(false);
+
   const { messages, input, setInput, append, status } = useChat({
     api: '/api/game/familienduell',
     streamProtocol: 'text',
@@ -36,20 +40,23 @@ export default function Game() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.main}>
-        <MemoizedMarkdownBlock content={response?.show ?? ''} />
-
-        <div className={styles.callForAction}>
-          <div>{response?.callForAction}</div>
-          <div className='actions-buttons'>
-            {actions.map(action =>
-              <button key={action} onClick={() => append({ content: action, role: 'user' })}>{action}</button>
-            )}
-          </div>
+      <div className={styles.left}>
+        <div className={styles.show}>
+          <MemoizedMarkdown content={response?.show ?? ''} />
+        </div>
+        <div className={styles.actionsButtons} style={{ visibility: actions.length > 0 ? 'initial' : 'hidden' }}>
+          {actions.map(action =>
+            <button key={action} onClick={() => append({ content: action, role: 'user' })}>{action}</button>
+          )}
+        </div>
+        <div className={styles.secret}>
+          <h2 onClick={() => setShowSecret(value => !value)}>
+            Secret {showSecret ? <BsEye /> : <BsEyeSlash />}
+          </h2>
+          <div style={{ visibility: showSecret ? 'initial' : 'hidden' }}>{response?.secret}</div>
         </div>
       </div>
-
-      <div className={styles.chat}>
+      <div className={styles.right}>
         <ChatMessages
           messages={messages.map(mapMessage)}
           style='bubbles'

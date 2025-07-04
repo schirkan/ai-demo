@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 import buttonStyles from '../../css/buttonStyles.module.css';
 import styles from './styles.module.css';
@@ -18,13 +17,10 @@ export default function SpeechOptions(props: SpeechOptionsProps) {
   const [voiceURI, setVoiceURI] = useState('Microsoft Conrad Online (Natural) - German (Germany)');
   const [showOptions, setShowOptions] = useState(false);
 
+  const text = props?.text?.replaceAll('**', '');
+
   const { voices, languages } = useVoices();
-  const { speechStatus, stop, pause, start } = useSpeech({
-    text: props?.text?.replaceAll('**', ''),
-    autoPlay,
-    lang,
-    voiceURI,
-  });
+  const { speechStatus, stop } = useSpeech({ text, autoPlay, lang, voiceURI, });
 
   return (
     <div className={styles.container}>
@@ -43,16 +39,12 @@ export default function SpeechOptions(props: SpeechOptionsProps) {
         <div className={styles.options}>
           <select value={lang} onChange={(e) => setLang(e.target.value)}>
             {languages.map((language) => (
-              <option key={language} value={language}>
-                {language}
-              </option>
+              <option key={language} value={language}>{language}</option>
             ))}
           </select>
           <select value={voiceURI} onChange={(e) => setVoiceURI(e.target.value)}>
             {voices.filter(x => x.lang === lang).map((voice, index) => (
-              <option key={index} value={voice.voiceURI}>
-                {voice.name}
-              </option>
+              <option key={index} value={voice.voiceURI}>{voice.name}</option>
             ))}
           </select>
         </div>

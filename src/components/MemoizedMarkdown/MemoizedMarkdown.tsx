@@ -5,14 +5,13 @@ import styles from "./styles.module.css";
 
 type MemoizedMarkdownProps = {
   content: string;
-  id: string;
+  id?: string;
 };
 
-export const MemoizedMarkdownBlock = memo(
-  ({ content }: { content: string }) =>
-    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-      {content}
-    </ReactMarkdown>,
+export const MemoizedMarkdownBlock = memo(({ content }: { content: string }) =>
+  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+    {content}
+  </ReactMarkdown>,
   (prevProps, nextProps) => prevProps.content === nextProps.content,
 );
 MemoizedMarkdownBlock.displayName = 'MemoizedMarkdownBlock';
