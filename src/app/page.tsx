@@ -8,7 +8,7 @@ export default function Index() {
         <li><a href='chat-ui-sample'>Chat UI Sample</a></li>
         <li><a href='chat-basic'>AI Chat (Basic)</a></li>
         <li><a href='chat-tts'>AI Chat (Voice)</a></li>
-        <li><a href='game/familienduell'>Game Familienduell</a></li>
+        <li><a href='game'>Quizshow</a></li>
       </ol>
     </div>
   );

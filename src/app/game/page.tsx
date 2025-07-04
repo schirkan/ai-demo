@@ -3,7 +3,7 @@ import { useChat } from '@ai-sdk/react';
 import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
 import styles from './styles.module.css';
 import { UIMessage, } from 'ai';
-import { QuizShowType } from '../../../schemas/quizShowSchema';
+import { QuizShowType } from '../../schemas/quizShowSchema';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
@@ -25,7 +25,7 @@ export default function Game() {
   const [showSecret, setShowSecret] = useState(false);
 
   const { messages, input, setInput, append, status } = useChat({
-    api: '/api/game/familienduell',
+    api: '/api/game',
     streamProtocol: 'text',
   });
 
@@ -44,7 +44,7 @@ export default function Game() {
         <div className={styles.show}>
           <MemoizedMarkdown content={response?.show ?? ''} />
         </div>
-        <div className={styles.actionsButtons} style={{ visibility: actions.length > 0 ? 'initial' : 'hidden' }}>
+        <div className={styles.actionsButtons}>
           {actions.map(action =>
             <button key={action} onClick={() => append({ content: action, role: 'user' })}>{action}</button>
           )}
