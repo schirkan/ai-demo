@@ -19,8 +19,7 @@
   width: calc(100% - 24rem);
 
   display: grid;
-  grid-template-rows: 1fr 1fr 6rem;
-  gap: 1rem;
+  grid-template-rows: 1fr auto 6rem;
 }
 
 .right {
@@ -48,6 +47,7 @@
 
 .show {
   padding: 1rem;
+  overflow: auto;
 }
 
 .actionsButtons {

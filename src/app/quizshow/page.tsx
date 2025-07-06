@@ -25,7 +25,7 @@ export default function Game() {
   const [showSecret, setShowSecret] = useState(false);
 
   const { messages, input, setInput, append, status } = useChat({
-    api: '/api/game',
+    api: '/api/quizshow',
     streamProtocol: 'text',
   });
 
