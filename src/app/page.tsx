@@ -8,6 +8,7 @@ export default function Index() {
         <li><a href='chat-ui-sample'>Chat UI Sample</a></li>
         <li><a href='chat-basic'>AI Chat (Basic)</a></li>
         <li><a href='chat-tts'>AI Chat (Voice)</a></li>
+        <li><a href='image'>Image Generation</a></li>
         <li><a href='quizshow'>Quizshow</a></li>
       </ol>
     </div>

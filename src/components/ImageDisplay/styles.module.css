@@ -1,0 +1,38 @@
+.container {
+  img {
+    width: 100%;
+  }
+}
+
+.zoomedOverlay {
+  position: fixed;
+  inset: 0; /* top: 0; right: 0; bottom: 0; left: 0; */
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-height: 100dvh;
+  width: 100vw;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+  transform: translateX(-50%);
+  font-size: 2rem;
+}
+
+.imagePlaceholder {
+  height: 3rem;
+  width: 3rem;
+  color: #d4d4d8;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+  transform: translateX(-50%);
+}
