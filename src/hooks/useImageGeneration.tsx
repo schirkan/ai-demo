@@ -1,3 +1,4 @@
+import { ImageRequest, ImageResponse } from "@/app/api/image/route";
 import { useState } from "react";
 
 export interface ProviderTiming {
@@ -7,52 +8,52 @@ export interface ProviderTiming {
 }
 
 interface UseImageGenerationReturn {
-  image: string | null;
-  error: string | null;
+  image?: string;
+  error?: string;
   timing: ProviderTiming;
   isLoading: boolean;
-  startGeneration: (prompt: string) => Promise<void>;
+  startGeneration: (prompt: string, options?: { quality?: string, style?: string, seed?: number }) => Promise<void>;
   resetState: () => void;
   activePrompt: string;
 }
 
 export function useImageGeneration(): UseImageGenerationReturn {
-  const [image, setImage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [image, setImage] = useState<string>();
+  const [error, setError] = useState<string>();
   const [timing, setTimings] = useState<ProviderTiming>({});
   const [isLoading, setIsLoading] = useState(false);
   const [activePrompt, setActivePrompt] = useState("");
 
   const resetState = () => {
-    setImage(null);
-    setError(null);
+    setImage(undefined);
+    setError(undefined);
     setTimings({});
     setIsLoading(false);
   };
 
-  const startGeneration = async (prompt: string) => {
+  const startGeneration = async (prompt: string, options?: { quality?: string, style?: string, seed?: number }) => {
     const startTime = Date.now();
     setActivePrompt(prompt);
     setIsLoading(true);
-    setImage(null);
-    setError(null);
+    setImage(undefined);
+    setError(undefined);
     setTimings({ startTime }); // Initialize timing with start time
 
     try {
       const response = await fetch("/api/image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, ...options } as ImageRequest),
       });
-      const data = await response.json();
-      if (!response.ok) {
+      const data = await response.json() as ImageResponse;
+      if (!response.ok || !data.url) {
         throw new Error(data.error || `Server error: ${response.status}`);
       }
 
       const completionTime = Date.now();
       const elapsed = completionTime - startTime;
       setTimings({ startTime, completionTime, elapsed, });
-      setImage(data.image);
+      setImage(data.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred");
     } finally {
