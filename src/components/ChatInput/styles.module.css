@@ -1,6 +1,8 @@
 .inputForm {
   position: absolute;
   display: flex;
+  align-items: flex-end;
+  gap: 0.3rem;
   bottom: 0;
   left: 1rem;
   right: 2rem;
@@ -10,6 +12,8 @@
 .inputTextbox {
   width: -webkit-fill-available;
   min-width: 50px;
+  min-height: 34px;
+  font-family: Arial, Helvetica, sans-serif;
   padding: 0.5rem;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
@@ -17,10 +21,8 @@
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -4px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-}
 
-@media (prefers-color-scheme: dark) {
-  .inputTextbox {
+  @media (prefers-color-scheme: dark) {
     background-color: #18181b;
     border-color: #27272a;
   }

@@ -18,7 +18,7 @@ const sampleMessages: Message[] = [
 ];
 
 export default function Page() {
-  const [style, setStyle] = useState<'default' | 'bubbles'>('default');
+  const [style, setStyle] = useState<'default' | 'whatsapp' | 'ios'>('default');
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const [showVoiceInput, setShowVoiceInput] = useState(false);
@@ -66,9 +66,10 @@ export default function Page() {
     <>
       <div className={styles.options}>
         <label>Style:&nbsp;
-          <select value={style} onChange={e => setStyle(e.target.value as 'default' | 'bubbles')}>
+          <select value={style} onChange={e => setStyle(e.target.value as 'default' | 'whatsapp')}>
             <option value="default">default</option>
-            <option value="bubbles">bubbles</option>
+            <option value="whatsapp">whatsapp</option>
+            <option value="ios">ios</option>
           </select>
         </label>
         <label>

@@ -5,6 +5,7 @@ import { ChangeEventHandler, FormEventHandler, useCallback, useEffect, useRef } 
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { BsMicFill } from 'react-icons/bs';
 import { BsSendFill } from 'react-icons/bs';
+import TextareaAutosize from '../TextareaAutosize/TextareaAutosize';
 
 export interface ChatInputProps {
   onSubmit: (text: string) => void,
@@ -16,14 +17,14 @@ export interface ChatInputProps {
 
 export default function ChatInput(props: ChatInputProps) {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     props.onSubmit(props.input);
   };
 
-  const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
+  const handleTextareaChange: ChangeEventHandler<HTMLTextAreaElement> = (event): void => {
     props.setInput(event.target.value);
   };
 
@@ -57,17 +58,34 @@ export default function ChatInput(props: ChatInputProps) {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Tab") return; // Ignore Tab key to prevent focus issues
 
+      if (event.code === "Space" && event.ctrlKey) {
+        // Prevent default space behavior in input field
+        event.preventDefault();
+        handleMicClick();
+        return;
+      }
+
+      // Ignore modifier keys to prevent conflicts
+      if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
+        return;
+      }
+
+      // If input is not focused, focus it or toggle mic
       if (document.activeElement !== inputRef.current) {
+        if (document.activeElement?.tagName === 'INPUT') return;
+        if (document.activeElement?.tagName === 'TEXTAREA') return;
         if (event.code === "Space") {
           event.preventDefault();
           handleMicClick();
         } else {
           inputRef.current?.focus();
         }
-      } else if (event.code === "Space" && event.ctrlKey) {
-        // Prevent default space behavior in input field
-        event.preventDefault();
-        handleMicClick();
+      } else {
+        // If textarea is focused, send on enter key
+        if (event.code === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          inputRef.current?.form?.submit();
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -76,11 +94,11 @@ export default function ChatInput(props: ChatInputProps) {
 
   return (
     <form onSubmit={handleSubmit} className={styles.inputForm}>
-      <input
+      <TextareaAutosize
         ref={inputRef}
         className={styles.inputTextbox}
         value={props.input}
-        onChange={handleInputChange}
+        onChange={handleTextareaChange}
         placeholder={props.placeholder ?? 'Say something...'} />
       {props.showVoiceInput &&
         <button

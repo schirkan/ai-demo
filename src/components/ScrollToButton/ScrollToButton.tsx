@@ -27,10 +27,13 @@ export default function ScrollToButton<T extends HTMLElement>({
 
           if (direction === 'up' && scrollTop > 0) {
             setVisible(true);
+            // console.log('setVisible', true);
           } else if (direction === 'down' && scrollTop < scrollHeight - clientHeight) {
             setVisible(true);
+            // console.log('setVisible', true);
           } else {
             setVisible(false);
+            // console.log('setVisible', false);
           }
         }
         scrollTimeoutRef.current = null;
@@ -46,17 +49,16 @@ export default function ScrollToButton<T extends HTMLElement>({
   }, [direction, scrollRef]);
 
   const handleClick = () => {
-    const scrollTo = direction === 'up' ? 0 : scrollRef.current?.scrollHeight;
-    scrollRef.current?.scrollTo({ top: scrollTo, behavior: 'smooth' });
     setVisible(false);
+    const scrollTo = direction === 'up' ? 0 : scrollRef.current?.scrollHeight;
+    scrollRef.current?.scrollTo({ top: scrollTo, behavior: 'auto' });
   };
-
-  if (!visible) return null;
 
   return (
     <button
       className={styles.button + " " + buttonStyles.iconButton}
       onClick={handleClick}
+      data-show={visible}
     >
       {direction === 'up' ? <BsArrowUp /> : <BsArrowDown />}
     </button>

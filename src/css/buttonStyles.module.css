@@ -6,7 +6,7 @@
   border-radius: 50%;
   font-size: 1rem;
   cursor: pointer;
-  margin-left: 0.3rem;
+
   padding: 0.5rem;
   border: 1px solid #d1d5db;
   background-color: #eee;
@@ -22,6 +22,10 @@
     border-color: #cbd5e1;
   }
 }
+/* 
+* ~ .iconButton {
+  margin-left: 0.3rem;
+} */
 
 @media (prefers-color-scheme: dark) {
   .iconButton {

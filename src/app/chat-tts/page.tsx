@@ -20,7 +20,7 @@ export default function Chat() {
     <div className={styles.container}>
       <ChatMessages
         messages={messages}
-        style='bubbles'
+        style='whatsapp'
         typing={status === 'submitted' || status === 'streaming'}
       />
       <ChatInput

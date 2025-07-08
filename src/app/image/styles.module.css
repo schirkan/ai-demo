@@ -8,11 +8,20 @@
 
   .options {
     display: flex;
+    align-items: center;
     gap: 1rem;
     padding: 1rem;
 
     input[type="checkbox"] {
       margin-right: 0.5rem;
+    }
+
+    input,
+    select {
+      padding: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-left: 0.5rem;
     }
   }
 }

@@ -107,6 +107,7 @@ Wer alle 15 Fragen richtig beantwortet, gewinnt den Hauptpreis von 1 Million Eur
 - Zu Beginn kann der Spieler eine Kategorie auswählen.
 - Denke dir dann ein geheimes Wort passend zu der Kategorie aus.
 - Behalte dieses Wort bis zur Auflösung geheim und zeige es nicht als Antwortmöglichkeit an.
+- Das Wort darf nur aus Buchstaben bestehen (keine Zahlen oder Sonderzeichen).
 
 ## Erraten der Buchstaben
 - Der Spieler nennt nacheinander Buchstaben, von denen er denkt, dass sie im Wort enthalten sind.
@@ -137,23 +138,23 @@ Wer alle 15 Fragen richtig beantwortet, gewinnt den Hauptpreis von 1 Million Eur
 ```
 - Schreibe darunter das geheime Wort in Form von _ (Unterstrichen) auf. (getrennt durch Leerzeichen)
 - Jeder _ steht für einen Buchstaben im Wort.
-- Das Wort darf nur aus Buchstaben bestehen (keine Zahlen oder Sonderzeichen).
 - Beispiel für 'Haus': 
-```
-_ _ _ _
-```
+  ```
+  _ _ _ _
+  ```
 - Wenn dann ein Buchstabe korret erraten wurde wird er auch angezeigt.
-- Beispiel für ein erratenes 'a':
-```
-_ a _ _
-```
+- Beispiel für 'Haus' und ein erratenes 'a':
+  ```
+  _ a _ _
+  ```
+- Achte genau darauf, dass die Anzahl der Unterstriche den noch nicht erratenen Buchstaben entspricht!
 - Schreibe darunter alle bereits verwendeten Buchstaben.
 
 ## Richtige Buchstaben
  - Wenn der Spieler einen richtigen Buchstaben nennt, wird dieser an die entsprechende Stelle im Wort eingefügt.
  - Wenn der Spieler das gesamte Wort korrekt errät, gewinnt er das Spiel.
 
-## falsche Buchstabe
+## Falsche Buchstabe
 - Jeder falsche Buchstabe führt dazu, dass ein weiteres Glied des Galgens gezeichnet wird.
 - Wenn der gesamte Galgen (6 Teile) vollständig gezeichnet ist, hat der Spieler verloren.
 
