@@ -24,7 +24,6 @@ export function ImageDisplay({
 }: ImageDisplayProps) {
   const [isZoomed, setIsZoomed] = useState(false);
 
-  // NEU: Icon-Index für Animation
   const icons = [
     <LuPaintRoller key="roller" />,
     <LuPaintbrush key="brush" />,
@@ -89,25 +88,35 @@ export function ImageDisplay({
 
   return (
     <>
-      <div onClick={handleImageClick} className={styles.container}>
+      <div className={styles.container}>
         {image ? (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={image} alt={prompt || `AI Generated`} />
-            <button className={buttonStyles.iconButton} onClick={(e) => handleActionClick(e, image)}>
-              <LuShare />
-              {/* <LuDownload /> */}
-            </button>
-            {timing?.elapsed && (
-              <div>{(timing.elapsed / 1000).toFixed(1)}s</div>
-            )}
+            <img src={image} alt={prompt} onClick={handleImageClick} />
+            <div className={styles.info}>
+              <button className={buttonStyles.iconButton} onClick={(e) => handleActionClick(e, image)}>
+                <LuShare />
+                {/* <LuDownload /> */}
+              </button>
+              {timing?.elapsed && (
+                <div className={buttonStyles.iconButton + ' ' + styles.elapsed}>{(timing.elapsed / 1000).toFixed(1)}s</div>
+              )}
+              <div className={buttonStyles.iconButton + ' ' + styles.prompt}>
+                {prompt}
+              </div>
+            </div>
           </>
         ) : failed ? (
           fallbackIcon || <LuCircleAlert className={styles.imagePlaceholder} />
         ) : timing?.startTime ? (
-          <div className={styles.loading}>
-            {icons[iconIndex]} <span>Generating...</span>
-          </div>
+          <>
+            <div className={styles.loading}>
+              {icons[iconIndex]} <span>Generating...</span>
+            </div>
+            <div className={buttonStyles.iconButton + ' ' + styles.prompt}>
+              {prompt}
+            </div>
+          </>
         ) : (
           <LuImage className={styles.imagePlaceholder} />
         )}

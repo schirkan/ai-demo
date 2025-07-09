@@ -59,7 +59,7 @@ export default function Game() {
       <div className={styles.right}>
         <ChatMessages
           messages={messages.map(mapMessage)}
-          style='bubbles'
+          style='whatsapp'
           typing={status === 'submitted' || status === 'streaming'}
         />
         <ChatInput

@@ -6,22 +6,26 @@ import { useState } from 'react';
 import { ImageDisplay } from '@/components/ImageDisplay/ImageDisplay';
 
 export default function Chat() {
-  const [input, setInput] = useState('');
-  const [hdQuality, setHdQuality] = useState(false);
-  const [style, setStyle] = useState('natural');
+  const [input, setInput] = useState("map in 'lord of the rings' style with a dragon in the sky, highly detailed, fantasy art, 4k resolution, intricate details, vibrant colors, epic composition, cinematic lighting, atmospheric effects, mystical elements, ancient ruins, lush landscapes, dramatic clouds");
+  const [hdQuality, setHdQuality] = useState(true);
+  const [style, setStyle] = useState('vivid');
   const [seed, setSeed] = useState<number | ''>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { image, error, timing, isLoading, startGeneration, resetState, activePrompt } = useImageGeneration();
 
   const handleSubmit = (text: string) => {
-    // Hier könnten hdQuality, style und seed an startGeneration übergeben werden
-    startGeneration(text, {quality: hdQuality ? 'hd' : undefined, style, seed: seed !== '' ? Number(seed) : undefined});
+    if (!text.trim()) {
+      console.warn('Empty input submitted');
+      return; // Do not submit empty input
+    }
+    startGeneration(text, { quality: hdQuality ? 'hd' : undefined, style, seed: seed !== '' ? Number(seed) : undefined });
     setInput('');
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.options}>
+        <h4>Options:</h4>
         <label>
           <input
             type="checkbox"
@@ -30,13 +34,16 @@ export default function Chat() {
           />
           HD quality
         </label>
-        <select
-          value={style}
-          onChange={e => setStyle(e.target.value)}
-        >
-          <option value="natural">natural</option>
-          <option value="vivid">vivid</option>
-        </select>
+        <label>
+          Style:
+          <select
+            value={style}
+            onChange={e => setStyle(e.target.value)}
+          >
+            <option value="natural">natural</option>
+            <option value="vivid">vivid</option>
+          </select>
+        </label>
         <label>
           Seed:
           <input
@@ -61,6 +68,7 @@ export default function Chat() {
         placeholder="Describe your image..."
         input={input}
         setInput={setInput}
+        showVoiceInput={true}
       />
     </div>
   );

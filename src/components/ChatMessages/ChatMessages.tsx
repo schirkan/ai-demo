@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 import ScrollToButton from '../ScrollToButton/ScrollToButton';
 
 export interface ChatMessagesProps {
-  style?: 'default' | 'bubbles' | undefined,
+  style?: 'default' | 'whatsapp' | 'ios' | undefined,
   messages: Message[],
   typing?: boolean,
   typingIndicator?: string,
@@ -31,7 +31,7 @@ export default function ChatMessages(props: ChatMessagesProps) {
             <div className={styles.markdownContent}>{props.typingIndicator ?? '...'}</div>
           </div>
         )}
-        <ScrollIntoView trigger={scrollRef.current?.scrollHeight} />
+        <ScrollIntoView trigger={props.messages.length + "|" + scrollRef.current?.scrollHeight} />
         <ScrollToButton direction='down' scrollRef={scrollRef} />
       </div>
     </div>

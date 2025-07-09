@@ -23,49 +23,84 @@
   margin-bottom: 1rem;
 }
 
-[data-style="bubbles"] .message {
-  width: fit-content;
-  padding: 0.5rem;
-  border-radius: 10px;
-  border: 1px solid #bbb;
-}
-
-@media (prefers-color-scheme: dark) {
-  [data-style="bubbles"] .message {
-    border-color: #555;
-  }
-}
-
-[data-style="bubbles"] .message[data-role="user"] {
-  margin-left: 1rem;
-  border-bottom-right-radius: 0;
-  background-color: #e2fdd5;
-  align-self: end;
-}
-
-@media (prefers-color-scheme: dark) {
-  [data-style="bubbles"] .message[data-role="user"] {
-    background-color: #204f46;
-  }
-}
-
-[data-style="bubbles"] .message:not([data-role="user"]) {
-  margin-right: 1rem;
-  border-bottom-left-radius: 0;
-  background-color: #f4f4f4;
-}
-
-@media (prefers-color-scheme: dark) {
-  [data-style="bubbles"] .message:not([data-role="user"]) {
-    background-color: #333;
-  }
-}
-
 .roleLabel {
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
-[data-style="bubbles"] .roleLabel {
-  display: none;
+.container[data-style="whatsapp"] {
+  .message {
+    width: fit-content;
+    padding: 0.5rem;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+
+    @media (prefers-color-scheme: dark) {
+      border-color: #555;
+    }
+  }
+
+  .message[data-role="user"] {
+    margin-left: 1rem;
+    border-bottom-right-radius: 0;
+    background-color: #e2fdd5;
+    align-self: end;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: #204f46;
+    }
+  }
+
+  .message:not([data-role="user"]) {
+    margin-right: 1rem;
+    border-bottom-left-radius: 0;
+    background-color: #f4f4f4;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: #333;
+    }
+  }
+
+  .roleLabel {
+    display: none;
+  }
+}
+
+.container[data-style="ios"] {
+  .message {
+    width: fit-content;
+    padding: 0.5rem;
+    border-radius: 10px;
+    /* border: 1px solid #bbb; */
+
+    @media (prefers-color-scheme: dark) {
+      /* border-color: #555; */
+    }
+  }
+
+  .message[data-role="user"] {
+    margin-left: 1rem;
+    border-bottom-right-radius: 0;
+    background-color: #03a2e9;
+    color: #fff;
+    align-self: end;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: #0082fe;
+    }
+  }
+
+  .message:not([data-role="user"]) {
+    margin-right: 1rem;
+    border-bottom-left-radius: 0;
+    background-color: #e5e5ea;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: #26252a;
+    }
+  }
+
+  .roleLabel {
+    display: none;
+  }
 }
