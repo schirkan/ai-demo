@@ -1,7 +1,7 @@
 'use client';
 import styles from './styles.module.css';
 import buttonStyles from '../../css/buttonStyles.module.css';
-import { ChangeEventHandler, FormEventHandler, useCallback, useEffect, useRef } from 'react';
+import { ChangeEventHandler, FormEvent, useCallback, useEffect, useRef } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { BsMicFill } from 'react-icons/bs';
 import { BsSendFill } from 'react-icons/bs';
@@ -19,10 +19,10 @@ export default function ChatInput(props: ChatInputProps) {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
+  const handleSubmit = useCallback((event?: FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
     props.onSubmit(props.input);
-  };
+  }, [props.onSubmit, props.input]);
 
   const handleTextareaChange: ChangeEventHandler<HTMLTextAreaElement> = (event): void => {
     props.setInput(event.target.value);
@@ -58,11 +58,18 @@ export default function ChatInput(props: ChatInputProps) {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Tab") return; // Ignore Tab key to prevent focus issues
 
+      // Toggle mic on Space + Ctrl
       if (event.code === "Space" && event.ctrlKey) {
-        // Prevent default space behavior in input field
         event.preventDefault();
         handleMicClick();
         return;
+      }
+
+      // submit on Ctrl + Enter
+      if (event.code === "Enter" && event.ctrlKey && document.activeElement === inputRef.current) {
+        event.preventDefault();
+        handleSubmit();
+        return
       }
 
       // Ignore modifier keys to prevent conflicts
@@ -80,17 +87,11 @@ export default function ChatInput(props: ChatInputProps) {
         } else {
           inputRef.current?.focus();
         }
-      } else {
-        // If textarea is focused, send on enter key
-        if (event.code === "Enter" && !event.shiftKey) {
-          event.preventDefault();
-          inputRef.current?.form?.submit();
-        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleMicClick]);
+  }, [handleMicClick, handleSubmit]);
 
   return (
     <form onSubmit={handleSubmit} className={styles.inputForm}>

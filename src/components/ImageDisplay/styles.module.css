@@ -1,6 +1,7 @@
 .container {
   img {
     width: 100%;
+    cursor: pointer;
   }
 }
 
@@ -25,7 +26,7 @@
 .zoomedOverlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: #000;
   z-index: 50;
   display: flex;
   align-items: center;
