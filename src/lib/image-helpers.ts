@@ -21,8 +21,17 @@ export const imageHelpers = {
     prefix: string
   ): Promise<void> => {
     const fileName = imageHelpers.generateImageFileName(prefix);
-    const blob = imageHelpers.base64ToBlob(imageData);
-    const file = new File([blob], `${fileName}.png`, { type: "image/png" });
+
+    // Extrahiere den Base64-Teil aus dem Data URL
+    const matches = imageData.match(/^data:(image\/\w+);base64,(.+)$/);
+    if (!matches) {
+      throw new Error("Ungültiges Image Data URL");
+    }
+    const mimeType = matches[1];
+    const base64Data = matches[2];
+
+    const blob = imageHelpers.base64ToBlob(base64Data, mimeType);
+    const file = new File([blob], `${fileName}.png`, { type: mimeType });
 
     try {
       if (navigator.share) {

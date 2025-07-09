@@ -111,7 +111,8 @@ export function ImageDisplay({
         ) : timing?.startTime ? (
           <>
             <div className={styles.loading}>
-              {icons[iconIndex]} <span>Generating...</span>
+              <span>Generating...</span>
+              {icons[iconIndex]}
             </div>
             <div className={buttonStyles.iconButton + ' ' + styles.prompt}>
               {prompt}

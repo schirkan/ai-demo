@@ -27,34 +27,20 @@ export default function Chat() {
       <div className={styles.options}>
         <h4>Options:</h4>
         <label>
-          <input
-            type="checkbox"
-            checked={hdQuality}
-            onChange={e => setHdQuality(e.target.checked)}
-          />
+          <input type="checkbox" checked={hdQuality} onChange={e => setHdQuality(e.target.checked)} />
           HD quality
         </label>
         <label>
           Style:
-          <select
-            value={style}
-            onChange={e => setStyle(e.target.value)}
-          >
+          <select value={style} onChange={e => setStyle(e.target.value)}>
             <option value="natural">natural</option>
             <option value="vivid">vivid</option>
           </select>
         </label>
-        <label>
+        <label style={{ display: 'none' }}>
           Seed:
-          <input
-            type="number"
-            min="0"
-            step="1"
-            placeholder="Random"
-            style={{ width: 80 }}
-            value={seed}
-            onChange={e => setSeed(e.target.value === '' ? '' : Number(e.target.value))}
-          />
+          <input type="number" min="0" step="1" placeholder="Random" style={{ width: 80 }} value={seed}
+            onChange={e => setSeed(e.target.value === '' ? '' : Number(e.target.value))} />
         </label>
       </div>
       <ImageDisplay
