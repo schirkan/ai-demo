@@ -18,6 +18,8 @@ export default function ChatMessages(props: ChatMessagesProps) {
 
   return (
     <div className={styles.container} data-style={props.style ?? 'default'}>
+
+
       <div className={styles.messages} ref={scrollRef}>
         {props.messages.map((message) => (
           <div key={message.id} className={styles.message} data-role={message.role}>
