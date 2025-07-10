@@ -1,5 +1,7 @@
 import { CSSProperties } from "react";
 
+// see https://github.com/megh-bari/pattern-craft/blob/main/src/app/utils/patterns.ts
+
 export type StyleName = 'none' | 'basic-grid' | 'diagonal-fade-grid-left';
 
 const styles: Record<StyleName, CSSProperties> = {

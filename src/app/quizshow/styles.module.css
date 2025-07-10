@@ -1,35 +1,38 @@
 .container {
   position: absolute;
   inset: 0;
-  margin: 5rem auto;
-  width: 1000px;
 
-  border: 1px solid #ccd;
-  border-radius: 1rem;
   background-color: aliceblue;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+
+  @media (min-width: 1000px) {
+    margin: 5rem auto;
+    width: 1000px;
+    border: 1px solid #ccd;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    grid-template-columns: 1fr 24rem;
+    grid-template-rows: 1fr;
+  }
 }
 
 .left {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: calc(100% - 24rem);
-
   display: grid;
   grid-template-rows: 1fr auto 6rem;
 }
 
 .right {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 24rem;
-  border-left: 1px solid #ccc;
+  position: relative;
   background-color: #fafafa;
+
+  @media (min-width: 1000px) {
+    border-left: 1px solid #ccc;
+  }
 }
 
 .secret {
