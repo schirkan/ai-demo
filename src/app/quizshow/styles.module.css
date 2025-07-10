@@ -1,5 +1,5 @@
 .container {
-  position: absolute;
+  position: fixed;
   inset: 0;
   overflow: hidden;
 
@@ -10,7 +10,7 @@
   @media (min-width: 1000px) {
     margin: 5rem auto;
     width: 1000px;
-    border: 1px solid #ccd;
+    border: 1px solid light-dark(#ccd, #444);
     border-radius: 1rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
@@ -36,18 +36,18 @@
   background-color: light-dark(#fafafa, #111);
 
   @media (max-width: 1000px) {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid light-dark(#ccd, #444);
   }
 
   @media (min-width: 1000px) {
-    border-left: 1px solid #ccc;
+    border-left: 1px solid light-dark(#ccd, #444);
   }
 }
 
 .secret {
   color: #ccc;
   padding: 1rem;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid light-dark(#ccd, #444);
   background-color: light-dark(#fafafa, #111);
 
   @media (max-width: 1000px) {
