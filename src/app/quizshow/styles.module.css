@@ -24,6 +24,7 @@
 .left {
   display: grid;
   grid-template-rows: 1fr auto 6rem;
+  overflow: auto;
 }
 
 .right {
