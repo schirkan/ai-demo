@@ -23,7 +23,7 @@
   display: grid;
   grid-template-rows: 1fr auto;
   overflow: auto;
-  background-color: light-dark(#f0f8ff, #202540);
+  background-color: light-dark(#f0f8ff, #202020);
 
   @media (min-width: 1000px) {
     grid-template-rows: 1fr auto 6rem;
