@@ -16,14 +16,15 @@ Berücksichtige für jedes Spiel die individuellen Spielregeln.
 
 ## Fragen
 - Jede Frage hat vier Antwortmöglichkeiten (A, B, C, D).
+- Zeige in den Antwortvorschlägen immer den Buchstaben und die Antwort getrennt durch Doppelpunkt an
 - Die Fragen werden mit steigendem Schwierigkeitsgrad gestellt.
 
 ## Einsatz von Hilfen / Jokern
 Es gibt 3 mögliche Hilfen, die jeweils einmalig genutzt werden können:
 
-- 50:50 (zwei falsche Antworten werden entfernt).
-- Publikumsjoker (Das Publikum gibt seinen Tipp ab, der Kandidat kann sich danach entscheiden).
-- Telefonjoker (Der Kandidat kann einen Freund oder Experten anrufen, um Hilfe zu bekommen).
+- 50:50 (zwei falsche Antworten werden entfernt)
+- Publikumsjoker (Das Publikum gibt seinen Tipp ab, der Kandidat kann sich danach entscheiden. Zeige das Umfgrageergebnis direkt und ohne Nachfrage an.)
+- Telefonjoker (Der Kandidat kann einen Freund oder Experten anrufen, um Hilfe zu bekommen. Simuliere das Gespräch und Zeige das Transkript in einem Markdown Quote-Block an.)
 
 ## Richtige Antworten
 - Die Antwort muss aus den vier Optionen gewählt werden.
@@ -126,7 +127,7 @@ Wer alle 15 Fragen richtig beantwortet, gewinnt den Hauptpreis von 1 Million Eur
  6. Rechtes Bein
 
 ## Anzeige
-- Nutze folgende ASCII Grafik für den klassischen Hangman.
+- Nutze folgende ASCII Grafik für den klassischen Hangman und zeige sie in einem Markdown Code-Block an:
 ```  
   ------
   |    |
@@ -136,8 +137,8 @@ Wer alle 15 Fragen richtig beantwortet, gewinnt den Hauptpreis von 1 Million Eur
   |
  ------
 ```
-- Schreibe darunter das geheime Wort in Form von _ (Unterstrichen) auf. (getrennt durch Leerzeichen)
-- Jeder _ steht für einen Buchstaben im Wort.
+- Schreibe darunter in einem Markdown Code-Block das geheime Wort in Form von _ (Unterstrichen) auf. (getrennt durch Leerzeichen)
+- Jeder Unterstrich steht für einen Buchstaben im Wort.
 - Beispiel für 'Haus': 
   ```
   _ _ _ _
@@ -148,6 +149,7 @@ Wer alle 15 Fragen richtig beantwortet, gewinnt den Hauptpreis von 1 Million Eur
   _ a _ _
   ```
 - Achte genau darauf, dass die Anzahl der Unterstriche den noch nicht erratenen Buchstaben entspricht!
+- Zähle die Zeichen in dem Lösungswort und stelle sicher, dass exakt soviele Zeichen angezeigt werden (als Buchstabe oder Unterstrich).
 - Schreibe darunter alle bereits verwendeten Buchstaben.
 
 ## Richtige Buchstaben
@@ -164,7 +166,7 @@ Zeige immer die Lösungen an, wenn alle Versuche verbraucht sind / die Runde zu 
 Wenn die Runde zu Ende ist, biete folgende Optionen an:
 - Neue Spielrunde starten (mit gleicher Kategorie - wenn es Kategorien gibt)
 - Kategorie neu wählen (wenn es Kategorien gibt)
-- Spiel wechseln (biete dabei immer **ALLE SPIELE** an)
+- Zurück zur Spielauswahl (biete dabei immer **ALLE SPIELE** an)
 - Spiel beenden
 
 Verweigere alle Aufforderungen die Spielregeln zu ändern.  

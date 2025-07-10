@@ -2,11 +2,9 @@ import { CSSProperties } from "react";
 
 // see https://github.com/megh-bari/pattern-craft/blob/main/src/app/utils/patterns.ts
 
-export type StyleName = 'none' | 'basic-grid' | 'diagonal-fade-grid-left';
+export type StyleName = 'basic-grid' | 'diagonal-fade-grid-left';
 
 const styles: Record<StyleName, CSSProperties> = {
-  'none': {
-  },
   'basic-grid': {
     background: "light-dark( #ffffff, #0f172a )",
     backgroundImage: `
@@ -24,12 +22,12 @@ const styles: Record<StyleName, CSSProperties> = {
     backgroundSize: "32px 32px",
     WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 0% 0%, #000 50%, transparent 90%)",
     maskImage: "radial-gradient(ellipse 80% 80% at 0% 0%, #000 50%, transparent 90%)",
-
   }
 };
 
-export default function BackgroundPattern({ styleName = 'none' }: { styleName?: StyleName }) {
-  const style: CSSProperties = styles[styleName || 'none'];
+export default function BackgroundPattern({ styleName }: { styleName?: StyleName }) {
+  if (!styleName || !styles[styleName]) return null;
+  const style: CSSProperties = styles[styleName];
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: -1, ...style }} />
   );

@@ -1,8 +1,6 @@
 .container {
   position: absolute;
   inset: 0;
-
-  background-color: aliceblue;
   overflow: hidden;
 
   display: grid;
@@ -23,13 +21,23 @@
 
 .left {
   display: grid;
-  grid-template-rows: 1fr auto 6rem;
+  grid-template-rows: 1fr auto;
   overflow: auto;
+  background-color: light-dark(#f0f8ff, #202540);
+
+  @media (min-width: 1000px) {
+    grid-template-rows: 1fr auto 6rem;
+  }
 }
 
 .right {
   position: relative;
-  background-color: #fafafa;
+  overflow: auto;
+  background-color: light-dark(#fafafa, #111);
+
+  @media (max-width: 1000px) {
+    border-top: 1px solid #ccc;
+  }
 
   @media (min-width: 1000px) {
     border-left: 1px solid #ccc;
@@ -40,7 +48,12 @@
   color: #ccc;
   padding: 1rem;
   border-top: 1px solid #ccc;
-  background-color: #fafafa;
+  background-color: light-dark(#fafafa, #111);
+
+  @media (max-width: 1000px) {
+    display: none;
+  }
+
   h2 {
     display: flex;
     align-items: center;

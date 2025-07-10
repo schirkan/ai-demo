@@ -66,7 +66,7 @@ export default function ChatInput(props: ChatInputProps) {
       }
 
       // submit on Ctrl + Enter
-      if (event.code === "Enter" && event.ctrlKey && document.activeElement === inputRef.current) {
+      if (event.code === "Enter" && !event.shiftKey && document.activeElement === inputRef.current) {
         event.preventDefault();
         handleSubmit();
         return
