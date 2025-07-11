@@ -5,7 +5,7 @@ import BackgroundPattern from "@/components/BackgroundPattern/BackgroundPattern"
 export default function Index() {
   return (
     <>
-      <BackgroundPattern styleName='diagonal-fade-grid-left' />
+      <BackgroundPattern styleName='grid-fade-sides' />
       <div style={{ width: 'fit-content', margin: '10rem auto 0' }}>
         <h1 style={{ textAlign: 'center', margin: '1rem' }}>AI Demo</h1>
         <ol style={{ listStyle: 'decimal', paddingLeft: 'revert' }}>

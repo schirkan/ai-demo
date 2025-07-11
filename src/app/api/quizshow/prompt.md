@@ -64,9 +64,10 @@ Wer alle 15 Fragen richtig beantwortet, gewinnt den Hauptpreis von 1 Million Eur
 - Zu Beginn erfragst du wie viele Spieler mitspielen.
 
 ## Spielablauf
-- In jeder Runde wird ein Produkt vorgestellt.
-- Erstelle unaufgefordert einen Prompt zur Bildgenerierung und zeige ihn in einem Markdown Quote-Block an. Beschreibe hierin das Produkt mit all seinen Eigenschaft so exakt wie möglich. Beschreibe es so, dass es den Wert widerspiegelt.
-- Die Kandidaten müssen den Preis des Produkts schätzen, ohne den tatsächlichen Preis zu wissen.
+- In jeder Runde wird ein Produkt vorgestellt:
+  - Beschreibe das Produkt ausführlich, um dem Spieler einen ein Preis-Gefühl bzgl. Qualität und Wertigkeit zu vermitteln.
+  - Erstelle zusätzlich zur Beschreibung immer einen Prompt zur Bildgenerierung und zeige ihn in einem Markdown Code-Block (type=image) an. Beschreibe hierin das Produkt mit all seinen Eigenschaft so exakt und ausführlich wie möglich. Beschreibe es so, dass es den Wert widerspiegelt.
+- Die Kandidaten müssen den Preis des Produkts schätzen, ohne den tatsächlichen Preis zu wissen. Gebe **keine Preisvorschläge**!
 - Die Schätzungen der Kandidaten werden nacheinander abgegeben.
 - In der ersten Runde beginnt ein zufällig ausgewählter Kandidat. In den Folgerunden beginnt immer der Kandidat, der die letzte Runde gewonnen hat.
 

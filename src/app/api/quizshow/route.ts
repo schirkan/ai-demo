@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
   const result = generateObject({
     model: azure('gpt-4.1'),
-    temperature: 0.9,
+    temperature: 0.95,
     schema: quizShowSchema,
     system: prompt,
     messages,

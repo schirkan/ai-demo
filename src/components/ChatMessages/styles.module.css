@@ -20,6 +20,10 @@
   margin-bottom: 1rem;
 }
 
+.messageContent {
+  position: relative;
+}
+
 .typingIndicator {
   margin-bottom: 1rem;
 }
@@ -32,8 +36,10 @@
 .container[data-style="whatsapp"],
 .container[data-style="ios"] {
   .message[data-role="user"] {
-    &::after {
-      z-index: -1;
+    margin-left: 1rem;
+    align-self: end;
+
+    &::before {
       position: absolute;
       bottom: -0.1rem;
       content: "";
@@ -43,7 +49,6 @@
       right: -0.35rem;
       transform: translate(0, -0.1rem);
 
-      /* background: light-dark(#03a2e9, #0082fe); */
       border-bottom-left-radius: 1rem;
       mask: radial-gradient(1.1rem at 1.7rem 0.1rem, #0000 98%, #000);
     }
@@ -51,10 +56,8 @@
 
   .message:not([data-role="user"]) {
     margin-right: 1rem;
-    background-color: light-dark(#e5e5ea, #26252a);
 
     &::before {
-      z-index: -1;
       position: absolute;
       bottom: -0.1rem;
       content: "";
@@ -64,7 +67,6 @@
       left: -0.35rem;
       transform: translate(0, -0.1rem);
 
-      /* background: light-dark(#e5e5ea, #26252a); */
       border-bottom-right-radius: 1rem;
       mask: radial-gradient(1.1rem at -0.7rem 0.1rem, #0000 98%, #000);
     }
@@ -76,21 +78,17 @@
     width: fit-content;
     padding: 0.5rem;
     border-radius: 10px;
-    /* border: 1px solid light-dark(#bbb, #555); */
   }
 
   .message[data-role="user"] {
-    margin-left: 1rem;
     background-color: light-dark(#e2fdd5, #204f46);
-    align-self: end;
 
-    &::after {
+    &::before {
       background-color: light-dark(#e2fdd5, #204f46);
     }
   }
 
   .message:not([data-role="user"]) {
-    margin-right: 1rem;
     background-color: light-dark(#f4f4f4, #333);
 
     &::before {
@@ -111,18 +109,15 @@
   }
 
   .message[data-role="user"] {
-    margin-left: 1rem;
-    background-color: light-dark(#03a2e9, #0082fe);
     color: #fff;
-    align-self: end;
+    background-color: light-dark(#03a2e9, #0082fe);
 
-    &::after {
+    &::before {
       background-color: light-dark(#03a2e9, #0082fe);
     }
   }
 
   .message:not([data-role="user"]) {
-    margin-right: 1rem;
     background-color: light-dark(#e5e5ea, #26252a);
 
     &::before {
