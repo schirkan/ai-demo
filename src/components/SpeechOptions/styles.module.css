@@ -8,6 +8,16 @@
 
   .buttons {
     display: flex;
+    gap: 0.3rem;
+
+    button {
+      opacity: 1;
+      transition: opacity 0.3s;
+
+      &[data-visible="false"] {
+        opacity: 0;
+      }
+    }
   }
 
   .options {

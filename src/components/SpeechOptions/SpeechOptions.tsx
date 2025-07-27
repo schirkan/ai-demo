@@ -12,7 +12,7 @@ export interface SpeechOptionsProps {
 }
 
 export default function SpeechOptions(props: SpeechOptionsProps) {
-  const [autoPlay, setAutoPlay] = useState(true);
+  const [enabled, setAutoPlay] = useState(true);
   const [lang, setLang] = useState('de-DE');
   const [voiceURI, setVoiceURI] = useState('Microsoft Conrad Online (Natural) - German (Germany)');
   const [showOptions, setShowOptions] = useState(false);
@@ -20,19 +20,19 @@ export default function SpeechOptions(props: SpeechOptionsProps) {
   const text = props?.text?.replaceAll('**', '');
 
   const { voices, languages } = useVoices();
-  const { speechStatus, stop } = useSpeech({ text, autoPlay, lang, voiceURI, });
+  const { speechStatus, stop } = useSpeech({ text, autoPlay: enabled, lang, voiceURI, });
 
   return (
     <div className={styles.container}>
       <div className={styles.buttons}>
-        <button className={buttonStyles.iconButton} onClick={() => setAutoPlay(!autoPlay)} title="Toggle Auto Play">
-          {autoPlay ? <HiSpeakerWave /> : <HiSpeakerXMark />}
-        </button>
-        <button className={buttonStyles.iconButton} disabled={speechStatus === "stopped"} onClick={stop}>
+        <button className={buttonStyles.iconButton} data-visible={enabled} disabled={speechStatus === "stopped"} onClick={stop}>
           <BsFillStopFill />
         </button>
-        <button className={buttonStyles.iconButton} onClick={() => setShowOptions(v => !v)} title="Optionen anzeigen/verbergen">
+        <button className={buttonStyles.iconButton} data-visible={enabled} onClick={() => setShowOptions(v => !v)} title="Optionen anzeigen / verbergen">
           <BsFillGearFill />
+        </button>
+        <button className={buttonStyles.iconButton} onClick={() => setAutoPlay(!enabled)} title="Sprachausgabe aktivieren / deaktivieren">
+          {enabled ? <HiSpeakerWave /> : <HiSpeakerXMark />}
         </button>
       </div>
       {showOptions && (
