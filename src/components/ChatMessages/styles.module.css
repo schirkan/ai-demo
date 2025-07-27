@@ -20,6 +20,13 @@
   margin-bottom: 1rem;
 }
 
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .messageContent {
   position: relative;
 }

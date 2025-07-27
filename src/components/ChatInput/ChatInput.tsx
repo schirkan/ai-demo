@@ -15,33 +15,33 @@ export interface ChatInputProps {
   showVoiceInput?: boolean,
 }
 
-export default function ChatInput(props: ChatInputProps) {
+export default function ChatInput({ onSubmit, placeholder, input, setInput, showVoiceInput }: ChatInputProps) {
   const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = useCallback((event?: FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
-    props.onSubmit(props.input);
-  }, [props.onSubmit, props.input]);
+    onSubmit(input);
+  }, [onSubmit, input]);
 
   const handleTextareaChange: ChangeEventHandler<HTMLTextAreaElement> = (event): void => {
-    props.setInput(event.target.value);
+    setInput(event.target.value);
   };
 
   const handleMicClick = useCallback(() => {
-    if (!props.showVoiceInput) return;
+    if (!showVoiceInput) return;
     if (listening) {
       SpeechRecognition.stopListening();
     } else {
       resetTranscript();
       SpeechRecognition.startListening();
     }
-  }, [props.showVoiceInput, listening, resetTranscript]);
+  }, [showVoiceInput, listening, resetTranscript]);
 
   // trigger input change when transcript updates
   useEffect(() => {
     if (transcript) {
-      props.setInput(transcript);
+      setInput(transcript);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transcript]);
@@ -98,10 +98,10 @@ export default function ChatInput(props: ChatInputProps) {
       <TextareaAutosize
         ref={inputRef}
         className={styles.inputTextbox}
-        value={props.input}
+        value={input}
         onChange={handleTextareaChange}
-        placeholder={props.placeholder ?? 'Say something...'} />
-      {props.showVoiceInput &&
+        placeholder={placeholder ?? 'Say something...'} />
+      {showVoiceInput &&
         <button
           onClick={handleMicClick}
           className={styles.micButton + " " + buttonStyles.iconButton}
@@ -113,7 +113,7 @@ export default function ChatInput(props: ChatInputProps) {
       }
       <button
         type="submit"
-        disabled={!props.input}
+        disabled={!input}
         className={styles.submitButton + " " + buttonStyles.iconButton}>
         <BsSendFill />
       </button>

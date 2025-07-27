@@ -14,6 +14,7 @@ export async function POST(req: Request) {
     schema: quizShowSchema,
     system: prompt,
     messages,
+    maxRetries: 0,
   });
   return (await result).toJsonResponse();
 }

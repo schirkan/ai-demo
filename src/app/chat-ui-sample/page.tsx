@@ -22,6 +22,7 @@ export default function Page() {
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const [showVoiceInput, setShowVoiceInput] = useState(false);
+  const [showSampleError, setShowSampleError] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const demo = () => {
@@ -47,7 +48,6 @@ export default function Page() {
     }]);
     setInput('');
 
-    // delay response to simulate AI processing
     window.setTimeout(() => {
       setTyping(true);
     }, 500);
@@ -62,6 +62,12 @@ export default function Page() {
     }, 1500);
   };
 
+  const sampleError = showSampleError ? new Error('This is a sample error.') : undefined;
+
+  const reload = () => {
+    setShowSampleError(false);
+  };
+
   return (
     <>
       <div className={styles.options}>
@@ -73,22 +79,27 @@ export default function Page() {
           </select>
         </label>
         <label>
-          <input
-            type="checkbox"
-            checked={showVoiceInput}
-            onChange={e => setShowVoiceInput(e.target.checked)}
-          />
+          <input type="checkbox" checked={showVoiceInput} onChange={e => setShowVoiceInput(e.target.checked)} />
           &nbsp;Voice Input
+        </label>
+        <label>
+          <input type="checkbox" checked={showSampleError} onChange={e => setShowSampleError(e.target.checked)} />
+          &nbsp;Sample Error
+        </label>
+        <label>
+          <input type="checkbox" checked={typing} onChange={e => setTyping(e.target.checked)} />
+          &nbsp;Typing Indicator
         </label>
         <button onClick={demo}>Demo</button>
         <button onClick={() => setMessages([])}>Clear</button>
-        <button onClick={() => setTyping(!typing)}>Toggle Typing</button>
       </div>
       <div className={styles.container}>
         <ChatMessages
           messages={messages}
           typing={typing}
           style={style}
+          error={sampleError}
+          reload={reload}
         />
         <ChatInput
           onSubmit={handleSubmit}
@@ -102,3 +113,4 @@ export default function Page() {
     </>
   );
 }
+

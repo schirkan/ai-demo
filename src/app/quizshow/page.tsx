@@ -24,7 +24,7 @@ const mapMessage = (message: UIMessage): UIMessage => {
 export default function Game() {
   const [showSecret, setShowSecret] = useState(false);
 
-  const { messages, input, setInput, append, status } = useChat({
+  const { messages, input, setInput, append, status, error, reload } = useChat({
     api: '/api/quizshow',
     streamProtocol: 'text',
   });
@@ -61,6 +61,8 @@ export default function Game() {
           messages={messages.map(mapMessage)}
           style='ios'
           typing={status === 'submitted' || status === 'streaming'}
+          error={error}
+          reload={reload}
         />
         <ChatInput
           onSubmit={handleSubmit}
