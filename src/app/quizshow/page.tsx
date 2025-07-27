@@ -3,7 +3,7 @@ import { useChat } from '@ai-sdk/react';
 import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
 import styles from './styles.module.css';
 import { UIMessage, } from 'ai';
-import { QuizShowType } from '../../schemas/quizShowSchema';
+import { QuizShowType } from '@/app/api/quizshow/schema';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';

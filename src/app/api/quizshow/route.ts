@@ -1,6 +1,6 @@
 import { azure } from '@ai-sdk/azure';
 import { generateObject } from 'ai';
-import { quizShowSchema } from '../../../schemas/quizShowSchema';
+import { quizShowSchema } from './schema';
 import prompt from './prompt.md';
 
 // Allow streaming responses up to 30 seconds
