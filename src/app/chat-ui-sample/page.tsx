@@ -1,7 +1,7 @@
 'use client';
 
 import ChatMessages from "@/components/ChatMessages/ChatMessages";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import styles from "./styles.module.css"
 import { Message } from 'ai';
 import ChatInput from "@/components/ChatInput/ChatInput";
@@ -19,7 +19,7 @@ const sampleMessages: Message[] = [
 
 export default function Page() {
   const [style, setStyle] = useState<'default' | 'whatsapp' | 'ios'>('default');
-  const [input, setInput] = useState('');
+  // const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const [showVoiceInput, setShowVoiceInput] = useState(false);
   const [showSampleError, setShowSampleError] = useState(false);
@@ -40,13 +40,13 @@ export default function Page() {
     });
   }
 
-  const handleSubmit = (text: string) => {
+  const handleSubmit = useCallback((text: string) => {
     setMessages(m => [...m, {
       id: 'User' + Date.now().toString(),
       role: 'user',
       content: text
     }]);
-    setInput('');
+    // setInput('');
 
     window.setTimeout(() => {
       setTyping(true);
@@ -60,7 +60,7 @@ export default function Page() {
       }]);
       setTyping(false);
     }, 1500);
-  };
+  }, [setMessages, setTyping]);
 
   const sampleError = showSampleError ? new Error('This is a sample error.') : undefined;
 
@@ -104,8 +104,8 @@ export default function Page() {
         <ChatInput
           onSubmit={handleSubmit}
           placeholder="Type your message..."
-          input={input}
-          setInput={setInput}
+          // input={input}
+          // setInput={setInput}
           showVoiceInput={showVoiceInput}
         />
       </div>

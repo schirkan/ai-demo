@@ -10,27 +10,21 @@ interface ImageDisplayProps {
   prompt?: string;
   image?: string;
   timing?: ProviderTiming;
-  failed?: boolean;
+  error?: Error;
   fallbackIcon?: React.ReactNode;
   enabled?: boolean;
 }
 
-export function ImageDisplay({
-  prompt,
-  image,
-  timing,
-  failed,
-  fallbackIcon,
-}: ImageDisplayProps) {
-  const [isZoomed, setIsZoomed] = useState(false);
+const icons = [
+  <LuPaintRoller key="roller" />,
+  <LuPaintbrush key="brush" />,
+  <LuPaintbrushVertical key="brushV" />,
+  <LuPalette key="palette" />,
+  <LuPaintBucket key="bucket" />,
+];
 
-  const icons = [
-    <LuPaintRoller key="roller" />,
-    <LuPaintbrush key="brush" />,
-    <LuPaintbrushVertical key="brushV" />,
-    <LuPalette key="palette" />,
-    <LuPaintBucket key="bucket" />,
-  ];
+export function ImageDisplay({ prompt, image, timing, error, fallbackIcon }: ImageDisplayProps) {
+  const [isZoomed, setIsZoomed] = useState(false);
   const [iconIndex, setIconIndex] = useState(0);
 
   useEffect(() => {
@@ -39,7 +33,7 @@ export function ImageDisplay({
       setIconIndex((prev) => (prev + 1) % icons.length);
     }, 2000);
     return () => clearInterval(interval);
-  }, [timing?.startTime]);
+  }, [timing?.completionTime, timing?.startTime]);
 
   useEffect(() => {
     if (isZoomed) {
@@ -106,12 +100,12 @@ export function ImageDisplay({
               </div>
             </div>
           </>
-        ) : failed ? (
+        ) : error ? (
           fallbackIcon || <LuCircleAlert className={styles.imagePlaceholder} />
         ) : timing?.startTime ? (
           <>
             <div className={styles.loading}>
-              <span>Generating...</span>
+              <div className={styles.loader}></div>
               {icons[iconIndex]}
             </div>
             <div className={buttonStyles.iconButton + ' ' + styles.prompt}>

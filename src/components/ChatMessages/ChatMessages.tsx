@@ -12,7 +12,6 @@ export interface ChatMessagesProps {
   style?: 'default' | 'whatsapp' | 'ios' | undefined,
   messages: Message[],
   typing?: boolean,
-  typingIndicator?: string,
   error?: Error,
   reload?: () => void,
 }
@@ -30,9 +29,10 @@ export default function ChatMessages(props: ChatMessagesProps) {
           </div>
         ))}
         {props.typing && (
-          <div key='typing-indicator' className={styles.typingIndicator} data-role='assistant'>
-            <div className={styles.roleLabel}>AI</div>
-            <div className={styles.messageContent}>{props.typingIndicator ?? '...'}</div>
+          <div className={styles.typingIndicator}>
+            {/* <div className={styles.roleLabel}>AI</div>
+            <div className={styles.messageContent}></div> */}
+            <div className={styles.loader}></div>
           </div>
         )}
         {props.error && (
@@ -44,7 +44,7 @@ export default function ChatMessages(props: ChatMessagesProps) {
                 <BsArrowClockwise />
               </button>
             )}
-            <div>Error: {props.error.message}</div>
+            <div className={styles.errorMessage}>Error: {props.error.message}</div>
           </div>
         )}
         <ScrollIntoView trigger={props.messages.length + "|" + scrollRef.current?.scrollHeight} />

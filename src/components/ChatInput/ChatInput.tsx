@@ -1,7 +1,7 @@
 'use client';
 import styles from './styles.module.css';
 import buttonStyles from '../../css/buttonStyles.module.css';
-import { ChangeEventHandler, FormEvent, useCallback, useEffect, useRef } from 'react';
+import { ChangeEventHandler, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { BsMicFill } from 'react-icons/bs';
 import { BsSendFill } from 'react-icons/bs';
@@ -9,20 +9,23 @@ import TextareaAutosize from '../TextareaAutosize/TextareaAutosize';
 
 export interface ChatInputProps {
   onSubmit: (text: string) => void,
-  placeholder: string,
-  input: string,
-  setInput: (text: string) => void,
+  placeholder?: string,
   showVoiceInput?: boolean,
+  disabled?: boolean,
+  initialValue?: string,
 }
 
-export default function ChatInput({ onSubmit, placeholder, input, setInput, showVoiceInput }: ChatInputProps) {
-  const { transcript, listening, resetTranscript } = useSpeechRecognition();
+export default function ChatInput({ onSubmit, placeholder, showVoiceInput, disabled, initialValue }: ChatInputProps) {
+  const [input, setInput] = useState(initialValue ?? '');
+  const { transcript, finalTranscript, listening, resetTranscript } = useSpeechRecognition();
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = useCallback((event?: FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
+    if (disabled || input.trim() === '') return;
     onSubmit(input);
-  }, [onSubmit, input]);
+    setInput('');
+  }, [disabled, onSubmit, input]);
 
   const handleTextareaChange: ChangeEventHandler<HTMLTextAreaElement> = (event): void => {
     setInput(event.target.value);
@@ -31,27 +34,31 @@ export default function ChatInput({ onSubmit, placeholder, input, setInput, show
   const handleMicClick = useCallback(() => {
     if (!showVoiceInput) return;
     if (listening) {
-      SpeechRecognition.stopListening();
+      SpeechRecognition.abortListening();
+      // console.log('SpeechRecognition.abortListening');
     } else {
       resetTranscript();
-      SpeechRecognition.startListening();
+      SpeechRecognition.startListening({ continuous: true });
+      // console.log('SpeechRecognition.startListening');
     }
   }, [showVoiceInput, listening, resetTranscript]);
 
   // trigger input change when transcript updates
   useEffect(() => {
     if (transcript) {
+      // console.log('transcript: ', transcript);
       setInput(transcript);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transcript]);
 
-  // Focus input when listening stops
   useEffect(() => {
-    if (!listening) {
-      inputRef.current?.focus();
+    if (finalTranscript.trim() !== '') {
+      // console.log('finalTranscript: ', finalTranscript);
+      onSubmit(finalTranscript);
+      setInput('');
+      resetTranscript();
     }
-  }, [listening]);
+  }, [finalTranscript, onSubmit, resetTranscript]);
 
   // Handle key down events for mic toggle or focus input
   useEffect(() => {
@@ -113,7 +120,7 @@ export default function ChatInput({ onSubmit, placeholder, input, setInput, show
       }
       <button
         type="submit"
-        disabled={!input}
+        disabled={!input || disabled}
         className={styles.submitButton + " " + buttonStyles.iconButton}>
         <BsSendFill />
       </button>

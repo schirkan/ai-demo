@@ -9,7 +9,7 @@ export interface ProviderTiming {
 
 interface UseImageGenerationReturn {
   image?: string;
-  error?: string;
+  error?: Error;
   timing: ProviderTiming;
   isLoading: boolean;
   startGeneration: (prompt: string, options?: { quality?: string, style?: string, seed?: number }) => Promise<void>;
@@ -19,7 +19,7 @@ interface UseImageGenerationReturn {
 
 export function useImageGeneration(): UseImageGenerationReturn {
   const [image, setImage] = useState<string>();
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<Error>();
   const [timing, setTimings] = useState<ProviderTiming>({});
   const [isLoading, setIsLoading] = useState(false);
   const [activePrompt, setActivePrompt] = useState("");
@@ -55,7 +55,7 @@ export function useImageGeneration(): UseImageGenerationReturn {
       setTimings({ startTime, completionTime, elapsed, });
       setImage(data.url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred");
+      setError(err instanceof Error ? err : new Error("An unexpected error occurred"));
     } finally {
       setIsLoading(false);
     }

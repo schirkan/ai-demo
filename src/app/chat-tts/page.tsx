@@ -1,35 +1,24 @@
 'use client';
 import { useChat } from '@ai-sdk/react';
+import { useCallback } from 'react';
 import styles from './styles.module.css';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
 
 export default function Chat() {
-  const { messages, input, setInput, append, status } = useChat({
-    experimental_throttle: 50
-  });
+  const { messages, append, status } = useChat({ experimental_throttle: 50 });
+  const loading = status === 'submitted' || status === 'streaming';
   const lastMessage = status === 'ready' ? messages.findLast(x => x.role === 'assistant') : null;
 
-  const handleSubmit = (text: string) => {
+  const handleSubmit = useCallback((text: string) => {
     append({ content: text, role: 'user' });
-    setInput('');
-  }
+  }, [append]);
 
   return (
     <div className={styles.container}>
-      <ChatMessages
-        messages={messages}
-        style='whatsapp'
-        typing={status === 'submitted' || status === 'streaming'}
-      />
-      <ChatInput
-        onSubmit={handleSubmit}
-        placeholder="Type your message..."
-        input={input}
-        setInput={setInput}
-        showVoiceInput={true}
-      />
+      <ChatMessages messages={messages} style='whatsapp' typing={loading} />
+      <ChatInput onSubmit={handleSubmit} showVoiceInput={true} />
       <SpeechOptions text={lastMessage?.content} />
     </div>
   );

@@ -7,7 +7,7 @@ import { QuizShowType } from '@/app/api/quizshow/schema';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
 const getObject = (message: UIMessage): QuizShowType => {
@@ -23,20 +23,16 @@ const mapMessage = (message: UIMessage): UIMessage => {
 
 export default function Game() {
   const [showSecret, setShowSecret] = useState(false);
+  const { messages, append, status, error, reload } = useChat({ api: '/api/quizshow', streamProtocol: 'text' });
 
-  const { messages, input, setInput, append, status, error, reload } = useChat({
-    api: '/api/quizshow',
-    streamProtocol: 'text',
-  });
-
+  const loading = status === 'submitted' || status === 'streaming';
   const lastMessage: UIMessage | undefined = messages.findLast(x => x.role === 'assistant');
   const response: QuizShowType | null = lastMessage ? getObject(lastMessage) : null;
-  const actions: string[] = response?.actions || (lastMessage ? [] : ['Start']);
+  const actions: string[] = response?.actions || ['Start'];
 
-  const handleSubmit = (text: string) => {
+  const handleSubmit = useCallback((text: string) => {
     append({ content: text, role: 'user' });
-    setInput('');
-  }
+  }, [append]);
 
   return (
     <div className={styles.container}>
@@ -57,20 +53,8 @@ export default function Game() {
         </div>
       </div>
       <div className={styles.right}>
-        <ChatMessages
-          messages={messages.map(mapMessage)}
-          style='ios'
-          typing={status === 'submitted' || status === 'streaming'}
-          error={error}
-          reload={reload}
-        />
-        <ChatInput
-          onSubmit={handleSubmit}
-          placeholder="Type your message..."
-          input={input}
-          setInput={setInput}
-          showVoiceInput={true}
-        />
+        <ChatMessages messages={messages.map(mapMessage)} style='ios' typing={loading} error={error} reload={reload} />
+        <ChatInput onSubmit={handleSubmit} disabled={loading} showVoiceInput={true} />
         <SpeechOptions text={response?.speak} />
       </div>
     </div>

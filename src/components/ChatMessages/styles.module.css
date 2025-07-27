@@ -27,12 +27,62 @@
   margin-bottom: 1rem;
 }
 
+.errorMessage {
+  background: lightgoldenrodyellow;
+  padding: 1rem;
+  border: 1px solid lightcoral;
+  color: red;
+  border-radius: 1rem;
+  font-size: 0.6rem;
+  font-family: monospace;
+}
+
 .messageContent {
   position: relative;
 }
 
 .typingIndicator {
   margin-bottom: 1rem;
+}
+
+.loader {
+  margin-left: 30px;
+  width: 10px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: threeDots 1s infinite linear;
+}
+@keyframes threeDots {
+  0% {
+    box-shadow:
+      20px 0 #000,
+      -20px 0 #0002;
+    background: #000;
+  }
+  25% {
+    box-shadow:
+      20px 0 #000,
+      -20px 0 #0002;
+    background: #0002;
+  }
+  50% {
+    box-shadow:
+      20px 0 #0002,
+      -20px 0 #000;
+    background: #0002;
+  }
+  75% {
+    box-shadow:
+      20px 0 #0002,
+      -20px 0 #000;
+    background: #000;
+  }
+  100% {
+    box-shadow:
+      20px 0 #000,
+      -20px 0 #0002;
+    background: #000;
+  }
 }
 
 .roleLabel {
