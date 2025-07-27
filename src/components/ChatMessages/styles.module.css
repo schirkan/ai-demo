@@ -132,7 +132,6 @@
 
 .container[data-style="whatsapp"] {
   .message {
-    width: fit-content;
     padding: 0.5rem;
     border-radius: 10px;
   }
@@ -160,7 +159,6 @@
 
 .container[data-style="ios"] {
   .message {
-    width: fit-content;
     padding: 0.5rem;
     border-radius: 1rem;
   }

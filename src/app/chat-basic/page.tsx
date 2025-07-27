@@ -15,7 +15,7 @@ export default function Chat() {
 
   return (
     <div className={styles.container}>
-      <ChatMessages messages={messages} style='whatsapp' typing={loading} />
+      <ChatMessages messages={messages} />
       <ChatInput onSubmit={handleSubmit} disabled={loading} />
     </div>
   );
