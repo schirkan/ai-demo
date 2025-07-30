@@ -6,6 +6,7 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import { BsMicFill } from 'react-icons/bs';
 import { BsSendFill } from 'react-icons/bs';
 import TextareaAutosize from '../TextareaAutosize/TextareaAutosize';
+import { useLatest, useUnmount } from 'react-use';
 
 export interface ChatInputProps {
   onSubmit: (text: string) => void,
@@ -19,13 +20,17 @@ export default function ChatInput({ onSubmit, placeholder, showVoiceInput, disab
   const [input, setInput] = useState(initialValue ?? '');
   const { transcript, finalTranscript, listening, resetTranscript } = useSpeechRecognition();
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const latestInput = useLatest(input);
+  const latestOnSubmit = useLatest(onSubmit);
+  useUnmount(SpeechRecognition.stopListening);
 
   const handleSubmit = useCallback((event?: FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
-    if (disabled || input.trim() === '') return;
-    onSubmit(input);
+    const value = latestInput.current;
+    if (disabled || value.trim() === '') return;
+    latestOnSubmit.current(value);
     setInput('');
-  }, [disabled, onSubmit, input]);
+  }, [disabled, latestInput, latestOnSubmit]);
 
   const handleTextareaChange: ChangeEventHandler<HTMLTextAreaElement> = (event): void => {
     setInput(event.target.value);
@@ -35,30 +40,26 @@ export default function ChatInput({ onSubmit, placeholder, showVoiceInput, disab
     if (!showVoiceInput) return;
     if (listening) {
       SpeechRecognition.abortListening();
-      // console.log('SpeechRecognition.abortListening');
     } else {
       resetTranscript();
       SpeechRecognition.startListening({ continuous: true });
-      // console.log('SpeechRecognition.startListening');
     }
   }, [showVoiceInput, listening, resetTranscript]);
 
   // trigger input change when transcript updates
   useEffect(() => {
     if (transcript) {
-      // console.log('transcript: ', transcript);
       setInput(transcript);
     }
   }, [transcript]);
 
   useEffect(() => {
     if (finalTranscript.trim() !== '') {
-      // console.log('finalTranscript: ', finalTranscript);
-      onSubmit(finalTranscript);
+      latestOnSubmit.current(finalTranscript);
       setInput('');
       resetTranscript();
     }
-  }, [finalTranscript, onSubmit, resetTranscript]);
+  }, [finalTranscript, latestOnSubmit, resetTranscript]);
 
   // Handle key down events for mic toggle or focus input
   useEffect(() => {

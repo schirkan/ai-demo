@@ -1,5 +1,4 @@
 'use client';
-
 import ChatMessages from "@/components/ChatMessages/ChatMessages";
 import { useState, useCallback } from "react";
 import styles from "./styles.module.css"
@@ -19,7 +18,6 @@ const sampleMessages: Message[] = [
 
 export default function Page() {
   const [style, setStyle] = useState<'default' | 'whatsapp' | 'ios'>('default');
-  // const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const [showVoiceInput, setShowVoiceInput] = useState(false);
   const [showSampleError, setShowSampleError] = useState(false);
@@ -46,7 +44,6 @@ export default function Page() {
       role: 'user',
       content: text
     }]);
-    // setInput('');
 
     window.setTimeout(() => {
       setTyping(true);
@@ -104,8 +101,6 @@ export default function Page() {
         <ChatInput
           onSubmit={handleSubmit}
           placeholder="Type your message..."
-          // input={input}
-          // setInput={setInput}
           showVoiceInput={showVoiceInput}
         />
       </div>
