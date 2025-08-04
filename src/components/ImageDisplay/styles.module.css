@@ -6,10 +6,11 @@
 }
 
 .info {
-  display: flex;
-  align-items: flex-start;
   margin: 0.5rem 0;
+  display: flex;
   gap: 0.3rem;
+  align-items: center;
+  justify-content: center;
 }
 
 .elapsed,
@@ -21,6 +22,7 @@
 .prompt {
   width: -webkit-fill-available;
   justify-content: left;
+  margin: 0.5rem 0;
 }
 
 .zoomedOverlay {
@@ -51,16 +53,22 @@
   flex-direction: column;
   align-items: center;
 }
-/* HTML: <div class="loader"></div> */
+
 .loader {
   width: fit-content;
   font-size: 40px;
   font-family: monospace;
   font-weight: bold;
   text-transform: uppercase;
-  color: #0000;
+  color: light-dark(#0000, #fff0);
   -webkit-text-stroke: 1px #000;
-  background: linear-gradient(90deg, #0000 33%, #000 0 67%, #0000 0) 100%/300% 100% no-repeat text;
+  background: linear-gradient(
+      90deg,
+      light-dark(#0000, #fff0) 33%,
+      light-dark(#000, #fff) 0 67%,
+      light-dark(#0000, #fff0) 0
+    )
+    100%/300% 100% no-repeat text;
   animation: l12 4s steps(14) infinite;
 }
 .loader:before {
@@ -80,9 +88,22 @@
   left: 50%;
   transform: translateY(-50%);
   transform: translateX(-50%);
-  color: #d4d4d8;
+  color: light-dark(#d4d4d8, #27272a);
+}
 
-  @media (prefers-color-scheme: dark) {
-    color: #27272a;
-  }
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.errorMessage {
+  background: lightgoldenrodyellow;
+  padding: 1rem;
+  border: 1px solid lightcoral;
+  color: red;
+  border-radius: 1rem;
+  font-size: 0.6rem;
+  font-family: monospace;
 }

@@ -17,16 +17,20 @@ export interface ChatInputProps {
 }
 
 export default function ChatInput({ onSubmit, placeholder, showVoiceInput, disabled, initialValue }: ChatInputProps) {
-  const [input, setInput] = useState(initialValue ?? '');
+  const [input, setInput] = useState(initialValue);
   const { transcript, finalTranscript, listening, resetTranscript } = useSpeechRecognition();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const latestInput = useLatest(input);
   const latestOnSubmit = useLatest(onSubmit);
   useUnmount(SpeechRecognition.stopListening);
 
+  useEffect(() => {
+    if (initialValue) setInput(initialValue);
+  }, [initialValue]);
+
   const handleSubmit = useCallback((event?: FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
-    const value = latestInput.current;
+    const value = latestInput.current || '';
     if (disabled || value.trim() === '') return;
     latestOnSubmit.current(value);
     setInput('');

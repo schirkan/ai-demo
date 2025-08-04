@@ -1,5 +1,5 @@
 import { createAzure } from '@ai-sdk/azure';
-import { experimental_generateImage as generateImage, JSONValue } from 'ai';
+import { APICallError, experimental_generateImage as generateImage, JSONValue } from 'ai';
 import { NextResponse } from 'next/server';
 
 const azure = createAzure({
@@ -36,6 +36,12 @@ export async function POST(req: Request): Promise<Response> {
     });
     return NextResponse.json({ url: "data:" + image.mimeType + ";base64," + image.base64 });
   } catch (error) {
-    return NextResponse.json({ error });
+    if (APICallError.isInstance(error)) {
+      const apiErrorMessage = error.message ||
+        (error.data && typeof error.data === 'object' && 'error' in error.data &&
+          (error.data as { error?: { message?: string } }).error?.message);
+      return NextResponse.json({ error: apiErrorMessage }, { status: error.statusCode });
+    }
+    return NextResponse.json({ error: 'Unknown error' }, { status: 500 })
   }
 }

@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { LuPaintRoller, LuPaintbrush, LuPaintbrushVertical, LuPalette, LuPaintBucket, LuImage, LuCircleAlert, LuShare } from "react-icons/lu";
 import { imageHelpers } from "@/lib/image-helpers";
 import { ProviderTiming } from "@/hooks/useImageGeneration";
+import { BsArrowClockwise, BsPencilSquare } from "react-icons/bs";
 import styles from './styles.module.css';
 import buttonStyles from '../../css/buttonStyles.module.css';
 
@@ -11,8 +12,8 @@ interface ImageDisplayProps {
   image?: string;
   timing?: ProviderTiming;
   error?: Error;
-  fallbackIcon?: React.ReactNode;
-  enabled?: boolean;
+  reload?: () => void;
+  edit?: () => void;
 }
 
 const icons = [
@@ -23,12 +24,12 @@ const icons = [
   <LuPaintBucket key="bucket" />,
 ];
 
-export function ImageDisplay({ prompt, image, timing, error, fallbackIcon }: ImageDisplayProps) {
+export function ImageDisplay({ prompt, image, timing, error, reload, edit }: ImageDisplayProps) {
   const [isZoomed, setIsZoomed] = useState(false);
   const [iconIndex, setIconIndex] = useState(0);
 
   useEffect(() => {
-    if (timing?.completionTime) return;
+    if (!timing?.startTime || timing?.completionTime) return;
     const interval = setInterval(() => {
       setIconIndex((prev) => (prev + 1) % icons.length);
     }, 2000);
@@ -36,26 +37,22 @@ export function ImageDisplay({ prompt, image, timing, error, fallbackIcon }: Ima
   }, [timing?.completionTime, timing?.startTime]);
 
   useEffect(() => {
-    if (isZoomed) {
-      window.history.pushState({ zoomed: true }, "");
-    }
+    if (!isZoomed) return;
+
+    window.history.pushState({ zoomed: true }, "");
 
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isZoomed) {
+      if (e.key === "Escape") {
         setIsZoomed(false);
       }
     };
 
     const handlePopState = () => {
-      if (isZoomed) {
-        setIsZoomed(false);
-      }
+      setIsZoomed(false);
     };
 
-    if (isZoomed) {
-      document.addEventListener("keydown", handleEscape);
-      window.addEventListener("popstate", handlePopState);
-    }
+    document.addEventListener("keydown", handleEscape);
+    window.addEventListener("popstate", handlePopState);
 
     return () => {
       document.removeEventListener("keydown", handleEscape);
@@ -83,38 +80,60 @@ export function ImageDisplay({ prompt, image, timing, error, fallbackIcon }: Ima
   return (
     <>
       <div className={styles.container}>
-        {image ? (
+        {prompt && (
+          <div className={buttonStyles.iconButton + ' ' + styles.prompt}>
+            {prompt}
+          </div>
+        )}
+
+        {image && (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img src={image} alt={prompt} onClick={handleImageClick} />
+        )}
+
+        {error && (
           <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={image} alt={prompt} onClick={handleImageClick} />
-            <div className={styles.info}>
-              <button className={buttonStyles.iconButton} onClick={(e) => handleActionClick(e, image)}>
-                <LuShare />
-                {/* <LuDownload /> */}
-              </button>
-              {timing?.elapsed && (
-                <div className={buttonStyles.iconButton + ' ' + styles.elapsed}>{(timing.elapsed / 1000).toFixed(1)}s</div>
-              )}
-              <div className={buttonStyles.iconButton + ' ' + styles.prompt}>
-                {prompt}
-              </div>
+            <LuCircleAlert className={styles.imagePlaceholder} />
+            <div className={styles.error}>
+              <div className={styles.errorMessage}>Error: {error.message}</div>
             </div>
           </>
-        ) : error ? (
-          fallbackIcon || <LuCircleAlert className={styles.imagePlaceholder} />
-        ) : timing?.startTime ? (
-          <>
-            <div className={styles.loading}>
-              <div className={styles.loader}></div>
-              {icons[iconIndex]}
-            </div>
-            <div className={buttonStyles.iconButton + ' ' + styles.prompt}>
-              {prompt}
-            </div>
-          </>
-        ) : (
+        )}
+
+        {timing?.startTime && !timing?.completionTime && (
+          <div className={styles.loading}>
+            <div className={styles.loader}></div>
+            {icons[iconIndex]}
+          </div>
+        )}
+
+        {!image && !error && !timing?.startTime && (
           <LuImage className={styles.imagePlaceholder} />
         )}
+
+        <div className={styles.info}>
+          {prompt && edit && (
+            <button onClick={edit} className={styles.editButton + " " + buttonStyles.iconButton}>
+              <BsPencilSquare />
+            </button>
+          )}
+
+          {(image || error) && reload && (
+            <button onClick={reload} className={styles.reloadButton + " " + buttonStyles.iconButton}>
+              <BsArrowClockwise />
+            </button>
+          )}
+
+          {timing?.elapsed && (
+            <div className={buttonStyles.iconButton + ' ' + styles.elapsed}>{(timing.elapsed / 1000).toFixed(1)}s</div>
+          )}
+
+          {image && (
+            <button className={buttonStyles.iconButton} onClick={(e) => handleActionClick(e, image)}>
+              <LuShare />{/* <LuDownload /> */}
+            </button>
+          )}
+        </div>
       </div>
 
       {isZoomed && image && createPortal(

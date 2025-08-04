@@ -5,14 +5,12 @@ import ChatInput from '@/components/ChatInput/ChatInput';
 import { useState, useCallback } from 'react';
 import { ImageDisplay } from '@/components/ImageDisplay/ImageDisplay';
 
-const initialPrompt = "map in 'lord of the rings' style with a dragon in the sky, highly detailed, fantasy art, 4k resolution, intricate details, vibrant colors, epic composition, cinematic lighting, atmospheric effects, mystical elements, ancient ruins, lush landscapes, dramatic clouds";
-
 export default function Chat() {
   const [hdQuality, setHdQuality] = useState(true);
   const [style, setStyle] = useState('vivid');
+  const [initialPrompt, setInitialPrompt] = useState("map in 'lord of the rings' style with a dragon in the sky, highly detailed, fantasy art, 4k resolution, intricate details, vibrant colors, epic composition, cinematic lighting, atmospheric effects, mystical elements, ancient ruins, lush landscapes, dramatic clouds");
   const [seed, setSeed] = useState<number | ''>('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { image, error, timing, isLoading, startGeneration, resetState, activePrompt } = useImageGeneration();
+  const { image, error, timing, startGeneration, activePrompt } = useImageGeneration();
 
   const handleSubmit = useCallback((text: string) => {
     if (!text.trim()) {
@@ -21,6 +19,16 @@ export default function Chat() {
     }
     startGeneration(text, { quality: hdQuality ? 'hd' : undefined, style, seed: seed !== '' ? Number(seed) : undefined });
   }, [hdQuality, startGeneration, style, seed]);
+
+  const reload = useCallback(() => {
+    handleSubmit(activePrompt);
+  }, [activePrompt, handleSubmit]);
+
+  const edit = useCallback(() => {
+    setInitialPrompt(activePrompt);
+    window.setTimeout(() => setInitialPrompt(''), 100);
+  }, [activePrompt]);
+
 
   return (
     <div className={styles.container}>
@@ -43,7 +51,7 @@ export default function Chat() {
             onChange={e => setSeed(e.target.value === '' ? '' : Number(e.target.value))} />
         </label>
       </div>
-      <ImageDisplay prompt={activePrompt} image={image} timing={timing} error={error} />
+      <ImageDisplay prompt={activePrompt} image={image} timing={timing} error={error} reload={reload} edit={edit} />
       <ChatInput onSubmit={handleSubmit} placeholder="Describe your image..." initialValue={initialPrompt} />
     </div>
   );

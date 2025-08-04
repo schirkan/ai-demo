@@ -9,11 +9,11 @@ import { BsArrowClockwise } from "react-icons/bs";
 import buttonStyles from '../../css/buttonStyles.module.css';
 
 export interface ChatMessagesProps {
-  style?: 'default' | 'whatsapp' | 'ios' | undefined,
-  messages: Message[],
-  typing?: boolean,
-  error?: Error,
-  reload?: () => void,
+  style?: 'default' | 'whatsapp' | 'ios' | undefined;
+  messages: Message[];
+  typing?: boolean;
+  error?: Error;
+  reload?: () => void;
 }
 
 export default function ChatMessages(props: ChatMessagesProps) {

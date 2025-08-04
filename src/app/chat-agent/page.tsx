@@ -10,7 +10,7 @@ const agents = ['Generic Chatbot', 'DungeonsAndDragons', 'GameMaster', 'Informat
 
 export default function Chat() {
   const [agent, setAgent] = useState('Generic Chatbot');
-  const { messages, append, status } = useChat({ experimental_throttle: 50, api: '/api/agent?agent=' + agent });
+  const { messages, append, status, error, reload } = useChat({ experimental_throttle: 50, api: '/api/agent?agent=' + agent });
   const loading = status === 'submitted' || status === 'streaming';
   const lastMessage = status === 'ready' ? messages.findLast(x => x.role === 'assistant') : null;
 
@@ -28,7 +28,7 @@ export default function Chat() {
           ))}
         </select>
       </div>
-      <ChatMessages messages={messages} style='whatsapp' typing={loading} />
+      <ChatMessages messages={messages} style='whatsapp' typing={loading} error={error} reload={reload} />
       <ChatInput onSubmit={handleSubmit} showVoiceInput={true} />
       <SpeechOptions text={lastMessage?.content} />
     </div>

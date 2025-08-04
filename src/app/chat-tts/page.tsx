@@ -7,7 +7,7 @@ import ChatInput from '@/components/ChatInput/ChatInput';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
 
 export default function Chat() {
-  const { messages, append, status } = useChat({ experimental_throttle: 50 });
+  const { messages, append, status, error, reload } = useChat({ experimental_throttle: 50 });
   const loading = status === 'submitted' || status === 'streaming';
   const lastMessage = status === 'ready' ? messages.findLast(x => x.role === 'assistant') : null;
 
@@ -17,7 +17,7 @@ export default function Chat() {
 
   return (
     <div className={styles.container}>
-      <ChatMessages messages={messages} style='whatsapp' typing={loading} />
+      <ChatMessages messages={messages} style='whatsapp' typing={loading} error={error} reload={reload} />
       <ChatInput onSubmit={handleSubmit} showVoiceInput={true} />
       <SpeechOptions text={lastMessage?.content} />
     </div>
