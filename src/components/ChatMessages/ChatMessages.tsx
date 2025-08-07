@@ -1,12 +1,14 @@
 'use client';
-import { useRef } from 'react';
-import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
+
 import { Message } from 'ai';
-import ScrollIntoView from '@/components/ScrollIntoView/ScrollIntoView';
-import styles from './styles.module.css';
-import ScrollToButton from '../ScrollToButton/ScrollToButton';
-import { BsArrowClockwise } from "react-icons/bs";
+import { BsArrowClockwise, BsFillStopFill } from "react-icons/bs";
+import { useRef } from 'react';
+
 import buttonStyles from '../../css/buttonStyles.module.css';
+import ScrollToButton from '../ScrollToButton/ScrollToButton';
+import styles from './styles.module.css';
+import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
+import ScrollIntoView from '@/components/ScrollIntoView/ScrollIntoView';
 
 export interface ChatMessagesProps {
   style?: 'default' | 'whatsapp' | 'ios' | undefined;
@@ -14,6 +16,7 @@ export interface ChatMessagesProps {
   typing?: boolean;
   error?: Error;
   reload?: () => void;
+  stop?: () => void;
 }
 
 export default function ChatMessages(props: ChatMessagesProps) {
@@ -30,17 +33,18 @@ export default function ChatMessages(props: ChatMessagesProps) {
         ))}
         {props.typing && (
           <div className={styles.typingIndicator}>
-            {/* <div className={styles.roleLabel}>AI</div>
-            <div className={styles.messageContent}></div> */}
             <div className={styles.loader}></div>
+            {props.stop && (
+              <button type="button" onClick={props.stop} className={styles.stopButton + " " + buttonStyles.iconButton}>
+                <BsFillStopFill />
+              </button>
+            )}
           </div>
         )}
         {props.error && (
           <div className={styles.error}>
             {props.reload && (
-              <button
-                onClick={props.reload}
-                className={styles.reloadButton + " " + buttonStyles.iconButton}>
+              <button type="button" onClick={props.reload} className={styles.reloadButton + " " + buttonStyles.iconButton}>
                 <BsArrowClockwise />
               </button>
             )}

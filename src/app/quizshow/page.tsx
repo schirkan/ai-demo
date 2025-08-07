@@ -23,7 +23,7 @@ const mapMessage = (message: UIMessage): UIMessage => {
 
 export default function Game() {
   const [showSecret, setShowSecret] = useState(false);
-  const { messages, append, status, error, reload } = useChat({ api: '/api/quizshow', streamProtocol: 'text' });
+  const { messages, append, status, error, reload, stop } = useChat({ api: '/api/quizshow', streamProtocol: 'text' });
 
   const loading = status === 'submitted' || status === 'streaming';
   const lastMessage: UIMessage | undefined = messages.findLast(x => x.role === 'assistant');
@@ -53,7 +53,7 @@ export default function Game() {
         </div>
       </div>
       <div className={styles.right}>
-        <ChatMessages messages={messages.map(mapMessage)} style='ios' typing={loading} error={error} reload={reload} />
+        <ChatMessages messages={messages.map(mapMessage)} style='ios' typing={loading} error={error} reload={reload} stop={stop} />
         <ChatInput onSubmit={handleSubmit} disabled={loading} showVoiceInput={true} />
         <SpeechOptions text={response?.speak} />
       </div>

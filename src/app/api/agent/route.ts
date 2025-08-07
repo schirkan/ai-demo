@@ -1,10 +1,11 @@
 import { azure } from '@ai-sdk/azure';
 import { APICallError, streamText } from 'ai';
+import { NextResponse } from 'next/server';
+
 import promptDungeonsAndDragons from './DungeonsAndDragons.md';
 import promptGameMaster from './GameMaster.md';
 import promptInformationGathering from './InformationGathering.md';
 import promptPromptOptimization from './PromptOptimization.md';
-import { NextResponse } from 'next/server';
 
 const agents: { [key: string]: string } = {
   'DungeonsAndDragons': promptDungeonsAndDragons,
