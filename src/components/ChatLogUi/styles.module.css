@@ -1,0 +1,59 @@
+.container {
+  width: 100%;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  min-height: 44px;
+  font-size: 1rem;
+  background: transparent;
+  border-bottom: 1px solid light-dark(#d1d5db, #27272a);
+}
+
+.selected {
+  background: light-dark(#e2fdd5, #204f46);
+  font-weight: 600;
+}
+
+.startItem {
+  background: light-dark(#e5e5ea, #26252a);
+  color: #888;
+  font-style: italic;
+  cursor: default;
+}
+
+.title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.editInput {
+  width: 90%;
+  font-size: 1rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid light-dark(#d1d5db, #27272a);
+  background-color: light-dark(#fff, #18181b);
+  border-radius: 4px;
+  outline: none;
+}
+
+.actions {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.actions button {
+  /* Icon-Button-Styles kommen aus buttonStyles.module.css */
+  padding: 0.2rem;
+  font-size: 1.1em;
+}

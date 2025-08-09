@@ -1,64 +1,64 @@
 import { Message } from '@ai-sdk/react';
-import { useCallback, useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLatest } from 'react-use';
 
-// Hook für Nachrichten-Persistenz, jetzt mit loadMessages statt initialMessages
-export function useChatMessagesPersistence(storageKey: string, status: string, messages: Message[], setMessages: (messages: Message[] | ((messages: Message[]) => Message[])) => void) {
-  const latestMessages = useLatest(messages);
+interface ChatMessagesPersistenceProps {
+  storageKey: string,
+  status: string,
+  messages: Message[],
+  setMessages: (messages: Message[] | ((messages: Message[]) => Message[])) => void,
+  storage?: Storage
+}
 
-  // Nachrichten aus localStorage laden (nur clientseitig aufrufbar)
-  const loadMessages = useCallback((): Message[] => {
-    // if (typeof window === "undefined") return [];
-    const key = `chat-messages-${storageKey}`;
-    const stored = localStorage.getItem(key);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          return parsed;
-        }
-      } catch {
-        // Fehler beim Parsen ignorieren
+// Nachrichten aus Storage laden
+const loadMessages = (props: Required<ChatMessagesPersistenceProps>) => {
+  const key = `chat-messages-${props.storageKey}`;
+  console.log("loadMessages", key);
+  const stored = props.storage.getItem(key);
+  if (stored) {
+    try {
+      const messages = JSON.parse(stored);
+      if (Array.isArray(messages)) { //  && stored.length > 0 && props.messages.length === 0
+        props.setMessages(messages);
+        return;
       }
+    } catch {
+      // Fehler beim Parsen ignorieren
     }
-    return [];
-  }, [storageKey]);
+  }
+  props.setMessages([]);
+};
 
-  // Nachrichten speichern
-  const saveMessages = useCallback((messages: Message[]) => {
-    console.log("saveMessages", storageKey, messages);
-    // if (typeof window === "undefined") return;
-    const key = `chat-messages-${storageKey}`;
-    localStorage.setItem(key, JSON.stringify(messages));
-  }, [storageKey]);
+// Nachrichten speichern
+const saveMessages = (props: Required<ChatMessagesPersistenceProps>) => {
+  if (props.status === 'ready' && props.messages.length) {
+    const key = `chat-messages-${props.storageKey}`;
+    console.log("saveMessages", key, props.messages);
+    props.storage.setItem(key, JSON.stringify(props.messages));
+  }
+};
 
-  // Nachrichten löschen
-  const clearMessages = useCallback(() => {
-    console.log("clearMessages", storageKey);
-    // if (typeof window === "undefined") return;
-    const key = `chat-messages-${storageKey}`;
-    localStorage.removeItem(key);
-    setMessages([]);
-  }, [storageKey, setMessages]);
+// Nachrichten löschen
+const deleteMessages = (props: Required<ChatMessagesPersistenceProps>, storageKey: string | undefined) => {
+  const key = `chat-messages-${storageKey || props.storageKey}`;
+  console.log("clearMessages", key);
+  props.storage.removeItem(key);
+  props.setMessages([]);
+};
 
-  // Nachrichten nach dem Mounten aus dem localStorage laden
-  // und nur, wenn noch keine Nachrichten vorhanden sind
-  useEffect(() => {
-    const stored = loadMessages();
-    if (stored.length > 0 && messages.length === 0) {
-      setMessages(stored);
-    }
+// Hook für Nachrichten-Persistenz, jetzt mit loadMessages statt initialMessages
+export function useChatMessagesPersistence(props: ChatMessagesPersistenceProps) {
+  props.storage = props.storage || (typeof window !== "undefined" ? localStorage : undefined);
+  const latestProps = useLatest(props as Required<ChatMessagesPersistenceProps>);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => loadMessages(latestProps.current), [props.storageKey]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => saveMessages(latestProps.current), [props.status]);
+
+  return useMemo(() => ({
+    deleteMessages: (storageKey?: string) => deleteMessages(latestProps.current, storageKey),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storageKey]);
-
-  useEffect(() => {
-    if (status === 'ready' && latestMessages.current.length) {
-      saveMessages(latestMessages.current);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
-
-  return {
-    clearMessages,
-  };
+  }), []);
 }

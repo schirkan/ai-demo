@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  margin: 5rem;
+  height: calc(100dvh - 10rem);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  /* position: relative; */
+  border: 1px solid light-dark(black, white);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.left {
+  width: 20rem;
+  position: relative;
+  border-right: 1px solid light-dark(black, white);
+}
+
+.right {
+  width: 40rem;
+  position: relative;
+}

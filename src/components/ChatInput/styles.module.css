@@ -15,17 +15,12 @@
   min-height: 34px;
   font-family: Arial, Helvetica, sans-serif;
   padding: 0.5rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid light-dark(#d1d5db, #27272a);
   border-radius: 0.5rem;
   box-shadow:
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-
-  @media (prefers-color-scheme: dark) {
-    background-color: #18181b;
-    border-color: #27272a;
-  }
+  background-color: light-dark(#fff, #18181b);
 }
 
 .micButton {

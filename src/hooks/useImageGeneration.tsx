@@ -29,10 +29,14 @@ export function useImageGeneration(): UseImageGenerationReturn {
     const handleBeforeUnload = () => {
       abortControllerRef.current?.abort();
     };
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    if (typeof window !== "undefined") {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+    }
     return () => {
       abortControllerRef.current?.abort();
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      }
     };
   }, []);
 
