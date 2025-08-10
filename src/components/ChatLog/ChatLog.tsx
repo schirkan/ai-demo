@@ -57,7 +57,7 @@ export default function ChatLog({
           <li key={entry.id} onClick={() => onSelect(entry.id)}
             className={styles.listItem + (entry.id === selectedChatLogId ? ' ' + styles.selected : '')}
           >
-            <span className={styles.title}>
+            <span className={styles.title} title={entry.title}>
               {editId === entry.id ? (
                 <input
                   className={styles.editInput}

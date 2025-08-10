@@ -10,10 +10,9 @@ export async function POST(req: Request) {
     const { text } = await req.json();
     const result = await generateText({
       model: azure('gpt-4.1'),
-      system: `Erstelle eine sehr kurze Überschrift (maximal 8 Wörter) für nachfolgende Anfrage.`,
-      prompt: text,
+      prompt: `Erstelle eine sehr kurze Überschrift (maximal 8 Wörter) für nachfolgende Anfrage: """${text}"""`,
     });
-    return result.text;
+    return NextResponse.json({ text: result.text });
   } catch (error) {
     if (APICallError.isInstance(error)) {
       return NextResponse.json(error.message, { status: error.statusCode })

@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { BsMagic } from "react-icons/bs";
 
 import buttonStyles from '../../css/buttonStyles.module.css';
@@ -9,30 +9,26 @@ import styles from './styles.module.css';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
-import { useChatMessagesPersistence } from '@/hooks/useChatMessagesPersistence';
-import { useChatLog } from '@/hooks/useChatLog';
 import ChatLog from '@/components/ChatLog/ChatLog';
 import BackgroundPattern from '@/components/BackgroundPattern/BackgroundPattern';
+import { useChatMessagesPersistence } from '@/hooks/useChatMessagesPersistence';
+import { useChatLog } from '@/hooks/useChatLog';
+import { useAutoGenerateTitle } from '@/hooks/useAutoGenerateTitle';
 
 export default function Chat() {
-  const { selectedChatLogId, addChatLog, chatLogs, deleteChatLog, renameChatLog, setSelectedChatLogId } = useChatLog({
-    storageKey: 'persistence-demo'
-  });
-
-  const { messages, setMessages, append, status, error, reload, stop } = useChat({
-    experimental_throttle: 50,
-    api: '/api/chat',
-  });
-
-  const { deleteMessages } = useChatMessagesPersistence({
-    storageKey: selectedChatLogId ?? '',
-    status,
-    messages,
-    setMessages,
-  });
+  const { selectedChatLogId, addChatLog, chatLogs, deleteChatLog, renameChatLog, setSelectedChatLogId } = useChatLog({ storageKey: 'persistence-demo' });
+  const { messages, setMessages, append, status, error, reload, stop } = useChat({ experimental_throttle: 50, api: '/api/chat' });
+  const { deleteMessages } = useChatMessagesPersistence({ storageKey: selectedChatLogId ?? '', status, messages, setMessages });
+  const { generateTitle } = useAutoGenerateTitle();
 
   const typing = status === 'submitted' || status === 'streaming';
   const lastMessage = status === 'ready' ? messages.findLast(x => x.role === 'assistant') : null;
+
+  useEffect(() => {
+    if (messages.length === 1 && selectedChatLogId) {
+      generateTitle(messages[0].content).then(newTitle => renameChatLog(selectedChatLogId, newTitle));
+    }
+  }, [messages]);
 
   const handleSubmit = useCallback((text: string) => {
     append({ content: text, role: 'user' });

@@ -48,11 +48,12 @@
   display: flex;
   gap: 0.25rem;
   margin-left: 0.5rem;
-  transition: opacity 0.3s;
-  opacity: 0;
+  width: 0;
+  visibility: hidden;
 }
 
 .listItem:hover .actions,
 .startItem .actions {
-  opacity: 1;
+  width: initial;
+  visibility: initial;
 }
