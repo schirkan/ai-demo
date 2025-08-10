@@ -11,6 +11,7 @@ const CHAT_LOGS_KEY = 'chat-logs';
 const SELECTED_CHAT_LOG_ID_KEY = 'selected-chat-log-id';
 
 function loadChatLogs(props: Required<ChatLogProps>): ChatLogMeta[] {
+  console.log('loadChatLogs');
   const stored = props.storage.getItem(CHAT_LOGS_KEY + '.' + props.storageKey);
   if (stored) {
     try {
@@ -26,14 +27,17 @@ function loadChatLogs(props: Required<ChatLogProps>): ChatLogMeta[] {
 }
 
 function saveChatLogs(props: Required<ChatLogProps>, logs: ChatLogMeta[]) {
+  console.log('saveChatLogs', logs);
   props.storage.setItem(CHAT_LOGS_KEY + '.' + props.storageKey, JSON.stringify(logs));
 }
 
 function loadSelectedChatLogId(props: Required<ChatLogProps>): string | null {
+  console.log('loadSelectedChatLogId');
   return props.storage.getItem(SELECTED_CHAT_LOG_ID_KEY + '.' + props.storageKey);
 }
 
 function saveSelectedChatLogId(props: Required<ChatLogProps>, id: string | null) {
+  console.log('saveSelectedChatLogId', id);
   if (id) {
     props.storage.setItem(SELECTED_CHAT_LOG_ID_KEY + '.' + props.storageKey, id);
   } else {
@@ -55,8 +59,13 @@ export function useChatLog(props: ChatLogProps) {
 
   // Initial laden
   useEffect(() => {
-    setChatLogs(loadChatLogs(latestProps.current));
+    const initialChatLog = loadChatLogs(latestProps.current);
+    setChatLogs(initialChatLog);
     setSelectedChatLogId(loadSelectedChatLogId(latestProps.current));
+
+    if (initialChatLog.length === 0) {
+      addChatLog();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -72,32 +81,42 @@ export function useChatLog(props: ChatLogProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChatLogId]);
 
+  const addChatLog = useCallback(() => {
+    const newLog: ChatLogMeta = {
+      id: crypto.randomUUID(),
+      title: 'new chat',
+      createdAt: new Date().toISOString(),
+    };
+    setChatLogs((prev) => [newLog, ...prev]);
+    setSelectedChatLogId(newLog.id);
+    return newLog.id;
+  }, []);
+
+  const deleteChatLog = useCallback((id: string) => {
+    let nextId: string | undefined = undefined;
+    setChatLogs((prev) => {
+      nextId = prev.find((log) => log.id !== id)?.id;
+      return prev.filter((log) => log.id !== id);
+    });
+    setSelectedChatLogId((prev) => (prev === id ? nextId || null : prev));
+  }, []);
+
+  const renameChatLog = useCallback((id: string, newTitle: string) => {
+    setChatLogs((prev) =>
+      prev.map((log) =>
+        log.id === id
+          ? { ...log, title: newTitle }
+          : log
+      )
+    );
+  }, []);
+
   return {
     chatLogs,
     selectedChatLogId,
     setSelectedChatLogId,
-    addChatLog: useCallback(() => {
-      const newLog: ChatLogMeta = {
-        id: crypto.randomUUID(),
-        title: 'new chat',
-        createdAt: new Date().toISOString(),
-      };
-      setChatLogs((prev) => [newLog, ...prev]);
-      setSelectedChatLogId(newLog.id);
-      return newLog.id;
-    }, []),
-    deleteChatLog: useCallback((id: string) => {
-      setChatLogs((prev) => prev.filter((log) => log.id !== id));
-      setSelectedChatLogId((prev) => (prev === id ? null : prev));
-    }, []),
-    renameChatLog: useCallback((id: string, newTitle: string) => {
-      setChatLogs((prev) =>
-        prev.map((log) =>
-          log.id === id
-            ? { ...log, title: newTitle }
-            : log
-        )
-      );
-    }, []),
+    addChatLog,
+    deleteChatLog,
+    renameChatLog,
   };
 }

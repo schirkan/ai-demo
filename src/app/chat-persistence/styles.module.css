@@ -1,23 +1,43 @@
+.header {
+  position: absolute;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 7rem;
+  font-size: 3rem;
+  user-select: none;
+}
+
 .container {
   display: flex;
-  margin: 5rem;
-  height: calc(100dvh - 10rem);
-  width: fit-content;
+  margin: 6.25rem;
+  height: calc(100dvh - 12.5rem);
   margin-left: auto;
   margin-right: auto;
-  /* position: relative; */
-  border: 1px solid light-dark(black, white);
+  border: 1px solid var(--foreground);
   border-radius: 1rem;
   overflow: hidden;
+  background: var(--background);
+  max-width: 60rem;
 }
 
 .left {
-  width: 20rem;
+  min-width: 20rem;
   position: relative;
-  border-right: 1px solid light-dark(black, white);
+  border-right: 1px solid var(--foreground);
 }
 
 .right {
-  width: 40rem;
+  width: -webkit-fill-available;
   position: relative;
+}
+
+.noActiveChat {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
 }

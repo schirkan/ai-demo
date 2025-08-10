@@ -3,9 +3,11 @@
   justify-content: center;
   align-items: center;
 
-  border-radius: 50%;
+  /* border-radius: 50%; */
+  border-radius: 1000px;
   font-size: 1rem;
   cursor: pointer;
+  user-select: none;
 
   padding: 0.5rem;
   border: 1px solid #d1d5db;

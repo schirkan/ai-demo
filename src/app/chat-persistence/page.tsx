@@ -2,14 +2,17 @@
 
 import { useChat } from '@ai-sdk/react';
 import { useCallback } from 'react';
+import { BsMagic } from "react-icons/bs";
 
+import buttonStyles from '../../css/buttonStyles.module.css';
 import styles from './styles.module.css';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
 import { useChatMessagesPersistence } from '@/hooks/useChatMessagesPersistence';
 import { useChatLog } from '@/hooks/useChatLog';
-import ChatLogUi from '@/components/ChatLogUi/ChatLogUi';
+import ChatLog from '@/components/ChatLog/ChatLog';
+import BackgroundPattern from '@/components/BackgroundPattern/BackgroundPattern';
 
 export default function Chat() {
   const { selectedChatLogId, addChatLog, chatLogs, deleteChatLog, renameChatLog, setSelectedChatLogId } = useChatLog({
@@ -42,13 +45,25 @@ export default function Chat() {
 
   return (
     <>
+      <BackgroundPattern styleName='basic-grid'></BackgroundPattern>
+      <h1 className={styles.header}>MyGPT</h1>
       <div className={styles.container}>
         <div className={styles.left}>
-          <ChatLogUi {...{ chatLogs, selectedChatLogId, onSelect: setSelectedChatLogId, onRename: renameChatLog, onDelete, onAdd: addChatLog }} />
+          <ChatLog {...{ chatLogs, selectedChatLogId, onSelect: setSelectedChatLogId, onRename: renameChatLog, onDelete, onAdd: addChatLog }} />
         </div>
         <div className={styles.right}>
-          <ChatMessages style="whatsapp" {...{ typing, messages, error, reload, stop }} />
-          <ChatInput onSubmit={handleSubmit} showVoiceInput={true} />
+          {selectedChatLogId && (
+            <>
+              <ChatMessages style="whatsapp" {...{ typing, messages, error, reload, stop }} />
+              <ChatInput onSubmit={handleSubmit} showVoiceInput={true} />
+            </>
+          ) || (
+              <div className={styles.noActiveChat}>
+                <button type="button" onClick={addChatLog} className={buttonStyles.iconButton}>
+                  <BsMagic />&nbsp;Start your first chat
+                </button>
+              </div>
+            )}
         </div>
       </div>
       <SpeechOptions text={lastMessage?.content} />

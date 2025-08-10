@@ -16,7 +16,7 @@ export interface ChatLogUiProps {
   onRename: (id: string, newTitle: string) => void;
 }
 
-export default function ChatLogUi({
+export default function ChatLog({
   chatLogs,
   selectedChatLogId,
   onAdd,
@@ -45,11 +45,11 @@ export default function ChatLogUi({
       <ul>
         <li className={styles.listItem + ' ' + styles.startItem}>
           <span className={styles.title}>
-            Start new chat
+            Chat history
           </span>
           <span className={styles.actions}>
-            <button type="button" onClick={() => onAdd()} className={buttonStyles.iconButton} title="Neuen Chat anlegen">
-              <BsPlus />
+            <button type="button" onClick={() => onAdd()} className={buttonStyles.iconButton} title="Start new chat">
+              <BsPlus /> New
             </button>
           </span>
         </li>
@@ -75,14 +75,14 @@ export default function ChatLogUi({
               )}
             </span>
             <span className={styles.actions}>
-              <button type="button" className={buttonStyles.iconButton} title="Bearbeiten"
+              <button type="button" className={buttonStyles.iconButton} title="Edit"
                 onClick={e => {
                   e.stopPropagation();
                   handleEdit(entry.id, entry.title);
                 }}>
                 <BsPencil />
               </button>
-              <button type="button" className={buttonStyles.iconButton} title="Löschen"
+              <button type="button" className={buttonStyles.iconButton} title="Delete"
                 onClick={e => {
                   e.stopPropagation();
                   onDelete(entry.id);

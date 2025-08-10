@@ -1,6 +1,8 @@
 'use client';
+
 import { useEffect, useState, useRef } from "react";
-import { BsArrowDown, BsArrowUp } from "react-icons/bs";
+import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+
 import styles from './styles.module.css';
 import buttonStyles from '../../css/buttonStyles.module.css';
 
@@ -60,7 +62,7 @@ export default function ScrollToButton<T extends HTMLElement>({
       onClick={handleClick}
       data-show={visible}
     >
-      {direction === 'up' ? <BsArrowUp /> : <BsArrowDown />}
+      {direction === 'up' ? <BsChevronUp /> : <BsChevronDown />}
     </button>
   );
 }

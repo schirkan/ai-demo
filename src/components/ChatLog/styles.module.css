@@ -8,7 +8,7 @@
   justify-content: space-between;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.3s;
   min-height: 44px;
   font-size: 1rem;
   background: transparent;
@@ -22,8 +22,6 @@
 
 .startItem {
   background: light-dark(#e5e5ea, #26252a);
-  color: #888;
-  font-style: italic;
   cursor: default;
 }
 
@@ -50,10 +48,11 @@
   display: flex;
   gap: 0.25rem;
   margin-left: 0.5rem;
+  transition: opacity 0.3s;
+  opacity: 0;
 }
 
-.actions button {
-  /* Icon-Button-Styles kommen aus buttonStyles.module.css */
-  padding: 0.2rem;
-  font-size: 1.1em;
+.listItem:hover .actions,
+.startItem .actions {
+  opacity: 1;
 }

@@ -41,7 +41,7 @@ const saveMessages = (props: Required<ChatMessagesPersistenceProps>) => {
 // Nachrichten löschen
 const deleteMessages = (props: Required<ChatMessagesPersistenceProps>, storageKey: string | undefined) => {
   const key = `chat-messages-${storageKey || props.storageKey}`;
-  console.log("clearMessages", key);
+  console.log("deleteMessages", key);
   props.storage.removeItem(key);
   props.setMessages([]);
 };
