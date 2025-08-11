@@ -97,6 +97,7 @@ export default function Page() {
           style={style}
           error={sampleError}
           reload={reload}
+          stop={() => { }}
         />
         <ChatInput
           onSubmit={handleSubmit}

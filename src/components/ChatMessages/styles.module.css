@@ -45,6 +45,12 @@
   margin-bottom: 1rem;
 }
 
+.stopButton {
+  position: absolute;
+  bottom: 3.5rem;
+  align-self: center;
+}
+
 .loader {
   margin-left: 30px;
   width: 10px;

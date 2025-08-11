@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 
 // see https://github.com/megh-bari/pattern-craft/blob/main/src/app/utils/patterns.ts
 
-export type StyleName = 'basic-grid' | 'grid-fade-diagonal-left' | 'grid-fade-sides';
+export type StyleName = 'basic-grid' | 'grid-fade-diagonal-left' | 'grid-fade-sides' | 'blueprint';
 
 const styles: Record<StyleName, CSSProperties> = {
   'basic-grid': {
@@ -32,6 +32,17 @@ const styles: Record<StyleName, CSSProperties> = {
     backgroundSize: "32px 32px",
     WebkitMaskImage: "linear-gradient(90deg, #fff, #0000, #0000, #fff)",
     maskImage: "linear-gradient(90deg, #fff, #0000, #0000, #fff)"
+  },
+  'blueprint': {
+    backgroundImage: `
+    linear-gradient(rgba(255,255,255,.5) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255,255,255,.5) 2px, transparent 2px),
+    linear-gradient(rgba(255,255,255,.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.28) 1px, transparent 1px),
+    linear-gradient(to bottom, #58c 0%, #3162a3 100%)
+    `,
+    backgroundSize: "100px 100px, 100px 100px, 20px 20px, 20px 20px, 100% 100dvh",
+    backgroundPosition: "-2px -2px, -2px -2px, -1px -1px, -1px -1px"
   }
 };
 

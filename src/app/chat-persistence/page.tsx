@@ -41,7 +41,7 @@ export default function Chat() {
 
   return (
     <>
-      <BackgroundPattern styleName='basic-grid'></BackgroundPattern>
+      <BackgroundPattern styleName='blueprint' />
       <h1 className={styles.header}>MyGPT</h1>
       <div className={styles.container}>
         <div className={styles.left}>
@@ -61,8 +61,8 @@ export default function Chat() {
               </div>
             )}
         </div>
+        <SpeechOptions text={lastMessage?.content} position='bottom-left' />
       </div>
-      <SpeechOptions text={lastMessage?.content} />
     </>
   );
 }

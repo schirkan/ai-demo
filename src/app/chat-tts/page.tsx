@@ -16,10 +16,12 @@ export default function Chat() {
   }, [append]);
 
   return (
-    <div className={styles.container}>
-      <ChatMessages messages={messages} style='whatsapp' typing={loading} error={error} reload={reload} stop={stop} />
-      <ChatInput onSubmit={handleSubmit} showVoiceInput={true} />
+    <>
+      <div className={styles.container}>
+        <ChatMessages messages={messages} style='whatsapp' typing={loading} error={error} reload={reload} stop={stop} />
+        <ChatInput onSubmit={handleSubmit} showVoiceInput={true} />
+      </div>
       <SpeechOptions text={lastMessage?.content} />
-    </div>
+    </>
   );
 }

@@ -22,18 +22,20 @@ export default function Chat() {
   }, [append]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.agentSelection}>
-        <label htmlFor="agent-select" style={{ marginRight: '0.5rem' }}>Agent auswählen:</label><br />
-        <select id="agent-select" value={agent} onChange={e => setAgent(e.target.value)}>
-          {agents.map(a => (
-            <option key={a} value={a}>{a}</option>
-          ))}
-        </select>
+    <>
+      <div className={styles.container}>
+        <div className={styles.agentSelection}>
+          <label htmlFor="agent-select" style={{ marginRight: '0.5rem' }}>Agent auswählen:</label><br />
+          <select id="agent-select" value={agent} onChange={e => setAgent(e.target.value)}>
+            {agents.map(a => (
+              <option key={a} value={a}>{a}</option>
+            ))}
+          </select>
+        </div>
+        <ChatMessages messages={messages} style='whatsapp' typing={loading} error={error} reload={reload} stop={stop} />
+        <ChatInput onSubmit={handleSubmit} showVoiceInput={true} />
       </div>
-      <ChatMessages messages={messages} style='whatsapp' typing={loading} error={error} reload={reload} stop={stop} />
-      <ChatInput onSubmit={handleSubmit} showVoiceInput={true} />
       <SpeechOptions text={lastMessage?.content} />
-    </div>
+    </>
   );
 }

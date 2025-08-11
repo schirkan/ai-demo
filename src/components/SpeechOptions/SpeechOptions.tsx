@@ -10,7 +10,8 @@ import buttonStyles from '../../css/buttonStyles.module.css';
 import styles from './styles.module.css';
 
 export interface SpeechOptionsProps {
-  text?: string
+  text?: string,
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left',
 }
 
 const key = `SpeechAutoPlayEnabled`;
@@ -18,6 +19,8 @@ const key = `SpeechAutoPlayEnabled`;
 export default function SpeechOptions(props: SpeechOptionsProps) {
   const [enabled, setEnabled] = useState(false);
   const [lang, setLang] = useState('de-DE');
+  const [voiceURI, setVoiceURI] = useState('Microsoft Conrad Online (Natural) - German (Germany)');
+  const [showOptions, setShowOptions] = useState(false);
 
   // localStorage nur im Client auslesen
   useEffect(() => {
@@ -25,8 +28,6 @@ export default function SpeechOptions(props: SpeechOptionsProps) {
     const stored = localStorage.getItem(key);
     setEnabled(stored !== "false");
   }, []);
-  const [voiceURI, setVoiceURI] = useState('Microsoft Conrad Online (Natural) - German (Germany)');
-  const [showOptions, setShowOptions] = useState(false);
 
   const text = props?.text?.replaceAll('**', '');
 
@@ -41,7 +42,7 @@ export default function SpeechOptions(props: SpeechOptionsProps) {
   }, [enabled]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-position={props.position || 'top-right'}>
       <div className={styles.buttons}>
         <button className={buttonStyles.iconButton} data-visible={enabled} disabled={speechStatus === "stopped"} onClick={stop}>
           <BsFillStopFill />

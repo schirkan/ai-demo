@@ -34,12 +34,12 @@ export default function ChatMessages(props: ChatMessagesProps) {
         {props.typing && (
           <div className={styles.typingIndicator}>
             <div className={styles.loader}></div>
-            {props.stop && (
-              <button type="button" onClick={props.stop} className={styles.stopButton + " " + buttonStyles.iconButton}>
-                <BsFillStopFill />
-              </button>
-            )}
           </div>
+        )}
+        {props.typing && props.stop && (
+          <button type="button" onClick={props.stop} className={styles.stopButton + " " + buttonStyles.iconButton}>
+            <BsFillStopFill />&nbsp;Stop
+          </button>
         )}
         {props.error && (
           <div className={styles.error}>

@@ -1,10 +1,6 @@
 .container {
-  position: fixed;
-  top: 0.5rem;
-  right: 0.5rem;
+  position: absolute;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
 
   .buttons {
     display: flex;
@@ -24,18 +20,62 @@
     display: flex;
     gap: 0.5rem;
     padding: 0.5rem;
-    margin-top: 0.5rem;
-    border: 1px solid #d1d5db;
-    background-color: #eee;
+    border: 1px solid light-dark(#d1d5db, #404040);
+    background-color: light-dark(#eee, #343434);
     border-radius: 0.5rem;
     box-shadow:
       0 10px 15px -3px rgba(0, 0, 0, 0.1),
       0 4px 6px -4px rgba(0, 0, 0, 0.1);
   }
-  @media (prefers-color-scheme: dark) {
+
+  &[data-position="top-right"] {
+    top: 0.5rem;
+    right: 0.5rem;
+
+    flex-direction: column;
+    align-items: flex-end;
+
     .options {
-      background-color: #343434;
-      border-color: #404040;
+      margin-top: 0.5rem;
+    }
+  }
+  &[data-position="top-left"] {
+    top: 0.5rem;
+    left: 0.5rem;
+
+    flex-direction: column;
+    align-items: flex-start;
+
+    .buttons {
+      flex-direction: row-reverse;
+    }
+    .options {
+      margin-top: 0.5rem;
+    }
+  }
+  &[data-position="bottom-right"] {
+    bottom: 0.5rem;
+    right: 0.5rem;
+
+    flex-direction: column-reverse;
+    align-items: flex-end;
+
+    .options {
+      margin-bottom: 0.5rem;
+    }
+  }
+  &[data-position="bottom-left"] {
+    bottom: 0.5rem;
+    left: 0.5rem;
+
+    flex-direction: column-reverse;
+    align-items: flex-start;
+
+    .buttons {
+      flex-direction: row-reverse;
+    }
+    .options {
+      margin-bottom: 0.5rem;
     }
   }
 }

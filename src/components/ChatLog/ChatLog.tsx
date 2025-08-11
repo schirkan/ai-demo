@@ -49,7 +49,7 @@ export default function ChatLog({
           </span>
           <span className={styles.actions}>
             <button type="button" onClick={() => onAdd()} className={buttonStyles.iconButton} title="Start new chat">
-              <BsPlus /> New
+              <BsPlus />&nbsp;New
             </button>
           </span>
         </li>
