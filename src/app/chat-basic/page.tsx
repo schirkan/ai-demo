@@ -6,17 +6,25 @@ import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import ChatInput from '@/components/ChatInput/ChatInput';
 
 export default function Chat() {
-  const { messages, append, status } = useChat({ experimental_throttle: 50 });
+  const { messages, sendMessage, status, stop, error, regenerate } = useChat({ experimental_throttle: 50 });
   const loading = status === 'submitted' || status === 'streaming';
 
   const handleSubmit = useCallback((text: string) => {
-    append({ content: text, role: 'user' });
-  }, [append]);
+    sendMessage({ role: 'user', parts: [{ type: 'text', text: text }] });
+  }, [sendMessage]);
 
   return (
     <div className={styles.container}>
-      <ChatMessages messages={messages} />
-      <ChatInput onSubmit={handleSubmit} disabled={loading} />
+      <ChatMessages
+        messages={messages}
+        loading={loading}
+        stop={stop}
+        error={error}
+        regenerate={regenerate} />
+      <ChatInput
+        onSubmit={handleSubmit}
+        loading={loading}
+        stop={stop} />
     </div>
   );
 }

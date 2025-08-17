@@ -1,6 +1,6 @@
 'use client';
 
-import { Message } from 'ai';
+import { UIMessage } from 'ai';
 import { BsArrowClockwise, BsFillStopFill } from "react-icons/bs";
 import { useRef } from 'react';
 
@@ -9,15 +9,17 @@ import ScrollToButton from '../ScrollToButton/ScrollToButton';
 import styles from './styles.module.css';
 import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
 import ScrollIntoView from '@/components/ScrollIntoView/ScrollIntoView';
+import { getMessageText } from '@/utils/UIMessageHelper';
 
 export interface ChatMessagesProps {
   style?: 'default' | 'whatsapp' | 'ios' | undefined;
-  messages: Message[];
-  typing?: boolean;
+  messages: UIMessage[];
+  loading?: boolean;
   error?: Error;
-  reload?: () => void;
+  regenerate?: () => void;
   stop?: () => void;
 }
+
 
 export default function ChatMessages(props: ChatMessagesProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -28,23 +30,28 @@ export default function ChatMessages(props: ChatMessagesProps) {
         {props.messages.map((message) => (
           <div key={message.id} className={styles.message} data-role={message.role}>
             <div className={styles.roleLabel}>{message.role === 'user' ? 'User' : 'AI'}</div>
-            <div className={styles.messageContent}><MemoizedMarkdown id={message.id} content={message.content} /></div>
+            <div className={styles.messageContent}>
+              <MemoizedMarkdown
+                id={message.id}
+                content={getMessageText(message)}
+              />
+            </div>
           </div>
         ))}
-        {props.typing && (
+        {props.loading && (
           <div className={styles.typingIndicator}>
             <div className={styles.loader}></div>
           </div>
         )}
-        {props.typing && props.stop && (
+        {props.loading && props.stop && (
           <button type="button" onClick={props.stop} className={styles.stopButton + " " + buttonStyles.iconButton}>
             <BsFillStopFill />&nbsp;Stop
           </button>
         )}
         {props.error && (
           <div className={styles.error}>
-            {props.reload && (
-              <button type="button" onClick={props.reload} className={styles.reloadButton + " " + buttonStyles.iconButton}>
+            {props.regenerate && (
+              <button type="button" onClick={props.regenerate} className={styles.reloadButton + " " + buttonStyles.iconButton}>
                 <BsArrowClockwise />
               </button>
             )}

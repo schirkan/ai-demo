@@ -2,18 +2,35 @@
 import ChatMessages from "@/components/ChatMessages/ChatMessages";
 import { useState, useCallback } from "react";
 import styles from "./styles.module.css"
-import { Message } from 'ai';
+import { UIMessage } from 'ai';
 import ChatInput from "@/components/ChatInput/ChatInput";
 
-const sampleMessages: Message[] = [
-  { id: "1", role: "user", content: "Hallo KI, ich überlege, eine Photovoltaikanlage auf meinem Dach zu installieren. Lohnt sich das überhaupt?" },
-  { id: "2", role: "assistant", content: "Hallo! Das kommt auf verschiedene Faktoren an, wie zum Beispiel die Ausrichtung deines Dachs, die Sonneneinstrahlung und deinen Stromverbrauch. In vielen Fällen lohnt sich eine Photovoltaikanlage aber finanziell und ökologisch." },
-  { id: "3", role: "user", content: "Wie viel Strom kann ich denn ungefähr selbst erzeugen?" },
-  { id: "4", role: "assistant", content: "Das hängt von der Größe der Anlage und der Sonneneinstrahlung ab. Im Durchschnitt erzeugt eine 10 kWp-Anlage in Deutschland etwa 9.000 bis 10.000 kWh Strom pro Jahr." },
-  { id: "5", role: "user", content: "Und was passiert, wenn ich mehr Strom erzeuge, als ich verbrauche?" },
-  { id: "6", role: "assistant", content: "Überschüssiger Strom kann ins öffentliche Netz eingespeist werden. Dafür erhältst du eine Einspeisevergütung, deren Höhe vom Zeitpunkt der Inbetriebnahme abhängt." },
-  { id: "7", role: "user", content: "Muss ich die Anlage regelmäßig warten lassen?" },
-  { id: "8", role: "assistant", content: "Photovoltaikanlagen sind relativ wartungsarm. Es empfiehlt sich aber, sie alle paar Jahre von einem Fachbetrieb überprüfen zu lassen, um die optimale Leistung zu gewährleisten." }
+const sampleMessages: UIMessage[] = [
+  {
+    id: "1", role: "user",
+    parts: [{ type: 'text', text: "Hallo KI, ich überlege, eine Photovoltaikanlage auf meinem Dach zu installieren. Lohnt sich das überhaupt?" }]
+  }, {
+    id: "2", role: "assistant",
+    parts: [{ type: 'text', text: "Hallo! Das kommt auf verschiedene Faktoren an, wie zum Beispiel die Ausrichtung deines Dachs, die Sonneneinstrahlung und deinen Stromverbrauch. In vielen Fällen lohnt sich eine Photovoltaikanlage aber finanziell und ökologisch." }]
+  }, {
+    id: "3", role: "user",
+    parts: [{ type: 'text', text: "Wie viel Strom kann ich denn ungefähr selbst erzeugen?" }]
+  }, {
+    id: "4", role: "assistant",
+    parts: [{ type: 'text', text: "Das hängt von der Größe der Anlage und der Sonneneinstrahlung ab. Im Durchschnitt erzeugt eine 10 kWp-Anlage in Deutschland etwa 9.000 bis 10.000 kWh Strom pro Jahr." }]
+  }, {
+    id: "5", role: "user",
+    parts: [{ type: 'text', text: "Und was passiert, wenn ich mehr Strom erzeuge, als ich verbrauche?" }]
+  }, {
+    id: "6", role: "assistant",
+    parts: [{ type: 'text', text: "Überschüssiger Strom kann ins öffentliche Netz eingespeist werden. Dafür erhältst du eine Einspeisevergütung, deren Höhe vom Zeitpunkt der Inbetriebnahme abhängt." }]
+  }, {
+    id: "7", role: "user",
+    parts: [{ type: 'text', text: "Muss ich die Anlage regelmäßig warten lassen?" }]
+  }, {
+    id: "8", role: "assistant",
+    parts: [{ type: 'text', text: "Photovoltaikanlagen sind relativ wartungsarm. Es empfiehlt sich aber, sie alle paar Jahre von einem Fachbetrieb überprüfen zu lassen, um die optimale Leistung zu gewährleisten." }]
+  }
 ];
 
 export default function Page() {
@@ -22,7 +39,7 @@ export default function Page() {
   const [showVoiceInput, setShowVoiceInput] = useState(false);
   const [showSampleError, setShowSampleError] = useState(false);
 
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<UIMessage[]>([]);
   const demo = () => {
     setMessages([]);
     sampleMessages.forEach((msg, index) => {
@@ -42,7 +59,7 @@ export default function Page() {
     setMessages(m => [...m, {
       id: 'User' + Date.now().toString(),
       role: 'user',
-      content: text
+      parts: [{ type: 'text', text }]
     }]);
 
     window.setTimeout(() => {
@@ -53,7 +70,7 @@ export default function Page() {
       setMessages(m => [...m, {
         id: 'AI' + Date.now().toString(),
         role: 'assistant',
-        content: text.toUpperCase()
+        parts: [{ type: 'text', text: text.toUpperCase() }]
       }]);
       setTyping(false);
     }, 1500);
@@ -61,7 +78,7 @@ export default function Page() {
 
   const sampleError = showSampleError ? new Error('This is a sample error.') : undefined;
 
-  const reload = () => {
+  const regenerate = () => {
     setShowSampleError(false);
   };
 
@@ -93,16 +110,18 @@ export default function Page() {
       <div className={styles.container}>
         <ChatMessages
           messages={messages}
-          typing={typing}
+          loading={typing}
           style={style}
           error={sampleError}
-          reload={reload}
+          regenerate={regenerate}
           stop={() => { }}
         />
         <ChatInput
           onSubmit={handleSubmit}
           placeholder="Type your message..."
           showVoiceInput={showVoiceInput}
+          loading={typing}
+          stop={() => { }}
         />
       </div>
       {typing}

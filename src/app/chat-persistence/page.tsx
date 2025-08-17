@@ -14,25 +14,36 @@ import BackgroundPattern from '@/components/BackgroundPattern/BackgroundPattern'
 import { useChatMessagesPersistence } from '@/hooks/useChatMessagesPersistence';
 import { useChatLog } from '@/hooks/useChatLog';
 import { useAutoGenerateTitle } from '@/hooks/useAutoGenerateTitle';
+import { getMessageText } from '@/utils/UIMessageHelper';
+import { DefaultChatTransport } from 'ai';
 
 export default function Chat() {
-  const { selectedChatLogId, addChatLog, chatLogs, deleteChatLog, renameChatLog, setSelectedChatLogId } = useChatLog({ storageKey: 'persistence-demo' });
-  const { messages, setMessages, append, status, error, reload, stop } = useChat({ experimental_throttle: 50, api: '/api/chat' });
-  const { deleteMessages } = useChatMessagesPersistence({ storageKey: selectedChatLogId ?? '', status, messages, setMessages });
+  const { selectedChatLogId, addChatLog, chatLogs, deleteChatLog, renameChatLog, setSelectedChatLogId } = useChatLog({
+    storageKey: 'persistence-demo'
+  });
+  const { messages, setMessages, sendMessage, status, error, regenerate, stop } = useChat({
+    experimental_throttle: 50,
+    transport: new DefaultChatTransport({ api: '/api/chat' }),
+  });
+  const { deleteMessages } = useChatMessagesPersistence({
+    storageKey: selectedChatLogId ?? '', status, messages, setMessages
+  });
   const { generateTitle } = useAutoGenerateTitle();
 
-  const typing = status === 'submitted' || status === 'streaming';
+  const loading = status === 'submitted' || status === 'streaming';
   const lastMessage = status === 'ready' ? messages.findLast(x => x.role === 'assistant') : null;
 
   useEffect(() => {
     if (messages.length === 1 && selectedChatLogId) {
-      generateTitle(messages[0].content).then(newTitle => renameChatLog(selectedChatLogId, newTitle));
+      const content = getMessageText(messages[0]);
+      generateTitle(content).then(newTitle => renameChatLog(selectedChatLogId, newTitle));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
   const handleSubmit = useCallback((text: string) => {
-    append({ content: text, role: 'user' });
-  }, [append]);
+    sendMessage({ role: 'user', parts: [{ type: 'text', text: text }] });
+  }, [sendMessage]);
 
   const onDelete = useCallback((id: string) => {
     deleteMessages(id);
@@ -50,8 +61,17 @@ export default function Chat() {
         <div className={styles.right}>
           {selectedChatLogId && (
             <>
-              <ChatMessages style="whatsapp" {...{ typing, messages, error, reload, stop }} />
-              <ChatInput onSubmit={handleSubmit} showVoiceInput={true} />
+              <ChatMessages
+                style="whatsapp"
+                messages={messages}
+                loading={loading}
+                stop={stop}
+                error={error}
+                regenerate={regenerate} />
+              <ChatInput
+                onSubmit={handleSubmit}
+                showVoiceInput={true}
+                loading={loading} stop={stop} />
             </>
           ) || (
               <div className={styles.noActiveChat}>
@@ -61,7 +81,7 @@ export default function Chat() {
               </div>
             )}
         </div>
-        <SpeechOptions text={lastMessage?.content} position='bottom-left' />
+        <SpeechOptions text={getMessageText(lastMessage)} position='bottom-left' />
       </div>
     </>
   );

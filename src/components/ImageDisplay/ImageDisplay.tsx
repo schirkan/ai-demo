@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { LuPaintRoller, LuPaintbrush, LuPaintbrushVertical, LuPalette, LuPaintBucket, LuImage, LuCircleAlert, LuShare } from "react-icons/lu";
-import { imageHelpers } from "@/lib/image-helpers";
+import { imageHelpers } from "@/utils/image-helpers";
 import { ProviderTiming } from "@/hooks/useImageGeneration";
 import { BsArrowClockwise, BsPencilSquare } from "react-icons/bs";
 import styles from './styles.module.css';

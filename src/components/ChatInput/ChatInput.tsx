@@ -1,22 +1,24 @@
 'use client';
-import styles from './styles.module.css';
-import buttonStyles from '../../css/buttonStyles.module.css';
-import { ChangeEventHandler, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+
+import { BsMicFill, BsSendFill, BsFillStopFill } from 'react-icons/bs';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { BsMicFill } from 'react-icons/bs';
-import { BsSendFill } from 'react-icons/bs';
-import TextareaAutosize from '../TextareaAutosize/TextareaAutosize';
+import { ChangeEventHandler, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useLatest, useUnmount } from 'react-use';
 
+import styles from './styles.module.css';
+import buttonStyles from '../../css/buttonStyles.module.css';
+import TextareaAutosize from '../TextareaAutosize/TextareaAutosize';
+
 export interface ChatInputProps {
-  onSubmit: (text: string) => void,
-  placeholder?: string,
-  showVoiceInput?: boolean,
-  disabled?: boolean,
-  initialValue?: string,
+  onSubmit: (text: string) => void;
+  placeholder?: string;
+  showVoiceInput?: boolean;
+  loading?: boolean;
+  initialValue?: string;
+  stop?: () => void;
 }
 
-export default function ChatInput({ onSubmit, placeholder, showVoiceInput, disabled, initialValue }: ChatInputProps) {
+export default function ChatInput({ onSubmit, placeholder, showVoiceInput, loading, initialValue, stop }: ChatInputProps) {
   const [input, setInput] = useState(initialValue);
   const { transcript, finalTranscript, listening, resetTranscript } = useSpeechRecognition();
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -31,10 +33,10 @@ export default function ChatInput({ onSubmit, placeholder, showVoiceInput, disab
   const handleSubmit = useCallback((event?: FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
     const value = latestInput.current || '';
-    if (disabled || value.trim() === '') return;
+    if (loading || value.trim() === '') return;
     latestOnSubmit.current(value);
     setInput('');
-  }, [disabled, latestInput, latestOnSubmit]);
+  }, [loading, latestInput, latestOnSubmit]);
 
   const handleTextareaChange: ChangeEventHandler<HTMLTextAreaElement> = (event): void => {
     setInput(event.target.value);
@@ -123,12 +125,15 @@ export default function ChatInput({ onSubmit, placeholder, showVoiceInput, disab
           <BsMicFill />
         </button>
       }
-      <button
-        type="submit"
-        disabled={!input || disabled}
-        className={styles.submitButton + " " + buttonStyles.iconButton}>
-        <BsSendFill />
-      </button>
+      {loading && stop ? (
+        <button type="button" onClick={stop} className={styles.stopButton + " " + buttonStyles.iconButton}>
+          <BsFillStopFill />
+        </button>
+      ) : (
+        <button type="submit" disabled={!input || loading} className={styles.submitButton + " " + buttonStyles.iconButton}>
+          <BsSendFill />
+        </button>
+      )}
     </form>
   );
 }

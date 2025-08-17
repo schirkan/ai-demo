@@ -1,5 +1,5 @@
 import { azure } from '@ai-sdk/azure';
-import { APICallError, streamText } from 'ai';
+import { APICallError, convertToModelMessages, streamText, UIMessage } from 'ai';
 import { NextResponse } from 'next/server';
 
 import promptDungeonsAndDragons from './DungeonsAndDragons.md';
@@ -22,13 +22,13 @@ export async function POST(req: Request) {
     const { searchParams } = new URL(req.url);
     const agent = searchParams.get('agent') || '';
     const systemPrompt = agents[agent] || 'Du bist ein hilfsbereiter Chatbot.';
-    const { messages } = await req.json();
+    const { messages }: { messages: UIMessage[] } = await req.json();
     const result = streamText({
       model: azure('gpt-4.1'),
       system: systemPrompt,
-      messages,
+      messages: convertToModelMessages(messages),
     });
-    return result.toDataStreamResponse();
+    return result.toUIMessageStreamResponse();
   } catch (error) {
     if (APICallError.isInstance(error)) {
       return NextResponse.json(error.message, { status: error.statusCode })

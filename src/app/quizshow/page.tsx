@@ -2,7 +2,7 @@
 import { useChat } from '@ai-sdk/react';
 import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
 import styles from './styles.module.css';
-import { UIMessage, } from 'ai';
+import { DefaultChatTransport, UIMessage } from 'ai';
 import { QuizShowType } from '@/app/api/quizshow/schema';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
@@ -10,30 +10,41 @@ import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
 import { useState, useCallback } from 'react';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import BackgroundPattern from '@/components/BackgroundPattern/BackgroundPattern';
+import { getDataPart, getMessageText } from '@/utils/UIMessageHelper';
 
-const getObject = (message: UIMessage): QuizShowType => {
-  const text = message.parts[0].type === 'text' && message.parts[0].text || '{}';
-  const response: QuizShowType = JSON.parse(text);
-  return response;
+const getObject = (message?: UIMessage): QuizShowType | undefined => {
+  return message ? getDataPart<QuizShowType>(message, 'data-quiz') : undefined;
+  // return message ? getDataProxy<QuizShowType>(message) : undefined;
 };
 
+
+
 const mapMessage = (message: UIMessage): UIMessage => {
-  const content = message.role === 'assistant' ? getObject(message).speak : message.content;
-  return { ...message, content };
+  if (message.role === 'assistant') {
+    const text = getMessageText(message);
+    // const text = getDataPart<string>(message, 'data-speak') || '';
+    // const text = getObject(message)?.speak || '';
+    return { ...message, parts: [{ type: 'text', text: text }] };
+  } else {
+    return message;
+  }
 }
 
 export default function Game() {
   const [showSecret, setShowSecret] = useState(false);
-  const { messages, append, status, error, reload, stop } = useChat({ api: '/api/quizshow', streamProtocol: 'text' });
+  const { messages, sendMessage, status, error, regenerate, stop } = useChat({
+    transport: new DefaultChatTransport({ api: '/api/quizshow' }),
+    experimental_throttle: 100
+  });
 
   const loading = status === 'submitted' || status === 'streaming';
-  const lastMessage: UIMessage | undefined = messages.findLast(x => x.role === 'assistant');
-  const response: QuizShowType | null = lastMessage ? getObject(lastMessage) : null;
-  const actions: string[] = response?.actions || ['Start'];
+  const lastMessage: UIMessage | undefined = messages.findLast(x => x.role === 'assistant' && x.parts.some(x => x.type === 'data-quiz'));
+  const response: QuizShowType | undefined = getObject(lastMessage);
+  const actions: string[] = messages.length === 0 ? ['Start'] : response?.actions || [];
 
   const handleSubmit = useCallback((text: string) => {
-    append({ content: text, role: 'user' });
-  }, [append]);
+    sendMessage({ role: 'user', parts: [{ type: 'text', text: text }] });
+  }, [sendMessage]);
 
   return (
     <>
@@ -41,13 +52,13 @@ export default function Game() {
       <h1 className={styles.header}>Quizshow</h1>
       <div className={styles.container}>
         <div className={styles.left}>
-          <SpeechOptions text={response?.speak} />
+          <SpeechOptions text={response?.speak || ''} />
           <div className={styles.show}>
             <MemoizedMarkdown content={response?.show ?? ''} />
           </div>
           <div className={styles.actionsButtons}>
             {actions.map(action =>
-              <button key={action} onClick={() => append({ content: action, role: 'user' })}>{action}</button>
+              <button key={action} onClick={() => handleSubmit(action)} disabled={loading}>{action}</button>
             )}
           </div>
           <div className={styles.secret}>
@@ -58,8 +69,18 @@ export default function Game() {
           </div>
         </div>
         <div className={styles.right}>
-          <ChatMessages messages={messages.map(mapMessage)} style='ios' typing={loading} error={error} reload={reload} stop={stop} />
-          <ChatInput onSubmit={handleSubmit} disabled={loading} showVoiceInput={true} />
+          <ChatMessages
+            messages={messages.map(mapMessage)}
+            style='ios'
+            loading={loading}
+            error={error}
+            regenerate={regenerate}
+            stop={stop} />
+          <ChatInput
+            onSubmit={handleSubmit}
+            showVoiceInput={true}
+            loading={loading}
+            stop={stop} />
         </div>
       </div>
     </>

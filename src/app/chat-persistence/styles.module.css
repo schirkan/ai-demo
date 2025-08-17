@@ -37,14 +37,13 @@
 
 .left {
   min-width: 20rem;
-  max-width: 30rem;
-  width: 30%;
+  width: 20rem;
   position: relative;
   border-right: 1px solid light-dark(#ccd, #444);
 }
 
 .right {
-  width: -webkit-fill-available;
+  width: calc(100% - 20rem);
   position: relative;
 }
 

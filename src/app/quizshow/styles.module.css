@@ -99,10 +99,19 @@
     background-color: #007bff;
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+    user-select: none;
 
     &:hover {
       background-color: #0056b3;
+    }
+
+    &:disabled {
+      background-color: light-dark(#47b, #235);
+      color: light-dark(#ccc, #777);
+      cursor: default;
     }
   }
 }

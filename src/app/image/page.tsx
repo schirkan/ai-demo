@@ -10,7 +10,7 @@ export default function Chat() {
   const [style, setStyle] = useState('vivid');
   const [initialPrompt, setInitialPrompt] = useState("map in 'lord of the rings' style with a dragon in the sky, highly detailed, fantasy art, 4k resolution, intricate details, vibrant colors, epic composition, cinematic lighting, atmospheric effects, mystical elements, ancient ruins, lush landscapes, dramatic clouds");
   const [seed, setSeed] = useState<number | ''>('');
-  const { image, error, timing, startGeneration, activePrompt } = useImageGeneration();
+  const { image, error, timing, startGeneration, activePrompt, isLoading } = useImageGeneration();
 
   const handleSubmit = useCallback((text: string) => {
     if (!text.trim()) {
@@ -51,8 +51,18 @@ export default function Chat() {
             onChange={e => setSeed(e.target.value === '' ? '' : Number(e.target.value))} />
         </label>
       </div>
-      <ImageDisplay prompt={activePrompt} image={image} timing={timing} error={error} reload={reload} edit={edit} />
-      <ChatInput onSubmit={handleSubmit} placeholder="Describe your image..." initialValue={initialPrompt} />
+      <ImageDisplay
+        prompt={activePrompt}
+        image={image}
+        timing={timing}
+        error={error}
+        reload={reload}
+        edit={edit} />
+      <ChatInput
+        onSubmit={handleSubmit}
+        placeholder="Describe your image..."
+        loading={isLoading}
+        initialValue={initialPrompt} />
     </div>
   );
 }

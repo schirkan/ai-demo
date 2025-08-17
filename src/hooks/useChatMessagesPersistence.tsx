@@ -1,12 +1,12 @@
-import { Message } from '@ai-sdk/react';
+import { UIMessage } from '@ai-sdk/react';
 import { useEffect, useMemo } from 'react';
 import { useLatest } from 'react-use';
 
 interface ChatMessagesPersistenceProps {
   storageKey: string,
   status: string,
-  messages: Message[],
-  setMessages: (messages: Message[] | ((messages: Message[]) => Message[])) => void,
+  messages: UIMessage[],
+  setMessages: (messages: UIMessage[] | ((messages: UIMessage[]) => UIMessage[])) => void,
   storage?: Storage
 }
 

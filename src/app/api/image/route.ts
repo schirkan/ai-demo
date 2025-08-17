@@ -34,7 +34,7 @@ export async function POST(req: Request): Promise<Response> {
       size: '1024x1024', // '1024x1024', '1792x1024', or '1024x1792' for DALL-E 3
       providerOptions: { openai: options },
     });
-    return NextResponse.json({ url: "data:" + image.mimeType + ";base64," + image.base64 });
+    return NextResponse.json({ url: "data:" + image.mediaType + ";base64," + image.base64 });
   } catch (error) {
     if (APICallError.isInstance(error)) {
       const apiErrorMessage = error.message ||
