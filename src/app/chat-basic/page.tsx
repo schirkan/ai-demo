@@ -6,7 +6,7 @@ import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import ChatInput from '@/components/ChatInput/ChatInput';
 
 export default function Chat() {
-  const { messages, sendMessage, status, stop, error, regenerate } = useChat({ experimental_throttle: 50 });
+  const { messages, sendMessage, status, stop, error, regenerate } = useChat({ experimental_throttle: 100 });
   const loading = status === 'submitted' || status === 'streaming';
 
   const handleSubmit = useCallback((text: string) => {
@@ -18,7 +18,6 @@ export default function Chat() {
       <ChatMessages
         messages={messages}
         loading={loading}
-        stop={stop}
         error={error}
         regenerate={regenerate} />
       <ChatInput

@@ -34,7 +34,8 @@ const sampleMessages: UIMessage[] = [
 ];
 
 export default function Page() {
-  const [style, setStyle] = useState<'default' | 'whatsapp' | 'ios'>('default');
+  const [messagesStyle, setMessagesStyle] = useState<'default' | 'whatsapp' | 'ios'>('default');
+  const [inputStyle, setInputStyle] = useState<'default' | 'combined'>('default');
   const [typing, setTyping] = useState(false);
   const [showVoiceInput, setShowVoiceInput] = useState(false);
   const [showSampleError, setShowSampleError] = useState(false);
@@ -85,11 +86,17 @@ export default function Page() {
   return (
     <>
       <div className={styles.options}>
-        <label>Style:&nbsp;
-          <select value={style} onChange={e => setStyle(e.target.value as 'default' | 'whatsapp')}>
+        <label>Messages Style:&nbsp;
+          <select value={messagesStyle} onChange={e => setMessagesStyle(e.target.value as typeof messagesStyle)}>
             <option value="default">default</option>
             <option value="whatsapp">whatsapp</option>
             <option value="ios">ios</option>
+          </select>
+        </label>
+        <label>Input Style:&nbsp;
+          <select value={inputStyle} onChange={e => setInputStyle(e.target.value as typeof inputStyle)}>
+            <option value="default">default</option>
+            <option value="combined">combined</option>
           </select>
         </label>
         <label>
@@ -111,12 +118,12 @@ export default function Page() {
         <ChatMessages
           messages={messages}
           loading={typing}
-          style={style}
+          style={messagesStyle}
           error={sampleError}
           regenerate={regenerate}
-          stop={() => { }}
         />
         <ChatInput
+          style={inputStyle}
           onSubmit={handleSubmit}
           placeholder="Type your message..."
           showVoiceInput={showVoiceInput}

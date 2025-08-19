@@ -6,7 +6,7 @@ function isTextPart(part: UIMessage["parts"][number]): part is { type: 'text'; t
 
 export function getMessageText(message: UIMessage | null | undefined): string {
   if (message === null || message === undefined) return '';
-  return message.parts.filter(isTextPart).map((part) => part.text).join('\n');
+  return message.parts.filter(isTextPart).map((part) => part.text).join('\n').trim();
 }
 
 export function getDataPart<TData>(message: UIMessage, type: string): TData | undefined {

@@ -12,9 +12,6 @@
   text-shadow: 1px 2px 3px #333;
 
   height: 4rem;
-  @media (min-width: 1000px) {
-    height: 8rem;
-  }
 }
 
 .container {
@@ -24,8 +21,7 @@
   overflow: hidden;
   background: var(--background);
 
-  margin-top: 4rem;
-  height: calc(100dvh - 4rem);
+  height: 100dvh;
 
   @media (min-width: 1000px) {
     margin: 8rem;

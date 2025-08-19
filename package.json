@@ -25,6 +25,7 @@
     "react-text-to-speech": "^2.1.0",
     "react-use": "^17.6.0",
     "remark-gfm": "^4.0.1",
+    "siriwave": "^2.4.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {

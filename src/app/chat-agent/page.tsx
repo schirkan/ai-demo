@@ -37,7 +37,7 @@ export default function Chat() {
             ))}
           </select>
         </div>
-        <ChatMessages messages={messages} style='whatsapp' loading={loading} error={error} regenerate={regenerate} stop={stop} />
+        <ChatMessages messages={messages} style='whatsapp' loading={loading} error={error} regenerate={regenerate} />
         <ChatInput onSubmit={handleSubmit} showVoiceInput={true} loading={loading} stop={stop} />
       </div>
       <SpeechOptions text={getMessageText(lastMessage)} />

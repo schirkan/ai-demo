@@ -41,7 +41,8 @@ export default function TextareaAutosize(props: TextareaAutosizeProps & { ref?: 
       style={{
         ...props.style,
         overflow: "hidden",
-        resize: "none"
+        resize: "none",
+        outline: "none"
       }}
     />
   );

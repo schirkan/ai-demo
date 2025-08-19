@@ -24,8 +24,7 @@ export default function Chat() {
           style='whatsapp'
           loading={loading}
           error={error}
-          regenerate={regenerate}
-          stop={stop} />
+          regenerate={regenerate} />
         <ChatInput
           onSubmit={handleSubmit}
           showVoiceInput={true}

@@ -62,33 +62,33 @@
 @keyframes threeDots {
   0% {
     box-shadow:
-      20px 0 #000,
-      -20px 0 #0002;
-    background: #000;
+      20px 0 light-dark(#000, #ccc2),
+      -20px 0 light-dark(#0002, #ccc);
+    background: light-dark(#000, #ccc2);
   }
   25% {
     box-shadow:
-      20px 0 #000,
-      -20px 0 #0002;
-    background: #0002;
+      20px 0 light-dark(#000, #ccc2),
+      -20px 0 light-dark(#0002, #ccc);
+    background: light-dark(#0002, #ccc);
   }
   50% {
     box-shadow:
-      20px 0 #0002,
-      -20px 0 #000;
-    background: #0002;
+      20px 0 light-dark(#0002, #ccc),
+      -20px 0 light-dark(#000, #ccc2);
+    background: light-dark(#0002, #ccc);
   }
   75% {
     box-shadow:
-      20px 0 #0002,
-      -20px 0 #000;
-    background: #000;
+      20px 0 light-dark(#0002, #ccc),
+      -20px 0 light-dark(#000, #ccc2);
+    background: light-dark(#000, #ccc2);
   }
   100% {
     box-shadow:
-      20px 0 #000,
-      -20px 0 #0002;
-    background: #000;
+      20px 0 light-dark(#000, #ccc2),
+      -20px 0 light-dark(#0002, #ccc);
+    background: light-dark(#000, #ccc2);
   }
 }
 

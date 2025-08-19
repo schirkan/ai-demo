@@ -17,8 +17,6 @@ const getObject = (message?: UIMessage): QuizShowType | undefined => {
   // return message ? getDataProxy<QuizShowType>(message) : undefined;
 };
 
-
-
 const mapMessage = (message: UIMessage): UIMessage => {
   if (message.role === 'assistant') {
     const text = getMessageText(message);
@@ -74,8 +72,7 @@ export default function Game() {
             style='ios'
             loading={loading}
             error={error}
-            regenerate={regenerate}
-            stop={stop} />
+            regenerate={regenerate} />
           <ChatInput
             onSubmit={handleSubmit}
             showVoiceInput={true}

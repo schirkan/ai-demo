@@ -62,16 +62,17 @@ export default function Chat() {
           {selectedChatLogId && (
             <>
               <ChatMessages
-                style="whatsapp"
+                style='whatsapp'
                 messages={messages}
                 loading={loading}
-                stop={stop}
                 error={error}
                 regenerate={regenerate} />
               <ChatInput
+                style='combined'
                 onSubmit={handleSubmit}
                 showVoiceInput={true}
-                loading={loading} stop={stop} />
+                loading={loading}
+                stop={stop} />
             </>
           ) || (
               <div className={styles.noActiveChat}>

@@ -1,7 +1,7 @@
 'use client';
 
 import { UIMessage } from 'ai';
-import { BsArrowClockwise, BsFillStopFill } from "react-icons/bs";
+import { BsArrowClockwise } from "react-icons/bs";
 import { useRef } from 'react';
 
 import buttonStyles from '../../css/buttonStyles.module.css';
@@ -17,9 +17,23 @@ export interface ChatMessagesProps {
   loading?: boolean;
   error?: Error;
   regenerate?: () => void;
-  stop?: () => void;
 }
 
+function renderMessage(message: UIMessage) {
+  const text = getMessageText(message);
+  if (!text) return null;
+  return (
+    <div key={message.id} className={styles.message} data-role={message.role}>
+      <div className={styles.roleLabel}>{message.role === 'user' ? 'User' : 'AI'}</div>
+      <div className={styles.messageContent}>
+        <MemoizedMarkdown
+          id={message.id}
+          content={text}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function ChatMessages(props: ChatMessagesProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -27,26 +41,11 @@ export default function ChatMessages(props: ChatMessagesProps) {
   return (
     <div className={styles.container} data-style={props.style ?? 'default'}>
       <div className={styles.messages} ref={scrollRef}>
-        {props.messages.map((message) => (
-          <div key={message.id} className={styles.message} data-role={message.role}>
-            <div className={styles.roleLabel}>{message.role === 'user' ? 'User' : 'AI'}</div>
-            <div className={styles.messageContent}>
-              <MemoizedMarkdown
-                id={message.id}
-                content={getMessageText(message)}
-              />
-            </div>
-          </div>
-        ))}
+        {props.messages.map(renderMessage)}
         {props.loading && (
           <div className={styles.typingIndicator}>
             <div className={styles.loader}></div>
           </div>
-        )}
-        {props.loading && props.stop && (
-          <button type="button" onClick={props.stop} className={styles.stopButton + " " + buttonStyles.iconButton}>
-            <BsFillStopFill />&nbsp;Stop
-          </button>
         )}
         {props.error && (
           <div className={styles.error}>

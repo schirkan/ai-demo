@@ -8,8 +8,10 @@ import { useLatest, useUnmount } from 'react-use';
 import styles from './styles.module.css';
 import buttonStyles from '../../css/buttonStyles.module.css';
 import TextareaAutosize from '../TextareaAutosize/TextareaAutosize';
+import { SiriWaveUi } from '../SiriWaveUi/SiriWaveUi';
 
 export interface ChatInputProps {
+  style?: 'default' | 'combined' | undefined;
   onSubmit: (text: string) => void;
   placeholder?: string;
   showVoiceInput?: boolean;
@@ -18,7 +20,7 @@ export interface ChatInputProps {
   stop?: () => void;
 }
 
-export default function ChatInput({ onSubmit, placeholder, showVoiceInput, loading, initialValue, stop }: ChatInputProps) {
+export default function ChatInput({ onSubmit, placeholder, showVoiceInput, loading, initialValue, stop, style = 'default' }: ChatInputProps) {
   const [input, setInput] = useState(initialValue);
   const { transcript, finalTranscript, listening, resetTranscript } = useSpeechRecognition();
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -107,15 +109,20 @@ export default function ChatInput({ onSubmit, placeholder, showVoiceInput, loadi
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleMicClick, handleSubmit]);
 
+  const micButtonVisible = style === 'combined' ? showVoiceInput && !loading && (!input || listening) : showVoiceInput;
+  const stopButtonVisible = loading && stop;
+  const sendButtonVisible = style === 'combined' ? !stopButtonVisible && input && !listening : !stopButtonVisible;
+
   return (
-    <form onSubmit={handleSubmit} className={styles.inputForm}>
+    <form onSubmit={handleSubmit} className={styles.inputForm} data-style={style}>
       <TextareaAutosize
         ref={inputRef}
         className={styles.inputTextbox}
         value={input}
         onChange={handleTextareaChange}
         placeholder={placeholder ?? 'Say something...'} />
-      {showVoiceInput &&
+
+      {micButtonVisible &&
         <button
           onClick={handleMicClick}
           className={styles.micButton + " " + buttonStyles.iconButton}
@@ -125,15 +132,19 @@ export default function ChatInput({ onSubmit, placeholder, showVoiceInput, loadi
           <BsMicFill />
         </button>
       }
-      {loading && stop ? (
+      {stopButtonVisible &&
         <button type="button" onClick={stop} className={styles.stopButton + " " + buttonStyles.iconButton}>
           <BsFillStopFill />
         </button>
-      ) : (
+      }
+      {sendButtonVisible &&
         <button type="submit" disabled={!input || loading} className={styles.submitButton + " " + buttonStyles.iconButton}>
           <BsSendFill />
         </button>
-      )}
+      }
+      {listening &&
+        <SiriWaveUi active={true} className={styles.wave} />
+      }
     </form>
   );
 }
