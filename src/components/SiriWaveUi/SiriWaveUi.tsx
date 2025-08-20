@@ -9,6 +9,7 @@ interface SiriWaveUiProps extends React.ComponentProps<"div"> {
 }
 
 function handleSuccess(stream: MediaStream, siriWave: SiriWave): () => void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     const source = audioContext.createMediaStreamSource(stream);
     const processor = audioContext.createScriptProcessor(1024, 1, 1);
