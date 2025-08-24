@@ -74,6 +74,7 @@ export default function Game() {
             error={error}
             regenerate={regenerate} />
           <ChatInput
+            style="combined"
             onSubmit={handleSubmit}
             showVoiceInput={true}
             loading={loading}
