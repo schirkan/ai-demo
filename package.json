@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build && cp -r ./public ./.next/standalone/ && cp -r ./.next/static ./.next/standalone/.next/",
     "start": "node server.js",
-    "lint": "next lint",
+    "lint": "eslint .",
     "clean:next": "rm -rf .next",
     "clean:npm": "rm -rf node_modules",
     "postinstall": "next telemetry disable"
