@@ -1,9 +1,12 @@
 'use client';
-import ChatMessages from "@/components/ChatMessages/ChatMessages";
-import { useState, useCallback } from "react";
-import styles from "./styles.module.css"
+
 import { UIMessage } from 'ai';
+import { useState, useCallback } from "react";
+
+import ChatMessages from "@/components/ChatMessages/ChatMessages";
 import ChatInput from "@/components/ChatInput/ChatInput";
+import BackgroundPattern from "@/components/BackgroundPattern/BackgroundPattern";
+import styles from "./styles.module.css"
 
 const sampleMessages: UIMessage[] = [
   {
@@ -83,9 +86,29 @@ export default function Page() {
     setShowSampleError(false);
   };
 
-  return (
-    <>
+  return (<>
+    <BackgroundPattern styleName='blueprint' />
+    <div className={styles.container}>
+      <h1 className={styles.header}>Chat UI</h1>
+      <div className={styles.chatUi}>
+        <ChatMessages
+          messages={messages}
+          loading={typing}
+          style={messagesStyle}
+          error={sampleError}
+          regenerate={regenerate}
+        />
+        <ChatInput
+          style={inputStyle}
+          onSubmit={handleSubmit}
+          placeholder="Type your message..."
+          showVoiceInput={showVoiceInput}
+          loading={typing}
+          stop={() => { }}
+        />
+      </div>
       <div className={styles.options}>
+        <h2>Options</h2>
         <label>Messages Style:&nbsp;
           <select value={messagesStyle} onChange={e => setMessagesStyle(e.target.value as typeof messagesStyle)}>
             <option value="default">default</option>
@@ -114,25 +137,8 @@ export default function Page() {
         <button onClick={demo}>Demo</button>
         <button onClick={() => setMessages([])}>Clear</button>
       </div>
-      <div className={styles.container}>
-        <ChatMessages
-          messages={messages}
-          loading={typing}
-          style={messagesStyle}
-          error={sampleError}
-          regenerate={regenerate}
-        />
-        <ChatInput
-          style={inputStyle}
-          onSubmit={handleSubmit}
-          placeholder="Type your message..."
-          showVoiceInput={showVoiceInput}
-          loading={typing}
-          stop={() => { }}
-        />
-      </div>
-      {typing}
-    </>
+    </div>
+  </>
   );
 }
 

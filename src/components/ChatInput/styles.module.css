@@ -20,6 +20,8 @@
     button {
       border: none;
       border-radius: 0.5rem;
+      background: none;
+      box-shadow: none;
     }
   }
 
