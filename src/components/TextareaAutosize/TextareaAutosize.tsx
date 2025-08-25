@@ -47,5 +47,3 @@ export default function TextareaAutosize(props: TextareaAutosizeProps & { ref?: 
     />
   );
 };
-
-

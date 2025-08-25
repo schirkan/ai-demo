@@ -10,12 +10,18 @@
   /* overflow: hidden; */
 
   &[data-style="combined"] {
-    border: 1px solid light-dark(#d1d5db, #27272a);
+    border: 1px solid;
+    border-color: #d1d5db;
     border-radius: 0.5rem;
     box-shadow:
       0 10px 15px -3px rgba(0, 0, 0, 0.1),
       0 4px 6px -4px rgba(0, 0, 0, 0.1);
-    background-color: light-dark(#fff, #18181b);
+    background-color: #fff;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: #18181b;
+      border-color: #27272a;
+    }
 
     button {
       border: none;
@@ -25,49 +31,55 @@
     }
   }
 
-  .inputTextbox {
-    width: -webkit-fill-available;
-    min-width: 50px;
-    min-height: 32px;
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 0.5rem;
-
-    border-radius: 0.5rem;
-    border: none;
-    background-color: light-dark(#fff, #18181b);
-  }
-
   &[data-style="default"] .inputTextbox {
     min-height: 34px;
-    border: 1px solid light-dark(#d1d5db, #27272a);
+    border: 1px solid;
+    border-color: #d1d5db;
     box-shadow:
       0 10px 15px -3px rgba(0, 0, 0, 0.1),
       0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  }
 
-  .micButton {
-    transition:
-      color 0.2s,
-      border-color 0.2s,
-      background-color 0.2s;
+    @media (prefers-color-scheme: dark) {
+      border-color: #27272a;
+    }
   }
+}
 
-  .micButton[data-active="true"],
-  .micButton[data-active="true"]:hover {
-    background-color: #f55 !important;
-    border-color: #c00 !important;
-    color: #fff;
-    box-shadow: 0 0 8px 2px #f88;
+.inputTextbox {
+  width: -webkit-fill-available;
+  min-width: 50px;
+  min-height: 32px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0.5rem;
+
+  border-radius: 0.5rem;
+  border: none;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #18181b;
   }
+}
 
-  .wave {
-    position: absolute;
-    width: 100%;
-    height: 2rem;
-    /* bottom: 3rem; */
-    pointer-events: none;
-    padding-right: 2rem;
+.micButton {
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background-color 0.2s;
+}
 
-    border-radius: 0.5rem;
-  }
+.micButton[data-active="true"],
+.micButton[data-active="true"]:hover {
+  background-color: #f55 !important;
+  border-color: #c00 !important;
+  color: #fff;
+  box-shadow: 0 0 8px 2px #f88;
+}
+
+.wave {
+  position: absolute;
+  width: 100%;
+  height: 2rem;
+  pointer-events: none;
+  padding-right: 2rem;
+  border-radius: 0.5rem;
 }

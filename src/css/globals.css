@@ -10,6 +10,12 @@
   }
 }
 
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

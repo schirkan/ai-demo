@@ -16,8 +16,8 @@ const styles: Record<StyleName, CSSProperties> = {
   'grid-fade-diagonal-left': {
     background: "light-dark( #f9fafb, #151515)",
     backgroundImage: `
-      linear-gradient(to right, light-dark(  #d1d5db, rgba(148,163,184,0.2)) 1px, transparent 1px),
-      linear-gradient(to bottom, light-dark(  #d1d5db, rgba(148,163,184,0.2)) 1px, transparent 1px)
+      linear-gradient(to right, light-dark( #d1d5db, rgba(148,163,184,0.2)) 1px, transparent 1px),
+      linear-gradient(to bottom, light-dark( #d1d5db, rgba(148,163,184,0.2)) 1px, transparent 1px)
     `,
     backgroundSize: "32px 32px",
     WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 0% 0%, #000 50%, transparent 90%)",
@@ -26,8 +26,8 @@ const styles: Record<StyleName, CSSProperties> = {
   'grid-fade-sides': {
     background: "light-dark( #f9fafb, #151515)",
     backgroundImage: `
-      linear-gradient(to right, light-dark(  #d1d5db, rgba(148,163,184,0.2)) 1px, transparent 1px),
-      linear-gradient(to bottom, light-dark(  #d1d5db, rgba(148,163,184,0.2)) 1px, transparent 1px)
+      linear-gradient(to right, light-dark( #d1d5db, rgba(148,163,184,0.2)) 1px, transparent 1px),
+      linear-gradient(to bottom, light-dark( #d1d5db, rgba(148,163,184,0.2)) 1px, transparent 1px)
     `,
     backgroundSize: "32px 32px",
     WebkitMaskImage: "linear-gradient(90deg, #fff, #0000, #0000, #fff)",
@@ -39,7 +39,7 @@ const styles: Record<StyleName, CSSProperties> = {
     linear-gradient(90deg, rgba(255,255,255,.5) 2px, transparent 2px),
     linear-gradient(rgba(255,255,255,.28) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,.28) 1px, transparent 1px),
-    linear-gradient(to bottom, #58c 0%, #3162a3 100%)
+    linear-gradient(to bottom, light-dark( #58c, #234776) 0%, light-dark( #3162a3, #12233b) 100%)
     `,
     backgroundSize: "100px 100px, 100px 100px, 20px 20px, 20px 20px, 100% 100dvh",
     backgroundPosition: "-2px -2px, -2px -2px, -1px -1px, -1px -1px"
