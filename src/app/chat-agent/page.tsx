@@ -17,6 +17,7 @@ export default function Chat() {
   const { messages, sendMessage, status, error, regenerate, stop } = useChat({
     experimental_throttle: 50,
     transport: new DefaultChatTransport({ api: '/api/agent?agent=' + agent }),
+    id: agent
   });
 
   const loading = status === 'submitted' || status === 'streaming';
