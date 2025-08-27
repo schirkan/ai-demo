@@ -1,6 +1,6 @@
 'use client';
 
-import { UIMessage } from 'ai';
+import { ToolUIPart, UIMessage } from 'ai';
 import { BsArrowClockwise } from "react-icons/bs";
 import { useRef } from 'react';
 
@@ -10,6 +10,7 @@ import styles from './styles.module.css';
 import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
 import ScrollIntoView from '@/components/ScrollIntoView/ScrollIntoView';
 import { getMessageText } from '@/utils/UIMessageHelper';
+import { ImageDisplay } from '../ImageDisplay/ImageDisplay';
 
 export interface ChatMessagesProps {
   style?: 'default' | 'whatsapp' | 'ios' | undefined;
@@ -21,18 +22,28 @@ export interface ChatMessagesProps {
 
 function renderMessage(message: UIMessage) {
   const text = getMessageText(message);
-  if (!text) return null;
-  return (
-    <div key={message.id} className={styles.message} data-role={message.role}>
-      <div className={styles.roleLabel}>{message.role === 'user' ? 'User' : 'AI'}</div>
-      <div className={styles.messageContent}>
-        <MemoizedMarkdown
-          id={message.id}
-          content={text}
-        />
+  if (text) {
+    return (
+      <div key={message.id} className={styles.message} data-role={message.role}>
+        <div className={styles.roleLabel}>{message.role === 'user' ? 'User' : 'AI'}</div>
+        <div className={styles.messageContent}>
+          <MemoizedMarkdown
+            id={message.id}
+            content={text}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  const imageTool = message.parts.find(x => x.type === 'tool-generateImage') as ToolUIPart;
+  if (imageTool && imageTool.input) {
+    const { prompt } = imageTool.input as { prompt: string };
+    const output = imageTool?.output as { url?: string };
+    return <ImageDisplay key={message.id} prompt={prompt} image={output?.url} />;
+  }
+
+  return null;
 }
 
 export default function ChatMessages(props: ChatMessagesProps) {

@@ -23,7 +23,7 @@ export default function Chat() {
   });
   const { messages, setMessages, sendMessage, status, error, regenerate, stop } = useChat({
     experimental_throttle: 50,
-    transport: new DefaultChatTransport({ api: '/api/chat' }),
+    transport: new DefaultChatTransport({ api: '/api/chat-with-tools' }),
   });
   const { deleteMessages } = useChatMessagesPersistence({
     storageKey: selectedChatLogId ?? '', status, messages, setMessages
