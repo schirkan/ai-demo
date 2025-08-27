@@ -46,9 +46,12 @@ const styles: Record<StyleName, CSSProperties> = {
   }
 };
 
-export default function BackgroundPattern({ styleName }: { styleName?: StyleName }) {
+export default function BackgroundPattern({ styleName, fixed = true }: { styleName?: StyleName, fixed?: boolean }) {
   if (!styleName || !styles[styleName]) return null;
   const style: CSSProperties = styles[styleName];
+  if (fixed) {
+    style.position = 'fixed';
+  }
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: -1, ...style }} />
   );
