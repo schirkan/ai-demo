@@ -12,16 +12,7 @@ import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
 import BackgroundPattern from '@/components/BackgroundPattern/BackgroundPattern';
-import { getDataPart, getMessageText } from '@/utils/UIMessageHelper';
-
-const mapMessage = (message: UIMessage): UIMessage => {
-  if (message.role === 'assistant') {
-    const text = getMessageText(message);
-    return { ...message, parts: [{ type: 'text', text: text }] };
-  } else {
-    return message;
-  }
-}
+import { getDataPart } from '@/utils/UIMessageHelper';
 
 export default function Game() {
   const [showSecret, setShowSecret] = useState(false);
@@ -64,7 +55,6 @@ export default function Game() {
         <div className={styles.right}>
           <ChatMessages
             messages={messages}
-            // messages={messages.map(mapMessage)}
             style='ios'
             loading={loading}
             error={error}
