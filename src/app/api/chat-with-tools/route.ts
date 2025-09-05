@@ -1,7 +1,7 @@
 import { APICallError, streamText, convertToModelMessages, UIMessage } from 'ai';
 import { NextResponse } from 'next/server';
 import { azure } from '@ai-sdk/azure';
-import { generateImage } from '../tools';
+import { generateImageTool } from '../tools';
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       model: azure('gpt-4.1'),
       system: `Du bist ein hilfsbereiter Chatbot.`,
       messages: modelMessages,
-      tools: { generateImage },
+      tools: { generateImage: generateImageTool },
     });
     return result.toUIMessageStreamResponse();
   } catch (error) {

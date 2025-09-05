@@ -1,27 +1,22 @@
 'use client';
-import { useChat } from '@ai-sdk/react';
-import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
-import styles from './styles.module.css';
+
+import { useState, useCallback } from 'react';
+import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import { DefaultChatTransport, UIMessage } from 'ai';
+import { useChat } from '@ai-sdk/react';
+
+import styles from './styles.module.css';
+import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
 import { QuizShowType } from '@/app/api/quizshow/schema';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
-import { useState, useCallback } from 'react';
-import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import BackgroundPattern from '@/components/BackgroundPattern/BackgroundPattern';
 import { getDataPart, getMessageText } from '@/utils/UIMessageHelper';
-
-const getObject = (message?: UIMessage): QuizShowType | undefined => {
-  return message ? getDataPart<QuizShowType>(message, 'data-quiz') : undefined;
-  // return message ? getDataProxy<QuizShowType>(message) : undefined;
-};
 
 const mapMessage = (message: UIMessage): UIMessage => {
   if (message.role === 'assistant') {
     const text = getMessageText(message);
-    // const text = getDataPart<string>(message, 'data-speak') || '';
-    // const text = getObject(message)?.speak || '';
     return { ...message, parts: [{ type: 'text', text: text }] };
   } else {
     return message;
@@ -37,7 +32,7 @@ export default function Game() {
 
   const loading = status === 'submitted' || status === 'streaming';
   const lastMessage: UIMessage | undefined = messages.findLast(x => x.role === 'assistant' && x.parts.some(x => x.type === 'data-quiz'));
-  const response: QuizShowType | undefined = getObject(lastMessage);
+  const response: QuizShowType | undefined = getDataPart<QuizShowType>(lastMessage, 'data-quiz');
   const actions: string[] = messages.length === 0 ? ['Start'] : response?.actions || [];
 
   const handleSubmit = useCallback((text: string) => {
@@ -68,7 +63,8 @@ export default function Game() {
         </div>
         <div className={styles.right}>
           <ChatMessages
-            messages={messages.map(mapMessage)}
+            messages={messages}
+            // messages={messages.map(mapMessage)}
             style='ios'
             loading={loading}
             error={error}

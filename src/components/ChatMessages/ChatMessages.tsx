@@ -1,6 +1,6 @@
 'use client';
 
-import { ToolUIPart, UIMessage } from 'ai';
+import { UIDataTypes, UIMessage, UIMessagePart, UITools } from 'ai';
 import { BsArrowClockwise } from "react-icons/bs";
 import { useRef } from 'react';
 
@@ -9,7 +9,6 @@ import ScrollToButton from '../ScrollToButton/ScrollToButton';
 import styles from './styles.module.css';
 import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
 import ScrollIntoView from '@/components/ScrollIntoView/ScrollIntoView';
-import { getMessageText } from '@/utils/UIMessageHelper';
 import { ImageDisplay } from '../ImageDisplay/ImageDisplay';
 
 export interface ChatMessagesProps {
@@ -21,28 +20,33 @@ export interface ChatMessagesProps {
 }
 
 function renderMessage(message: UIMessage) {
-  const text = getMessageText(message);
-  if (text) {
-    return (
-      <div key={message.id} className={styles.message} data-role={message.role}>
-        <div className={styles.roleLabel}>{message.role === 'user' ? 'User' : 'AI'}</div>
-        <div className={styles.messageContent}>
-          <MemoizedMarkdown
-            id={message.id}
-            content={text}
-          />
+  return message.parts.map((p, index) => renderPart(p, message, index));
+}
+
+function renderPart(part: UIMessagePart<UIDataTypes, UITools>, message: UIMessage, index: number) {
+  switch (part.type) {
+    case 'text':
+      return (
+        <div key={message.id} className={styles.message} data-role={message.role}>
+          <div className={styles.roleLabel}>{message.role === 'user' ? 'User' : 'AI'}</div>
+          <div className={styles.messageContent}>
+            <MemoizedMarkdown id={message.id + '|' + index} content={part.text} />
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
 
-  const imageTool = message.parts.find(x => x.type === 'tool-generateImage') as ToolUIPart;
-  if (imageTool && imageTool.input) {
-    const { prompt } = imageTool.input as { prompt: string };
-    const output = imageTool?.output as { url?: string };
-    return <ImageDisplay key={message.id} prompt={prompt} image={output?.url} />;
-  }
+    case 'tool-generateImage':
+      // TODO: auslagern
+      if (part.input) {
+        const { prompt } = part.input as { prompt: string };
+        const output = part.output as { url?: string };
+        return <ImageDisplay key={message.id + '|' + index} prompt={prompt} image={output?.url} />;
+      }
+      break;
 
+    case 'file':
+      return <ImageDisplay key={message.id + '|' + index} image={part.url} />;
+  }
   return null;
 }
 

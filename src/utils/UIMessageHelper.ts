@@ -5,11 +5,12 @@ function isTextPart(part: UIMessage["parts"][number]): part is { type: 'text'; t
 }
 
 export function getMessageText(message: UIMessage | null | undefined): string {
-  if (message === null || message === undefined) return '';
+  if (!message) return '';
   return message.parts.filter(isTextPart).map((part) => part.text).join('\n').trim();
 }
 
-export function getDataPart<TData>(message: UIMessage, type: string): TData | undefined {
+export function getDataPart<TData>(message: UIMessage | null | undefined, type: string): TData | undefined {
+  if (!message) return undefined;
   const dataParts = message.parts.filter(x => x.type === type);
   const firstPart = dataParts[0] as { data: TData };
   return firstPart?.data;
