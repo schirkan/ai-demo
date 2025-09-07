@@ -1,36 +1,96 @@
+# AI Demo
+
+Demo: https://my-ai-demo.azurewebsites.net
+
+## Project Overview
+
+This application demonstrates various AI-powered features such as chatbots, image generation, quiz games, and text-to-speech.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Features
+
+- Multiple chat variants (Basic, Custom GPT, Persistent, Text-to-Speech)
+- AI-based image generation
+- Quiz show mode
+- Markdown rendering
+- Multiple API endpoints (Chat, Image, Quiz, Summarize, Custom GPT, etc.)
+- Modern UI components (React, TypeScript, CSS Modules)
+- Demo deployment on Azure
+
+## Main AI Packages
+
+- **ai**: Core AI utilities and abstractions for building AI-powered apps. ([AI-SDK](https://ai-sdk.dev/))
+- **@ai-sdk/azure**: Integration for using Azure AI services.
+- **@ai-sdk/react**: React bindings for AI SDK, enabling easy integration in React components.
+- **react-speech-recognition**: Speech-to-text functionality for chat and voice features.
+- **react-text-to-speech**: Text-to-speech synthesis for voice output in chat.
+
+## Directory Structure (excerpt)
+
+```
+src/
+  app/                # Next.js app router & pages
+    api/              # API routes (chat, image, quizshow, summarize, custom-gpt)
+    chat-basic/       # Basic chat UI
+    chat-custom-gpt/  # Chat with custom GPT
+    chat-persistence/ # Chat with persistence
+    chat-tts/         # Chat with text-to-speech
+    chat-ui-sample/   # Sample chat UI
+    image/            # Image generation
+    quizshow/         # Quiz show mode
+  components/         # Reusable UI components
+  hooks/              # React hooks
+  utils/              # Utility functions
+  css/                # Global and modular styles
+public/               # Static files (images, JS, etc.)
+```
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/schirkan/ai-demo.git
+   cd ai-demo
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   # or
+   bun install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   # or
+   bun dev
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Key Routes & Features
 
-## Learn More
+- `/chat-basic` – Basic chatbot
+- `/chat-custom-gpt` – Chat with custom GPT
+- `/chat-persistence` – Chat with persistent history
+- `/chat-tts` – Chat with text-to-speech
+- `/image` – Image generation
+- `/quizshow` – Quiz show mode
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project can be deployed to Vercel, Azure, or any other platform supporting Next.js apps.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[MIT](https://choosealicense.com/licenses/mit/)
