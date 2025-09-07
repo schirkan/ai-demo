@@ -91,6 +91,18 @@ public/               # Static files (images, JS, etc.)
 
 This project can be deployed to Vercel, Azure, or any other platform supporting Next.js apps.
 
+## Environment Variables
+
+The following environment variables must be set for certain features to work:
+
+| Variable                     | Description                          |
+| ---------------------------- | ------------------------------------ |
+| AZURE_RESOURCE_NAME          | Name of the Azure OpenAI resource    |
+| AZURE_API_KEY                | API key for Azure OpenAI             |
+| AZURE_RESOURCE_NAME_DALL_E_3 | Name of the Azure DALL·E 3 resource  |
+| AZURE_API_KEY_DALL_E_3       | API key for Azure DALL·E 3           |
+| IMGBB_API_KEY                | API key for imgbb.com (image upload) |
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
