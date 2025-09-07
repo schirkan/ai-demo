@@ -20,8 +20,8 @@ export const maxDuration = 30;
 export async function POST(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const agent = searchParams.get('agent') || '';
-    const systemPrompt = agents[agent] || 'Du bist ein hilfsbereiter Chatbot.';
+    const id = searchParams.get('id') || '';
+    const systemPrompt = agents[id] || 'Du bist ein hilfsbereiter Chatbot.';
     const { messages }: { messages: UIMessage[] } = await req.json();
     const result = streamText({
       model: azure('gpt-4.1'),

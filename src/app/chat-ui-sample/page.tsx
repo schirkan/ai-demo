@@ -42,6 +42,7 @@ export default function Page() {
   const [typing, setTyping] = useState(false);
   const [showVoiceInput, setShowVoiceInput] = useState(false);
   const [showSampleError, setShowSampleError] = useState(false);
+  const [showWhatsappBackground, setShowWhatsappBackground] = useState(false);
 
   const [messages, setMessages] = useState<UIMessage[]>([]);
   const demo = () => {
@@ -90,7 +91,7 @@ export default function Page() {
     <BackgroundPattern styleName='blueprint' />
     <div className={styles.container}>
       <h1 className={styles.header}>Chat UI</h1>
-      <div className={styles.chatUi}>
+      <div className={styles.chatUi + ' ' + (showWhatsappBackground && styles.whatsappBackground)}>
         <ChatMessages
           messages={messages}
           loading={typing}
@@ -121,6 +122,10 @@ export default function Page() {
             <option value="default">default</option>
             <option value="combined">combined</option>
           </select>
+        </label>
+        <label>
+          <input type="checkbox" checked={showWhatsappBackground} onChange={e => setShowWhatsappBackground(e.target.checked)} />
+          &nbsp;Whatsapp Background
         </label>
         <label>
           <input type="checkbox" checked={showVoiceInput} onChange={e => setShowVoiceInput(e.target.checked)} />

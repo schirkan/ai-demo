@@ -10,14 +10,14 @@ import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
 import { getMessageText } from '@/utils/UIMessageHelper';
 import { DefaultChatTransport } from 'ai';
 
-const agents = ['Generic Chatbot', 'DungeonsAndDragons', 'GameMaster', 'InformationGathering', 'PromptOptimization'];
+const gpts = ['Generic Chatbot', 'DungeonsAndDragons', 'GameMaster', 'InformationGathering', 'PromptOptimization'];
 
 export default function Chat() {
-  const [agent, setAgent] = useState('Generic Chatbot');
+  const [currentGpt, setCurrentGpt] = useState('Generic Chatbot');
   const { messages, sendMessage, status, error, regenerate, stop } = useChat({
     experimental_throttle: 50,
-    transport: new DefaultChatTransport({ api: '/api/agent?agent=' + agent }),
-    id: agent
+    transport: new DefaultChatTransport({ api: '/api/custom-gpt?id=' + currentGpt }),
+    id: currentGpt
   });
 
   const loading = status === 'submitted' || status === 'streaming';
@@ -31,9 +31,9 @@ export default function Chat() {
     <>
       <div className={styles.container}>
         <div className={styles.agentSelection}>
-          <label htmlFor="agent-select" style={{ marginRight: '0.5rem' }}>Agent auswählen:</label><br />
-          <select id="agent-select" value={agent} onChange={e => setAgent(e.target.value)}>
-            {agents.map(a => (
+          <label htmlFor="gpt-select" style={{ marginRight: '0.5rem' }}>GPT auswählen:</label><br />
+          <select id="gpt-select" value={currentGpt} onChange={e => setCurrentGpt(e.target.value)}>
+            {gpts.map(a => (
               <option key={a} value={a}>{a}</option>
             ))}
           </select>

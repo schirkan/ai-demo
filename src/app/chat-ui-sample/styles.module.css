@@ -33,6 +33,18 @@
     overflow: hidden;
   }
 
+  .whatsappBackground:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    filter: light-dark(invert(0.15), invert(0.85));
+    background-image: url("/whatsapp_background.png");
+  }
+
   .options {
     grid-column: 1 / 1;
     @media (min-width: 600px) {
