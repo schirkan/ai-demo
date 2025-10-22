@@ -30,7 +30,7 @@ organisation-wide `completed_features_log.md`:
 [One-sentence summary of purpose/outcome].
 
 Suggest Architecture Review: Identify which specific sections of 
-`docs/_reference/architecture.md` might need a human review based on 
+`docs/architecture.md` might need a human review based on 
 this feature. Do not edit the architecture file directly — 
 simply suggest targeted areas for consideration 
 (e.g., “Consider updating the 'API Endpoints' section due to new endpoint X”).
@@ -38,9 +38,8 @@ simply suggest targeted areas for consideration
 ## Output
 
 - Provide the content of the generated `summary.md`.
-- Provide the exact log entry to append to 
-  `docs/_reference/completed_features_log.md`.
-- Provide the list of suggested sections in `architecture.md` that may 
+- Provide the exact log entry to append to `docs/completed_features_log.md`.
+- Provide the list of suggested sections in `docs/architecture.md` that may 
   need review.
 
 ## Note
