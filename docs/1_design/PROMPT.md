@@ -1,8 +1,8 @@
-# Feature Planning
+# Feature Design
 
 ## Context
 
-A feature has been moved into the planning stage and the idea file 
+A feature has been moved into the design / definition stage and the idea file 
 has been referenced using `@filename.md` in this chat.
 
 ## Instructions
@@ -14,8 +14,8 @@ and its intended goal.
 Determine Feature Name: Extract a short, clear name for the feature based 
 on the file or content (e.g., `chart-feature.md` → “Chart Feature”).
 
-Create Folder: Inside docs/1_planning/, create a new folder named after the 
-feature (e.g., docs/1_planning/chart-feature/).
+Create Folder: Inside docs/1_design/, create a new folder named after the 
+feature (e.g., docs/1_design/chart-feature/).
 
 Move the referenced file `@filename.md` into this new folder and rename it to `idea.md`.
 
