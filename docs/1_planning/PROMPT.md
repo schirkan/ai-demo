@@ -1,25 +1,31 @@
-Context: A feature has been moved into the planning stage and the idea file 
-has been referenced using @filename.md in this chat.
+# Feature Planning
 
-Instructions:
+## Context
+
+A feature has been moved into the planning stage and the idea file 
+has been referenced using `@filename.md` in this chat.
+
+## Instructions
 
 Read the Referenced File: Review the contents of the feature file that was 
-referenced using @ (e.g., @chart-feature.md) to understand the feature idea 
+referenced using @ (e.g., `@chart-feature.md`) to understand the feature idea 
 and its intended goal.
 
 Determine Feature Name: Extract a short, clear name for the feature based 
-on the file or content (e.g., chart-feature.md → “Chart Feature”).
+on the file or content (e.g., `chart-feature.md` → “Chart Feature”).
 
 Create Folder: Inside docs/1_planning/, create a new folder named after the 
 feature (e.g., docs/1_planning/chart-feature/).
 
+Move the referenced file `@filename.md` into this new folder and rename it to `idea.md`.
+
 Create Standard Files: Within this folder, generate the following files:
 
-- README.md
-- spec.md
-- design.md
+- `README.md`
+- `spec.md`
+- `design.md`
 
-Populate README.md:
+## Populate `README.md`
 
 - Extract and include the Goal of the feature.
 - Populate the following sections using your best judgement based on the 
@@ -34,7 +40,7 @@ end users).
 Open Questions — List any specific clarifying questions that would need to be 
 answered if you have them and if things are still confusing.
 
-Populate spec.md:
+## Populate `spec.md`
 
 - Outline the feature’s intended functionality and technical scope.
 - Include 2–3 different UI treatments or layout options for how this feature 
@@ -44,7 +50,7 @@ could be visually presented or interacted with in the product
 - Highlight trade-offs or use cases that might make one design better than 
 another.
 
-Populate design.md:
+## Populate `design.md`
 
 Add any architectural thoughts, visual sketches (as markdown code or descriptions), 
 component interactions, or other design considerations worth capturing early.
