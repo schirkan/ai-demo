@@ -1,0 +1,94 @@
+.main {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1rem;
+  font-family: sans-serif;
+}
+
+.heading {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.roomId {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.nameInput {
+  display: block;
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 0.6rem;
+  margin: 0.5rem 0 1.2rem 0;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+.buzzerButton {
+  width: 100%;
+  font-size: 2rem;
+  padding: 1.2rem 0;
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  border-radius: 1.2rem;
+  margin: 1.5rem 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.connectButton {
+  width: 100%;
+  font-size: 2rem;
+  padding: 1.2rem 0;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 1.2rem;
+  margin: 1.5rem 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.buzzerButton:disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.status {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 1rem 0;
+}
+
+.chatInput {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  border: 1px solid #bbb;
+  margin-bottom: 1rem;
+}
+
+.sendButton {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 0.7rem;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  cursor: pointer;
+  margin-bottom: 1.2rem;
+  transition: background 0.2s;
+}
+
+.sendButton:disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}

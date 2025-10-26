@@ -10,3 +10,15 @@ Implementiere die Befehle im PROMPT
  @docs/2_planning/PROMPT.md
  @docs/2_planning/buzzer
 ```
+
+
+- inkrementell vorgehen und Tasks abhaken
+- bei wichtigen Entscheidungen nachfragen (bspw. vor dem Installieren neuer Pakete Alternativen vorschlagen)
+- bei der Integration neuer Pakete zuerst die offizielle Dokumentation lesen
+- offene Punkte auflisten / auf die Task Liste packen
+
+- der Timer (aktuell 60s) soll auf der buzzer Seite individuell einstellbar sein (Range: 5 bis 120)
+- Raum ID soll mit uuid initialisiert werden
+- der QR-Code enthält: <hostname> + <path_to_buzzer_connect> + <raum_id> (als get/query Parameter)
+- buzzer server (buzzer-ws-server.ts) in nextjs api integrieren
+

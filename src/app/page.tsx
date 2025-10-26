@@ -14,6 +14,7 @@ export default function Index() {
           <li><a href='chat-custom-gpt'>AI Chat (Custom GPTs)</a></li>
           <li><a href='chat-persistence'>AI Chat (Persistence)</a></li>
           <li><a href='quizshow'>Quizshow</a></li>
+          <li><a href='buzzer'>Buzzer (Multiplayer Demo)</a></li>
         </ol>
       </div>
     </>
