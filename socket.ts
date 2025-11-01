@@ -22,7 +22,7 @@ const rooms: Record<string, Room | undefined> = {};
 let io: IOServer | undefined;
 
 // Helper: Broadcast
-function broadcastRoomState(room: Room, ioInstance: IOServer) {
+function broadcastRoomState(room: Room) {
   const state = {
     type: 'room_state',
     players: room.players.map((p) => p.name),
@@ -32,7 +32,7 @@ function broadcastRoomState(room: Room, ioInstance: IOServer) {
       : undefined,
     chat: room.chat,
   };
-  ioInstance.to(room.id).emit('room_state', state);
+  io!.to(room.id).emit('room_state', state);
 }
 
 /*
@@ -81,7 +81,7 @@ export function initSocket(existingServer: any) {
       currentRoom = rooms[roomId]!;
       currentRoom.players.push({ id: playerId, name, socketId: socket.id });
       socket.join(roomId);
-      broadcastRoomState(currentRoom, io!);
+      broadcastRoomState(currentRoom);
     });
 
     socket.on('buzz', () => {
@@ -89,13 +89,13 @@ export function initSocket(existingServer: any) {
       if (currentRoom.state !== 'free') return;
       currentRoom.state = 'buzzed';
       currentRoom.winner = playerId;
-      broadcastRoomState(currentRoom, io!);
+      broadcastRoomState(currentRoom);
       // Timeout für 60s
       currentRoom.timeout = setTimeout(() => {
         if (currentRoom) {
           currentRoom.state = 'free';
           currentRoom.winner = undefined;
-          broadcastRoomState(currentRoom, io!);
+          broadcastRoomState(currentRoom);
         }
       }, 60000);
     });
@@ -110,7 +110,7 @@ export function initSocket(existingServer: any) {
         clearTimeout(currentRoom.timeout);
         currentRoom.timeout = undefined;
       }
-      broadcastRoomState(currentRoom, io!);
+      broadcastRoomState(currentRoom);
     });
 
     socket.on('leave', () => {
@@ -120,7 +120,7 @@ export function initSocket(existingServer: any) {
       if (currentRoom.players.length === 0) {
         delete rooms[currentRoom.id];
       } else {
-        broadcastRoomState(currentRoom, io!);
+        broadcastRoomState(currentRoom);
       }
       socket.disconnect(true);
     });
@@ -131,7 +131,7 @@ export function initSocket(existingServer: any) {
         if (currentRoom.players.length === 0) {
           delete rooms[currentRoom.id];
         } else {
-          broadcastRoomState(currentRoom, io!);
+          broadcastRoomState(currentRoom);
         }
       }
     });
