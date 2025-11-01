@@ -69,11 +69,7 @@ export default function BuzzerConnectPage() {
     if (socketRef.current) {
       socketRef.current.disconnect();
     }
-    // Vor dem Verbindungsaufbau die API-Route initialisieren
-    await fetch("/api/socket");
-    const socket = io(":8081", {
-      path: "/api/buzzer-socket",
-    });
+    const socket = io({ path: "/api/buzzer-socket" });
     socketRef.current = socket;
 
     socket.on("connect", () => {

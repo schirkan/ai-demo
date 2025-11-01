@@ -20,7 +20,6 @@ import { Route as ChatBasicIndexRouteImport } from './routes/chat-basic/index'
 import { Route as BuzzerIndexRouteImport } from './routes/buzzer/index'
 import { Route as BuzzerConnectIndexRouteImport } from './routes/buzzer-connect/index'
 import { Route as ApiSummarizeRouteImport } from './routes/api/summarize'
-import { Route as ApiSocketRouteImport } from './routes/api/socket'
 import { Route as ApiQuizshowRouteImport } from './routes/api/quizshow'
 import { Route as ApiImageRouteImport } from './routes/api/image'
 import { Route as ApiCustomGptRouteImport } from './routes/api/custom-gpt'
@@ -82,11 +81,6 @@ const ApiSummarizeRoute = ApiSummarizeRouteImport.update({
   path: '/api/summarize',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiSocketRoute = ApiSocketRouteImport.update({
-  id: '/api/socket',
-  path: '/api/socket',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiQuizshowRoute = ApiQuizshowRouteImport.update({
   id: '/api/quizshow',
   path: '/api/quizshow',
@@ -120,7 +114,6 @@ export interface FileRoutesByFullPath {
   '/api/custom-gpt': typeof ApiCustomGptRoute
   '/api/image': typeof ApiImageRoute
   '/api/quizshow': typeof ApiQuizshowRoute
-  '/api/socket': typeof ApiSocketRoute
   '/api/summarize': typeof ApiSummarizeRoute
   '/buzzer-connect': typeof BuzzerConnectIndexRoute
   '/buzzer': typeof BuzzerIndexRoute
@@ -139,7 +132,6 @@ export interface FileRoutesByTo {
   '/api/custom-gpt': typeof ApiCustomGptRoute
   '/api/image': typeof ApiImageRoute
   '/api/quizshow': typeof ApiQuizshowRoute
-  '/api/socket': typeof ApiSocketRoute
   '/api/summarize': typeof ApiSummarizeRoute
   '/buzzer-connect': typeof BuzzerConnectIndexRoute
   '/buzzer': typeof BuzzerIndexRoute
@@ -159,7 +151,6 @@ export interface FileRoutesById {
   '/api/custom-gpt': typeof ApiCustomGptRoute
   '/api/image': typeof ApiImageRoute
   '/api/quizshow': typeof ApiQuizshowRoute
-  '/api/socket': typeof ApiSocketRoute
   '/api/summarize': typeof ApiSummarizeRoute
   '/buzzer-connect/': typeof BuzzerConnectIndexRoute
   '/buzzer/': typeof BuzzerIndexRoute
@@ -180,7 +171,6 @@ export interface FileRouteTypes {
     | '/api/custom-gpt'
     | '/api/image'
     | '/api/quizshow'
-    | '/api/socket'
     | '/api/summarize'
     | '/buzzer-connect'
     | '/buzzer'
@@ -199,7 +189,6 @@ export interface FileRouteTypes {
     | '/api/custom-gpt'
     | '/api/image'
     | '/api/quizshow'
-    | '/api/socket'
     | '/api/summarize'
     | '/buzzer-connect'
     | '/buzzer'
@@ -218,7 +207,6 @@ export interface FileRouteTypes {
     | '/api/custom-gpt'
     | '/api/image'
     | '/api/quizshow'
-    | '/api/socket'
     | '/api/summarize'
     | '/buzzer-connect/'
     | '/buzzer/'
@@ -238,7 +226,6 @@ export interface RootRouteChildren {
   ApiCustomGptRoute: typeof ApiCustomGptRoute
   ApiImageRoute: typeof ApiImageRoute
   ApiQuizshowRoute: typeof ApiQuizshowRoute
-  ApiSocketRoute: typeof ApiSocketRoute
   ApiSummarizeRoute: typeof ApiSummarizeRoute
   BuzzerConnectIndexRoute: typeof BuzzerConnectIndexRoute
   BuzzerIndexRoute: typeof BuzzerIndexRoute
@@ -330,13 +317,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSummarizeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/socket': {
-      id: '/api/socket'
-      path: '/api/socket'
-      fullPath: '/api/socket'
-      preLoaderRoute: typeof ApiSocketRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/quizshow': {
       id: '/api/quizshow'
       path: '/api/quizshow'
@@ -382,7 +362,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCustomGptRoute: ApiCustomGptRoute,
   ApiImageRoute: ApiImageRoute,
   ApiQuizshowRoute: ApiQuizshowRoute,
-  ApiSocketRoute: ApiSocketRoute,
   ApiSummarizeRoute: ApiSummarizeRoute,
   BuzzerConnectIndexRoute: BuzzerConnectIndexRoute,
   BuzzerIndexRoute: BuzzerIndexRoute,

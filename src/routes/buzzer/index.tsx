@@ -52,16 +52,12 @@ export default function BuzzerPage() {
   useEffect(() => {
     if (!roomId) return;
 
-    // Vor dem Verbindungsaufbau die API-Route initialisieren
     let socket: Socket | null = null;
     let isMounted = true;
 
     const connectSocket = async () => {
       try {
-        await fetch("/api/socket");
-        socket = io(':8081', {
-          path: "/api/buzzer-socket",
-        });
+        socket = io({ path: "/api/buzzer-socket" });
         socketRef.current = socket;
 
         socket.on("connect", () => {

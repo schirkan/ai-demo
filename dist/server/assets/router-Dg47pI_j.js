@@ -1,7 +1,6 @@
-import { createRootRoute, Link, HeadContent, Scripts, createFileRoute, lazyRouteComponent, createRouter } from "@tanstack/react-router";
+import { createRootRoute, Link, Outlet, HeadContent, Scripts, createFileRoute, lazyRouteComponent, createRouter } from "@tanstack/react-router";
 import { jsxs, jsx, Fragment } from "react/jsx-runtime";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { TanStackDevtools } from "@tanstack/react-devtools";
+import * as React from "react";
 import { memo, useMemo, useEffect, useRef, useCallback, useState } from "react";
 import { BsMicFill, BsFillStopFill, BsSendFill, BsChevronUp, BsChevronDown, BsPencilSquare, BsArrowClockwise, BsFillGearFill, BsEye, BsEyeSlash, BsPlus, BsPencil, BsTrash, BsMagic } from "react-icons/bs";
 import { DefaultChatTransport, generateText, APICallError, tool, experimental_generateImage, createIdGenerator, createUIMessageStream, streamObject, createUIMessageStreamResponse, streamText, convertToModelMessages } from "ai";
@@ -14,9 +13,12 @@ import { createPortal } from "react-dom";
 import { LuCircleAlert, LuImage, LuShare, LuPaintRoller, LuPaintbrush, LuPaintbrushVertical, LuPalette, LuPaintBucket } from "react-icons/lu";
 import { useVoices, useSpeech } from "react-text-to-speech";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
+import { io as io$1 } from "socket.io-client";
+import { v4 } from "uuid";
+import { FiCopy } from "react-icons/fi";
+import { QRCodeSVG } from "qrcode.react";
 import { azure as azure$1, createAzure } from "@ai-sdk/azure";
 import { Server } from "socket.io";
-import { v4 } from "uuid";
 import { z } from "zod";
 import fs from "fs";
 import * as https from "https";
@@ -31,7 +33,7 @@ function NotFound() {
     /* @__PURE__ */ jsx("p", { children: /* @__PURE__ */ jsx(Link, { to: "/", children: "Zur Startseite" }) })
   ] });
 }
-const Route$f = createRootRoute({
+const Route$h = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -40,34 +42,47 @@ const Route$f = createRootRoute({
     ],
     links: [{ rel: "stylesheet", href: appCss }]
   }),
-  shellComponent: RootDocument,
+  component: RootComponent,
   notFoundComponent: NotFound
 });
+function RootComponent() {
+  return /* @__PURE__ */ jsx(RootDocument, { children: /* @__PURE__ */ jsx(Outlet, {}) });
+}
+let RouterDevtools = () => null;
+if (process.env.NODE_ENV === "development") {
+  const TanStackRouterDevtoolsPanel = React.lazy(async () => import("@tanstack/react-router-devtools").then((res) => ({
+    default: res.TanStackRouterDevtoolsPanel
+  })));
+  const TanStackDevtools = React.lazy(async () => import("@tanstack/react-devtools").then((res) => ({
+    default: res.TanStackDevtools
+  })));
+  RouterDevtools = () => /* @__PURE__ */ jsx(
+    TanStackDevtools,
+    {
+      config: {
+        position: "bottom-right"
+      },
+      plugins: [
+        {
+          name: "Tanstack Router",
+          render: /* @__PURE__ */ jsx(TanStackRouterDevtoolsPanel, {})
+        }
+      ]
+    }
+  );
+}
 function RootDocument({ children }) {
-  return /* @__PURE__ */ jsxs("html", { lang: "de", children: [
+  return /* @__PURE__ */ jsxs("html", { lang: "en", children: [
     /* @__PURE__ */ jsx("head", { children: /* @__PURE__ */ jsx(HeadContent, {}) }),
     /* @__PURE__ */ jsxs("body", { children: [
       children,
-      /* @__PURE__ */ jsx(
-        TanStackDevtools,
-        {
-          config: {
-            position: "bottom-right"
-          },
-          plugins: [
-            {
-              name: "Tanstack Router",
-              render: /* @__PURE__ */ jsx(TanStackRouterDevtoolsPanel, {})
-            }
-          ]
-        }
-      ),
+      /* @__PURE__ */ jsx(RouterDevtools, {}),
       /* @__PURE__ */ jsx(Scripts, {})
     ] })
   ] });
 }
-const $$splitComponentImporter = () => import("./index-DBf43b_O.js");
-const Route$e = createFileRoute("/")({
+const $$splitComponentImporter = () => import("./index-KQeyMvBJ.js");
+const Route$g = createFileRoute("/")({
   component: lazyRouteComponent($$splitComponentImporter, "component")
 });
 const header$2 = "_header_k4yph_1";
@@ -77,7 +92,7 @@ const right$1 = "_right_k4yph_99";
 const secret = "_secret_k4yph_127";
 const show = "_show_k4yph_163";
 const actionsButtons = "_actionsButtons_k4yph_173";
-const styles$e = {
+const styles$g = {
   header: header$2,
   container: container$a,
   left: left$1,
@@ -87,7 +102,7 @@ const styles$e = {
   actionsButtons
 };
 const markdown = "_markdown_77v11_1";
-const styles$d = {
+const styles$f = {
   markdown
 };
 const MemoizedMarkdownBlock = memo(
@@ -97,7 +112,7 @@ const MemoizedMarkdownBlock = memo(
 MemoizedMarkdownBlock.displayName = "MemoizedMarkdownBlock";
 const MemoizedMarkdown = memo(({ content, id }) => {
   const blocks = useMemo(() => [content], [content]);
-  return /* @__PURE__ */ jsx("div", { className: styles$d.markdown, children: blocks.map((block, index) => /* @__PURE__ */ jsx(MemoizedMarkdownBlock, { content: block }, `${id}-block_${index}`)) });
+  return /* @__PURE__ */ jsx("div", { className: styles$f.markdown, children: blocks.map((block, index) => /* @__PURE__ */ jsx(MemoizedMarkdownBlock, { content: block }, `${id}-block_${index}`)) });
 });
 MemoizedMarkdown.displayName = "MemoizedMarkdown";
 var useEffectOnce = function(effect) {
@@ -182,7 +197,7 @@ function useSiriWave(props) {
     });
     setSiriWave(instance);
     return () => {
-      instance?.dispose();
+      instance.dispose();
     };
   }, [
     props.container,
@@ -253,7 +268,7 @@ const inputForm = "_inputForm_167w0_1";
 const inputTextbox = "_inputTextbox_167w0_67";
 const micButton = "_micButton_167w0_125";
 const wave = "_wave_167w0_155";
-const styles$c = {
+const styles$e = {
   inputForm,
   inputTextbox,
   micButton,
@@ -308,7 +323,7 @@ function ChatInput({ onSubmit, placeholder, showVoiceInput, loading: loading2, i
         handleMicClick();
         return;
       }
-      if (event.code === "Enter" && !event.shiftKey && document.activeElement === inputRef.current) {
+      if ((event.code === "Enter" || event.code === "NumpadEnter") && !event.shiftKey && document.activeElement === inputRef.current) {
         event.preventDefault();
         handleSubmit();
         return;
@@ -333,12 +348,12 @@ function ChatInput({ onSubmit, placeholder, showVoiceInput, loading: loading2, i
   const micButtonVisible = style === "combined" ? showVoiceInput && !loading2 && (!input || listening) : showVoiceInput;
   const stopButtonVisible = loading2 && stop;
   const sendButtonVisible = style === "combined" ? !stopButtonVisible && input && !listening : !stopButtonVisible;
-  return /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: styles$c.inputForm, "data-style": style, children: [
+  return /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: styles$e.inputForm, "data-style": style, children: [
     /* @__PURE__ */ jsx(
       TextareaAutosize,
       {
         ref: inputRef,
-        className: styles$c.inputTextbox,
+        className: styles$e.inputTextbox,
         value: input,
         onChange: handleTextareaChange,
         placeholder: placeholder ?? "Say something..."
@@ -348,20 +363,20 @@ function ChatInput({ onSubmit, placeholder, showVoiceInput, loading: loading2, i
       "button",
       {
         onClick: handleMicClick,
-        className: styles$c.micButton + " " + buttonStyles.iconButton,
+        className: styles$e.micButton + " " + buttonStyles.iconButton,
         "data-active": listening,
         "aria-label": "Toggle voice input",
         type: "button",
         children: /* @__PURE__ */ jsx(BsMicFill, {})
       }
     ),
-    stopButtonVisible && /* @__PURE__ */ jsx("button", { type: "button", onClick: stop, className: styles$c.stopButton + " " + buttonStyles.iconButton, children: /* @__PURE__ */ jsx(BsFillStopFill, {}) }),
-    sendButtonVisible && /* @__PURE__ */ jsx("button", { type: "submit", disabled: !input || loading2, className: styles$c.submitButton + " " + buttonStyles.iconButton, children: /* @__PURE__ */ jsx(BsSendFill, {}) }),
-    listening && /* @__PURE__ */ jsx(SiriWaveUi, { active: true, className: styles$c.wave })
+    stopButtonVisible && /* @__PURE__ */ jsx("button", { type: "button", onClick: stop, className: styles$e.stopButton + " " + buttonStyles.iconButton, children: /* @__PURE__ */ jsx(BsFillStopFill, {}) }),
+    sendButtonVisible && /* @__PURE__ */ jsx("button", { type: "submit", disabled: !input || loading2, className: styles$e.submitButton + " " + buttonStyles.iconButton, children: /* @__PURE__ */ jsx(BsSendFill, {}) }),
+    listening && /* @__PURE__ */ jsx(SiriWaveUi, { active: true, className: styles$e.wave })
   ] });
 }
 const button = "_button_p839x_1";
-const styles$b = {
+const styles$d = {
   button
 };
 function ScrollToButton({
@@ -405,42 +420,35 @@ function ScrollToButton({
   return /* @__PURE__ */ jsx(
     "button",
     {
-      className: styles$b.button + " " + buttonStyles.iconButton,
+      className: styles$d.button + " " + buttonStyles.iconButton,
       onClick: handleClick,
       "data-show": visible,
       children: direction === "up" ? /* @__PURE__ */ jsx(BsChevronUp, {}) : /* @__PURE__ */ jsx(BsChevronDown, {})
     }
   );
 }
-const container$9 = "_container_1q3ac_1";
-const messages = "_messages_1q3ac_13";
-const message = "_message_1q3ac_13";
-const error$1 = "_error_1q3ac_47";
-const errorMessage$1 = "_errorMessage_1q3ac_61";
-const messageContent = "_messageContent_1q3ac_81";
-const typingIndicator = "_typingIndicator_1q3ac_89";
-const loader$1 = "_loader_1q3ac_109";
-const roleLabel = "_roleLabel_1q3ac_189";
-const styles$a = {
+const container$9 = "_container_1wwe8_1";
+const info = "_info_1wwe8_15";
+const elapsed = "_elapsed_1wwe8_31";
+const prompt$1 = "_prompt_1wwe8_33";
+const zoomedOverlay = "_zoomedOverlay_1wwe8_55";
+const loading = "_loading_1wwe8_89";
+const loader$1 = "_loader_1wwe8_113";
+const imagePlaceholder = "_imagePlaceholder_1wwe8_165";
+const error$1 = "_error_1wwe8_187";
+const errorMessage$1 = "_errorMessage_1wwe8_201";
+const styles$c = {
   container: container$9,
-  messages,
-  message,
-  error: error$1,
-  errorMessage: errorMessage$1,
-  messageContent,
-  typingIndicator,
+  info,
+  elapsed,
+  prompt: prompt$1,
+  zoomedOverlay,
+  loading,
   loader: loader$1,
-  roleLabel
+  imagePlaceholder,
+  error: error$1,
+  errorMessage: errorMessage$1
 };
-function ScrollIntoView({ trigger }) {
-  const messagesEndRef = useRef(null);
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [trigger]);
-  return /* @__PURE__ */ jsx("div", { ref: messagesEndRef });
-}
 const imageHelpers = {
   base64ToBlob: (base64Data, type = "image/png") => {
     const byteString = atob(base64Data);
@@ -487,28 +495,6 @@ const imageHelpers = {
     }
   }
 };
-const container$8 = "_container_1wwe8_1";
-const info = "_info_1wwe8_15";
-const elapsed = "_elapsed_1wwe8_31";
-const prompt$1 = "_prompt_1wwe8_33";
-const zoomedOverlay = "_zoomedOverlay_1wwe8_55";
-const loading = "_loading_1wwe8_89";
-const loader = "_loader_1wwe8_113";
-const imagePlaceholder = "_imagePlaceholder_1wwe8_165";
-const error = "_error_1wwe8_187";
-const errorMessage = "_errorMessage_1wwe8_201";
-const styles$9 = {
-  container: container$8,
-  info,
-  elapsed,
-  prompt: prompt$1,
-  zoomedOverlay,
-  loading,
-  loader,
-  imagePlaceholder,
-  error,
-  errorMessage
-};
 const icons = [
   /* @__PURE__ */ jsx(LuPaintRoller, {}, "roller"),
   /* @__PURE__ */ jsx(LuPaintbrush, {}, "brush"),
@@ -520,7 +506,7 @@ function ImageDisplay({ prompt: prompt2, image, timing, error: error2, reload, e
   const [isZoomed, setIsZoomed] = useState(false);
   const [iconIndex, setIconIndex] = useState(0);
   useEffect(() => {
-    if (!timing?.startTime || timing?.completionTime) return;
+    if (!timing?.startTime || timing.completionTime) return;
     const interval = setInterval(() => {
       setIconIndex((prev) => (prev + 1) % icons.length);
     }, 2e3);
@@ -552,31 +538,30 @@ function ImageDisplay({ prompt: prompt2, image, timing, error: error2, reload, e
   };
   const handleActionClick = (e, imageData) => {
     e.stopPropagation();
-    imageHelpers.shareOrDownload(imageData, "image").catch((error22) => {
-      console.error("Failed to share/download image:", error22);
+    imageHelpers.shareOrDownload(imageData, "image").catch((err) => {
+      console.error("Failed to share/download image:", err);
     });
   };
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: styles$9.container, children: [
-      prompt2 && /* @__PURE__ */ jsx("div", { className: buttonStyles.iconButton + " " + styles$9.prompt, children: prompt2 }),
-      image && /* eslint-disable-next-line @next/next/no-img-element */
-      /* @__PURE__ */ jsx("img", { src: image, alt: prompt2, onClick: handleImageClick }),
+    /* @__PURE__ */ jsxs("div", { className: styles$c.container, children: [
+      prompt2 && /* @__PURE__ */ jsx("div", { className: buttonStyles.iconButton + " " + styles$c.prompt, children: prompt2 }),
+      image && /* @__PURE__ */ jsx("img", { src: image, alt: prompt2, onClick: handleImageClick }),
       error2 && /* @__PURE__ */ jsxs(Fragment, { children: [
-        /* @__PURE__ */ jsx(LuCircleAlert, { className: styles$9.imagePlaceholder }),
-        /* @__PURE__ */ jsx("div", { className: styles$9.error, children: /* @__PURE__ */ jsxs("div", { className: styles$9.errorMessage, children: [
+        /* @__PURE__ */ jsx(LuCircleAlert, { className: styles$c.imagePlaceholder }),
+        /* @__PURE__ */ jsx("div", { className: styles$c.error, children: /* @__PURE__ */ jsxs("div", { className: styles$c.errorMessage, children: [
           "Error: ",
           error2.message
         ] }) })
       ] }),
-      timing?.startTime && !timing?.completionTime && /* @__PURE__ */ jsxs("div", { className: styles$9.loading, children: [
-        /* @__PURE__ */ jsx("div", { className: styles$9.loader }),
+      timing?.startTime && !timing.completionTime && /* @__PURE__ */ jsxs("div", { className: styles$c.loading, children: [
+        /* @__PURE__ */ jsx("div", { className: styles$c.loader }),
         icons[iconIndex]
       ] }),
-      !image && !error2 && !timing?.startTime && /* @__PURE__ */ jsx(LuImage, { className: styles$9.imagePlaceholder }),
-      /* @__PURE__ */ jsxs("div", { className: styles$9.info, children: [
-        prompt2 && edit && /* @__PURE__ */ jsx("button", { onClick: edit, className: styles$9.editButton + " " + buttonStyles.iconButton, children: /* @__PURE__ */ jsx(BsPencilSquare, {}) }),
-        (image || error2) && reload && /* @__PURE__ */ jsx("button", { onClick: reload, className: styles$9.reloadButton + " " + buttonStyles.iconButton, children: /* @__PURE__ */ jsx(BsArrowClockwise, {}) }),
-        timing?.elapsed && /* @__PURE__ */ jsxs("div", { className: buttonStyles.iconButton + " " + styles$9.elapsed, children: [
+      !image && !error2 && !timing?.startTime && /* @__PURE__ */ jsx(LuImage, { className: styles$c.imagePlaceholder }),
+      /* @__PURE__ */ jsxs("div", { className: styles$c.info, children: [
+        prompt2 && edit && /* @__PURE__ */ jsx("button", { onClick: edit, className: styles$c.editButton + " " + buttonStyles.iconButton, children: /* @__PURE__ */ jsx(BsPencilSquare, {}) }),
+        (image || error2) && reload && /* @__PURE__ */ jsx("button", { onClick: reload, className: styles$c.reloadButton + " " + buttonStyles.iconButton, children: /* @__PURE__ */ jsx(BsArrowClockwise, {}) }),
+        timing?.elapsed && /* @__PURE__ */ jsxs("div", { className: buttonStyles.iconButton + " " + styles$c.elapsed, children: [
           (timing.elapsed / 1e3).toFixed(1),
           "s"
         ] }),
@@ -584,10 +569,39 @@ function ImageDisplay({ prompt: prompt2, image, timing, error: error2, reload, e
       ] })
     ] }),
     isZoomed && image && createPortal(
-      /* @__PURE__ */ jsx("div", { className: styles$9.zoomedOverlay, onClick: () => setIsZoomed(false), children: /* @__PURE__ */ jsx("img", { src: image, alt: prompt2 || `AI Generated` }) }),
+      /* @__PURE__ */ jsx("div", { className: styles$c.zoomedOverlay, onClick: () => setIsZoomed(false), children: /* @__PURE__ */ jsx("img", { src: image, alt: prompt2 || `AI Generated` }) }),
       document.body
     )
   ] });
+}
+const container$8 = "_container_1q3ac_1";
+const messages = "_messages_1q3ac_13";
+const message = "_message_1q3ac_13";
+const error = "_error_1q3ac_47";
+const errorMessage = "_errorMessage_1q3ac_61";
+const messageContent = "_messageContent_1q3ac_81";
+const typingIndicator = "_typingIndicator_1q3ac_89";
+const loader = "_loader_1q3ac_109";
+const roleLabel = "_roleLabel_1q3ac_189";
+const styles$b = {
+  container: container$8,
+  messages,
+  message,
+  error,
+  errorMessage,
+  messageContent,
+  typingIndicator,
+  loader,
+  roleLabel
+};
+function ScrollIntoView({ trigger }) {
+  const messagesEndRef = useRef(null);
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [trigger]);
+  return /* @__PURE__ */ jsx("div", { ref: messagesEndRef });
 }
 function renderMessage(message2) {
   return message2.parts.map((p, index) => renderPart(p, message2, index));
@@ -595,9 +609,9 @@ function renderMessage(message2) {
 function renderPart(part, message2, index) {
   switch (part.type) {
     case "text":
-      return /* @__PURE__ */ jsxs("div", { className: styles$a.message, "data-role": message2.role, children: [
-        /* @__PURE__ */ jsx("div", { className: styles$a.roleLabel, children: message2.role === "user" ? "User" : "AI" }),
-        /* @__PURE__ */ jsx("div", { className: styles$a.messageContent, children: /* @__PURE__ */ jsx(MemoizedMarkdown, { id: message2.id + "|" + index, content: part.text }) })
+      return /* @__PURE__ */ jsxs("div", { className: styles$b.message, "data-role": message2.role, children: [
+        /* @__PURE__ */ jsx("div", { className: styles$b.roleLabel, children: message2.role === "user" ? "User" : "AI" }),
+        /* @__PURE__ */ jsx("div", { className: styles$b.messageContent, children: /* @__PURE__ */ jsx(MemoizedMarkdown, { id: message2.id + "|" + index, content: part.text }) })
       ] }, message2.id);
     case "tool-generateImage":
       if (part.input) {
@@ -613,12 +627,12 @@ function renderPart(part, message2, index) {
 }
 function ChatMessages(props) {
   const scrollRef = useRef(null);
-  return /* @__PURE__ */ jsx("div", { className: styles$a.container, "data-style": props.style ?? "default", children: /* @__PURE__ */ jsxs("div", { className: styles$a.messages, ref: scrollRef, children: [
+  return /* @__PURE__ */ jsx("div", { className: styles$b.container, "data-style": props.style ?? "default", children: /* @__PURE__ */ jsxs("div", { className: styles$b.messages, ref: scrollRef, children: [
     props.messages.map(renderMessage),
-    props.loading && /* @__PURE__ */ jsx("div", { className: styles$a.typingIndicator, children: /* @__PURE__ */ jsx("div", { className: styles$a.loader }) }),
-    props.error && /* @__PURE__ */ jsxs("div", { className: styles$a.error, children: [
-      props.regenerate && /* @__PURE__ */ jsx("button", { type: "button", onClick: props.regenerate, className: styles$a.reloadButton + " " + buttonStyles.iconButton, children: /* @__PURE__ */ jsx(BsArrowClockwise, {}) }),
-      /* @__PURE__ */ jsxs("div", { className: styles$a.errorMessage, children: [
+    props.loading && /* @__PURE__ */ jsx("div", { className: styles$b.typingIndicator, children: /* @__PURE__ */ jsx("div", { className: styles$b.loader }) }),
+    props.error && /* @__PURE__ */ jsxs("div", { className: styles$b.error, children: [
+      props.regenerate && /* @__PURE__ */ jsx("button", { type: "button", onClick: props.regenerate, className: styles$b.reloadButton + " " + buttonStyles.iconButton, children: /* @__PURE__ */ jsx(BsArrowClockwise, {}) }),
+      /* @__PURE__ */ jsxs("div", { className: styles$b.errorMessage, children: [
         "Error: ",
         props.error.message
       ] })
@@ -630,13 +644,13 @@ function ChatMessages(props) {
 const container$7 = "_container_1nbev_1";
 const buttons = "_buttons_1nbev_9";
 const options$2 = "_options_1nbev_37";
-const styles$8 = {
+const styles$a = {
   container: container$7,
   buttons,
   options: options$2
 };
 const key = `SpeechAutoPlayEnabled`;
-function SpeechOptions(props) {
+function SpeechOptions({ text, position }) {
   const [enabled, setEnabled] = useState(false);
   const [lang, setLang] = useState("de-DE");
   const [voiceURI, setVoiceURI] = useState("Microsoft Conrad Online (Natural) - German (Germany)");
@@ -646,7 +660,7 @@ function SpeechOptions(props) {
     const stored = localStorage.getItem(key);
     setEnabled(stored !== "false");
   }, []);
-  const text = props?.text?.replaceAll("**", "");
+  text = text?.replaceAll("**", "");
   const { voices, languages } = useVoices();
   const { speechStatus, stop } = useSpeech({ text, autoPlay: enabled, lang, voiceURI });
   const toggleEnabled = useCallback(() => {
@@ -655,19 +669,19 @@ function SpeechOptions(props) {
     if (typeof window === "undefined") return;
     localStorage.setItem(key, !enabled ? "true" : "false");
   }, [enabled]);
-  return /* @__PURE__ */ jsxs("div", { className: styles$8.container, "data-position": props.position || "top-right", children: [
-    /* @__PURE__ */ jsxs("div", { className: styles$8.buttons, children: [
+  return /* @__PURE__ */ jsxs("div", { className: styles$a.container, "data-position": position || "top-right", children: [
+    /* @__PURE__ */ jsxs("div", { className: styles$a.buttons, children: [
       /* @__PURE__ */ jsx("button", { className: buttonStyles.iconButton, "data-visible": enabled, disabled: speechStatus === "stopped", onClick: stop, children: /* @__PURE__ */ jsx(BsFillStopFill, {}) }),
       /* @__PURE__ */ jsx("button", { className: buttonStyles.iconButton, "data-visible": enabled, onClick: () => setShowOptions((v) => !v), title: "Optionen anzeigen / verbergen", children: /* @__PURE__ */ jsx(BsFillGearFill, {}) }),
       /* @__PURE__ */ jsx("button", { className: buttonStyles.iconButton, onClick: toggleEnabled, title: "Sprachausgabe aktivieren / deaktivieren", children: enabled ? /* @__PURE__ */ jsx(HiSpeakerWave, {}) : /* @__PURE__ */ jsx(HiSpeakerXMark, {}) })
     ] }),
-    showOptions && /* @__PURE__ */ jsxs("div", { className: styles$8.options, children: [
+    showOptions && /* @__PURE__ */ jsxs("div", { className: styles$a.options, children: [
       /* @__PURE__ */ jsx("select", { value: lang, onChange: (e) => setLang(e.target.value), children: languages.map((language) => /* @__PURE__ */ jsx("option", { value: language, children: language }, language)) }),
       /* @__PURE__ */ jsx("select", { value: voiceURI, onChange: (e) => setVoiceURI(e.target.value), children: voices.filter((x) => x.lang === lang).map((voice, index) => /* @__PURE__ */ jsx("option", { value: voice.voiceURI, children: voice.name }, index)) })
     ] })
   ] });
 }
-const styles$7 = {
+const styles$9 = {
   "basic-grid": {
     background: "light-dark( #ffffff, #0f172a )",
     backgroundImage: `
@@ -709,15 +723,15 @@ const styles$7 = {
   }
 };
 function BackgroundPattern({ styleName, fixed = true }) {
-  if (!styleName || !styles$7[styleName]) return null;
-  const style = styles$7[styleName];
+  if (!styleName || !styles$9[styleName]) return null;
+  const style = styles$9[styleName];
   if (fixed) {
     style.position = "fixed";
   }
   return /* @__PURE__ */ jsx("div", { style: { position: "absolute", inset: 0, zIndex: -1, ...style } });
 }
 function isTextPart(part) {
-  return part?.type === "text" && typeof part.text === "string";
+  return part?.type === "text" && typeof part?.text === "string";
 }
 function getMessageText(message2) {
   if (!message2) return "";
@@ -729,16 +743,16 @@ function getDataPart(message2, type) {
   const firstPart = dataParts[0];
   return firstPart?.data;
 }
-const Route$d = createFileRoute("/quizshow/")({
-  component: Game
+const Route$f = createFileRoute("/quizshow/")({
+  component: Page$6
 });
-function Game() {
+function Page$6() {
   const [showSecret, setShowSecret] = useState(false);
-  const { messages: messages2, sendMessage, status, error: error2, regenerate, stop } = useChat({
+  const { messages: messages2, sendMessage, status: status2, error: error2, regenerate, stop } = useChat({
     transport: new DefaultChatTransport({ api: "/api/quizshow" }),
     experimental_throttle: 100
   });
-  const loading2 = status === "submitted" || status === "streaming";
+  const loading2 = status2 === "submitted" || status2 === "streaming";
   const lastMessage = messages2.slice().reverse().find((x) => x.role === "assistant" && x.parts.some((p) => p.type === "data-quiz"));
   const response = getDataPart(lastMessage, "data-quiz");
   const actions2 = messages2.length === 0 ? ["Start"] : response?.actions || [];
@@ -750,13 +764,13 @@ function Game() {
   );
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx(BackgroundPattern, { styleName: "blueprint" }),
-    /* @__PURE__ */ jsx("h1", { className: styles$e.header, children: "Quizshow" }),
-    /* @__PURE__ */ jsxs("div", { className: styles$e.container, children: [
-      /* @__PURE__ */ jsxs("div", { className: styles$e.left, children: [
+    /* @__PURE__ */ jsx("h1", { className: styles$g.header, children: "Quizshow" }),
+    /* @__PURE__ */ jsxs("div", { className: styles$g.container, children: [
+      /* @__PURE__ */ jsxs("div", { className: styles$g.left, children: [
         /* @__PURE__ */ jsx(SpeechOptions, { text: response?.speak || "" }),
-        /* @__PURE__ */ jsx("div", { className: styles$e.show, children: /* @__PURE__ */ jsx(MemoizedMarkdown, { content: response?.show ?? "" }) }),
-        /* @__PURE__ */ jsx("div", { className: styles$e.actionsButtons, children: actions2.map((action) => /* @__PURE__ */ jsx("button", { onClick: () => handleSubmit(action), disabled: loading2, children: action }, action)) }),
-        /* @__PURE__ */ jsxs("div", { className: styles$e.secret, children: [
+        /* @__PURE__ */ jsx("div", { className: styles$g.show, children: /* @__PURE__ */ jsx(MemoizedMarkdown, { content: response?.show ?? "" }) }),
+        /* @__PURE__ */ jsx("div", { className: styles$g.actionsButtons, children: actions2.map((action) => /* @__PURE__ */ jsx("button", { onClick: () => handleSubmit(action), disabled: loading2, children: action }, action)) }),
+        /* @__PURE__ */ jsxs("div", { className: styles$g.secret, children: [
           /* @__PURE__ */ jsxs("h2", { onClick: () => setShowSecret((value) => !value), children: [
             "Secret ",
             showSecret ? /* @__PURE__ */ jsx(BsEye, {}) : /* @__PURE__ */ jsx(BsEyeSlash, {})
@@ -764,7 +778,7 @@ function Game() {
           /* @__PURE__ */ jsx("div", { style: { visibility: showSecret ? "initial" : "hidden" }, children: response?.secret })
         ] })
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: styles$e.right, children: [
+      /* @__PURE__ */ jsxs("div", { className: styles$g.right, children: [
         /* @__PURE__ */ jsx(ChatMessages, { messages: messages2, style: "ios", loading: loading2, error: error2, regenerate }),
         /* @__PURE__ */ jsx(ChatInput, { style: "combined", onSubmit: handleSubmit, showVoiceInput: true, loading: loading2, stop })
       ] })
@@ -773,7 +787,7 @@ function Game() {
 }
 const container$6 = "_container_4tdlj_1";
 const options$1 = "_options_4tdlj_19";
-const styles$6 = {
+const styles$8 = {
   container: container$6,
   options: options$1
 };
@@ -850,10 +864,10 @@ function useImageGeneration() {
     activePrompt
   };
 }
-const Route$c = createFileRoute("/image/")({
-  component: Chat$4
+const Route$e = createFileRoute("/image/")({
+  component: Page$5
 });
-function Chat$4() {
+function Page$5() {
   const [hdQuality, setHdQuality] = useState(true);
   const [style, setStyle] = useState("vivid");
   const [initialPrompt, setInitialPrompt] = useState(
@@ -878,8 +892,8 @@ function Chat$4() {
     setInitialPrompt(activePrompt);
     window.setTimeout(() => setInitialPrompt(""), 100);
   }, [activePrompt]);
-  return /* @__PURE__ */ jsxs("div", { className: styles$6.container, children: [
-    /* @__PURE__ */ jsxs("div", { className: styles$6.options, children: [
+  return /* @__PURE__ */ jsxs("div", { className: styles$8.container, children: [
+    /* @__PURE__ */ jsxs("div", { className: styles$8.options, children: [
       /* @__PURE__ */ jsx("h4", { children: "Options:" }),
       /* @__PURE__ */ jsxs("label", { children: [
         /* @__PURE__ */ jsx("input", { type: "checkbox", checked: hdQuality, onChange: (e) => setHdQuality(e.target.checked) }),
@@ -912,20 +926,20 @@ function Chat$4() {
     /* @__PURE__ */ jsx(ChatInput, { onSubmit: handleSubmit, placeholder: "Describe your image...", loading: isLoading, initialValue: initialPrompt })
   ] });
 }
-const container$5 = "_container_1ddkz_1";
-const header$1 = "_header_1ddkz_21";
-const chatUi = "_chatUi_1ddkz_41";
-const whatsappBackground = "_whatsappBackground_1ddkz_71";
-const options = "_options_1ddkz_95";
-const styles$5 = {
+const container$5 = "_container_1yird_1";
+const header$1 = "_header_1yird_21";
+const chatUi = "_chatUi_1yird_41";
+const whatsappBackground = "_whatsappBackground_1yird_71";
+const options = "_options_1yird_103";
+const styles$7 = {
   container: container$5,
   header: header$1,
   chatUi,
   whatsappBackground,
   options
 };
-const Route$b = createFileRoute("/chat-ui-sample/")({
-  component: Page
+const Route$d = createFileRoute("/chat-ui-sample/")({
+  component: Page$4
 });
 const sampleMessages = [
   {
@@ -969,7 +983,7 @@ const sampleMessages = [
     parts: [{ type: "text", text: "Photovoltaikanlagen sind relativ wartungsarm. Es empfiehlt sich aber, sie alle paar Jahre von einem Fachbetrieb überprüfen zu lassen, um die optimale Leistung zu gewährleisten." }]
   }
 ];
-function Page() {
+function Page$4() {
   const [messagesStyle, setMessagesStyle] = useState("default");
   const [inputStyle, setInputStyle] = useState("default");
   const [typing, setTyping] = useState(false);
@@ -1015,9 +1029,9 @@ function Page() {
   };
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx(BackgroundPattern, { styleName: "blueprint" }),
-    /* @__PURE__ */ jsxs("div", { className: styles$5.container, children: [
-      /* @__PURE__ */ jsx("h1", { className: styles$5.header, children: "Chat UI" }),
-      /* @__PURE__ */ jsxs("div", { className: styles$5.chatUi + " " + (showWhatsappBackground && styles$5.whatsappBackground), children: [
+    /* @__PURE__ */ jsxs("div", { className: styles$7.container, children: [
+      /* @__PURE__ */ jsx("h1", { className: styles$7.header, children: "Chat UI" }),
+      /* @__PURE__ */ jsxs("div", { className: styles$7.chatUi + " " + (showWhatsappBackground && styles$7.whatsappBackground), children: [
         /* @__PURE__ */ jsx(
           ChatMessages,
           {
@@ -1041,7 +1055,7 @@ function Page() {
           }
         )
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: styles$5.options, children: [
+      /* @__PURE__ */ jsxs("div", { className: styles$7.options, children: [
         /* @__PURE__ */ jsx("h2", { children: "Options" }),
         /* @__PURE__ */ jsxs("label", { children: [
           "Messages Style: ",
@@ -1081,16 +1095,16 @@ function Page() {
   ] });
 }
 const container$4 = "_container_1sbs0_1";
-const styles$4 = {
+const styles$6 = {
   container: container$4
 };
-const Route$a = createFileRoute("/chat-tts/")({
-  component: Chat$3
+const Route$c = createFileRoute("/chat-tts/")({
+  component: Page$3
 });
-function Chat$3() {
-  const { messages: messages2, sendMessage, status, error: error2, regenerate, stop } = useChat({ experimental_throttle: 50 });
-  const loading2 = status === "submitted" || status === "streaming";
-  const lastMessage = status === "ready" ? messages2.findLast((x) => x.role === "assistant") : null;
+function Page$3() {
+  const { messages: messages2, sendMessage, status: status2, error: error2, regenerate, stop } = useChat({ experimental_throttle: 50 });
+  const loading2 = status2 === "submitted" || status2 === "streaming";
+  const lastMessage = status2 === "ready" ? messages2.findLast((x) => x.role === "assistant") : null;
   const handleSubmit = useCallback(
     (text) => {
       sendMessage({ role: "user", parts: [{ type: "text", text }] });
@@ -1098,7 +1112,7 @@ function Chat$3() {
     [sendMessage]
   );
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: styles$4.container, children: [
+    /* @__PURE__ */ jsxs("div", { className: styles$6.container, children: [
       /* @__PURE__ */ jsx(ChatMessages, { messages: messages2, style: "whatsapp", loading: loading2, error: error2, regenerate }),
       /* @__PURE__ */ jsx(ChatInput, { onSubmit: handleSubmit, showVoiceInput: true, loading: loading2, stop })
     ] }),
@@ -1110,7 +1124,7 @@ const container$3 = "_container_12eqa_23";
 const left = "_left_12eqa_57";
 const right = "_right_12eqa_71";
 const noActiveChat = "_noActiveChat_12eqa_81";
-const styles$3 = {
+const styles$5 = {
   header,
   container: container$3,
   left,
@@ -1124,7 +1138,7 @@ const startItem = "_startItem_2q6w6_45";
 const title = "_title_2q6w6_55";
 const editInput = "_editInput_2q6w6_73";
 const actions = "_actions_2q6w6_93";
-const styles$2 = {
+const styles$4 = {
   container: container$2,
   listItem,
   selected,
@@ -1154,10 +1168,10 @@ function ChatLog({
     setEditId(null);
     setEditValue("");
   };
-  return /* @__PURE__ */ jsx("div", { className: styles$2.container, children: /* @__PURE__ */ jsxs("ul", { children: [
-    /* @__PURE__ */ jsxs("li", { className: styles$2.listItem + " " + styles$2.startItem, children: [
-      /* @__PURE__ */ jsx("span", { className: styles$2.title, children: "Chat history" }),
-      /* @__PURE__ */ jsx("span", { className: styles$2.actions, children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onAdd(), className: buttonStyles.iconButton, title: "Start new chat", children: [
+  return /* @__PURE__ */ jsx("div", { className: styles$4.container, children: /* @__PURE__ */ jsxs("ul", { children: [
+    /* @__PURE__ */ jsxs("li", { className: styles$4.listItem + " " + styles$4.startItem, children: [
+      /* @__PURE__ */ jsx("span", { className: styles$4.title, children: "Chat history" }),
+      /* @__PURE__ */ jsx("span", { className: styles$4.actions, children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onAdd(), className: buttonStyles.iconButton, title: "Start new chat", children: [
         /* @__PURE__ */ jsx(BsPlus, {}),
         " New"
       ] }) })
@@ -1166,12 +1180,12 @@ function ChatLog({
       "li",
       {
         onClick: () => onSelect(entry.id),
-        className: styles$2.listItem + (entry.id === selectedChatLogId ? " " + styles$2.selected : ""),
+        className: styles$4.listItem + (entry.id === selectedChatLogId ? " " + styles$4.selected : ""),
         children: [
-          /* @__PURE__ */ jsx("span", { className: styles$2.title, title: entry.title, children: editId === entry.id ? /* @__PURE__ */ jsx(
+          /* @__PURE__ */ jsx("span", { className: styles$4.title, title: entry.title, children: editId === entry.id ? /* @__PURE__ */ jsx(
             "input",
             {
-              className: styles$2.editInput,
+              className: styles$4.editInput,
               value: editValue,
               onChange: (e) => setEditValue(e.target.value),
               onBlur: () => handleEditSubmit(entry.id),
@@ -1182,7 +1196,7 @@ function ChatLog({
               autoFocus: true
             }
           ) : entry.title === "" ? "new chat" : entry.title }),
-          /* @__PURE__ */ jsxs("span", { className: styles$2.actions, children: [
+          /* @__PURE__ */ jsxs("span", { className: styles$4.actions, children: [
             /* @__PURE__ */ jsx(
               "button",
               {
@@ -1364,26 +1378,26 @@ function useAutoGenerateTitle() {
   };
   return { loading: loading2, error: error2, generateTitle };
 }
-const Route$9 = createFileRoute("/chat-persistence/")({
-  component: Chat$2
+const Route$b = createFileRoute("/chat-persistence/")({
+  component: Page$2
 });
-function Chat$2() {
+function Page$2() {
   const { selectedChatLogId, addChatLog, chatLogs, deleteChatLog, renameChatLog, setSelectedChatLogId } = useChatLog({
     storageKey: "persistence-demo"
   });
-  const { messages: messages2, setMessages, sendMessage, status, error: error2, regenerate, stop } = useChat({
+  const { messages: messages2, setMessages, sendMessage, status: status2, error: error2, regenerate, stop } = useChat({
     experimental_throttle: 50,
     transport: new DefaultChatTransport({ api: "/api/chat-with-tools" })
   });
   const { deleteMessages: deleteMessages2 } = useChatMessagesPersistence({
     storageKey: selectedChatLogId ?? "",
-    status,
+    status: status2,
     messages: messages2,
     setMessages
   });
   const { generateTitle } = useAutoGenerateTitle();
-  const loading2 = status === "submitted" || status === "streaming";
-  const lastMessage = status === "ready" ? messages2.slice().reverse().find((x) => x.role === "assistant") : null;
+  const loading2 = status2 === "submitted" || status2 === "streaming";
+  const lastMessage = status2 === "ready" ? messages2.slice().reverse().find((x) => x.role === "assistant") : null;
   useEffect(() => {
     if (messages2.length === 1 && selectedChatLogId) {
       const content = getMessageText(messages2[0]);
@@ -1399,10 +1413,10 @@ function Chat$2() {
   }, [deleteChatLog, deleteMessages2]);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx(BackgroundPattern, { styleName: "blueprint" }),
-    /* @__PURE__ */ jsx("h1", { className: styles$3.header, children: "MyGPT" }),
-    /* @__PURE__ */ jsxs("div", { className: styles$3.container, children: [
-      /* @__PURE__ */ jsx("div", { className: styles$3.left, children: /* @__PURE__ */ jsx(ChatLog, { ...{ chatLogs, selectedChatLogId, onSelect: setSelectedChatLogId, onRename: renameChatLog, onDelete, onAdd: addChatLog } }) }),
-      /* @__PURE__ */ jsx("div", { className: styles$3.right, children: selectedChatLogId ? /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("h1", { className: styles$5.header, children: "MyGPT" }),
+    /* @__PURE__ */ jsxs("div", { className: styles$5.container, children: [
+      /* @__PURE__ */ jsx("div", { className: styles$5.left, children: /* @__PURE__ */ jsx(ChatLog, { ...{ chatLogs, selectedChatLogId, onSelect: setSelectedChatLogId, onRename: renameChatLog, onDelete, onAdd: addChatLog } }) }),
+      /* @__PURE__ */ jsx("div", { className: styles$5.right, children: selectedChatLogId ? /* @__PURE__ */ jsxs(Fragment, { children: [
         /* @__PURE__ */ jsx(
           ChatMessages,
           {
@@ -1423,7 +1437,7 @@ function Chat$2() {
             stop
           }
         )
-      ] }) : /* @__PURE__ */ jsx("div", { className: styles$3.noActiveChat, children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: addChatLog, className: buttonStyles.iconButton, children: [
+      ] }) : /* @__PURE__ */ jsx("div", { className: styles$5.noActiveChat, children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: addChatLog, className: buttonStyles.iconButton, children: [
         /* @__PURE__ */ jsx(BsMagic, {}),
         " Start your first chat"
       ] }) }) }),
@@ -1433,29 +1447,29 @@ function Chat$2() {
 }
 const container$1 = "_container_1e8ge_1";
 const agentSelection = "_agentSelection_1e8ge_19";
-const styles$1 = {
+const styles$3 = {
   container: container$1,
   agentSelection
 };
 const gpts = ["Generic Chatbot", "DungeonsAndDragons", "GameMaster", "InformationGathering", "PromptOptimization"];
-const Route$8 = createFileRoute("/chat-custom-gpt/")({
-  component: Chat$1
+const Route$a = createFileRoute("/chat-custom-gpt/")({
+  component: Page$1
 });
-function Chat$1() {
+function Page$1() {
   const [currentGpt, setCurrentGpt] = useState("Generic Chatbot");
-  const { messages: messages2, sendMessage, status, error: error2, regenerate, stop } = useChat({
+  const { messages: messages2, sendMessage, status: status2, error: error2, regenerate, stop } = useChat({
     experimental_throttle: 50,
     transport: new DefaultChatTransport({ api: "/api/custom-gpt?id=" + currentGpt }),
     id: currentGpt
   });
-  const loading2 = status === "submitted" || status === "streaming";
-  const lastMessage = status === "ready" ? messages2.slice().reverse().find((x) => x.role === "assistant") : null;
+  const loading2 = status2 === "submitted" || status2 === "streaming";
+  const lastMessage = status2 === "ready" ? messages2.slice().reverse().find((x) => x.role === "assistant") : null;
   const handleSubmit = useCallback((text) => {
     sendMessage({ role: "user", parts: [{ type: "text", text }] });
   }, [sendMessage]);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: styles$1.container, children: [
-      /* @__PURE__ */ jsxs("div", { className: styles$1.agentSelection, children: [
+    /* @__PURE__ */ jsxs("div", { className: styles$3.container, children: [
+      /* @__PURE__ */ jsxs("div", { className: styles$3.agentSelection, children: [
         /* @__PURE__ */ jsx("label", { htmlFor: "gpt-select", style: { marginRight: "0.5rem" }, children: "GPT auswählen:" }),
         /* @__PURE__ */ jsx("br", {}),
         /* @__PURE__ */ jsx("select", { id: "gpt-select", value: currentGpt, onChange: (e) => setCurrentGpt(e.target.value), children: gpts.map((a) => /* @__PURE__ */ jsx("option", { value: a, children: a }, a)) })
@@ -1467,19 +1481,19 @@ function Chat$1() {
   ] });
 }
 const container = "_container_1sbs0_1";
-const styles = {
+const styles$2 = {
   container
 };
-const Route$7 = createFileRoute("/chat-basic/")({
-  component: Chat
+const Route$9 = createFileRoute("/chat-basic/")({
+  component: Page
 });
-function Chat() {
-  const { messages: messages2, sendMessage, status, stop, error: error2, regenerate } = useChat({ experimental_throttle: 100 });
-  const loading2 = status === "submitted" || status === "streaming";
+function Page() {
+  const { messages: messages2, sendMessage, status: status2, stop, error: error2, regenerate } = useChat({ experimental_throttle: 100 });
+  const loading2 = status2 === "submitted" || status2 === "streaming";
   const handleSubmit = useCallback((text) => {
     sendMessage({ role: "user", parts: [{ type: "text", text }] });
   }, [sendMessage]);
-  return /* @__PURE__ */ jsxs("div", { className: styles.container, children: [
+  return /* @__PURE__ */ jsxs("div", { className: styles$2.container, children: [
     /* @__PURE__ */ jsx(
       ChatMessages,
       {
@@ -1495,6 +1509,471 @@ function Chat() {
         onSubmit: handleSubmit,
         loading: loading2,
         stop
+      }
+    )
+  ] });
+}
+const main$1 = "_main_nn45s_1";
+const heading$1 = "_heading_nn45s_15";
+const description = "_description_nn45s_27";
+const section = "_section_nn45s_37";
+const sectionCenter = "_sectionCenter_nn45s_45";
+const sectionTitle = "_sectionTitle_nn45s_55";
+const qrHint = "_qrHint_nn45s_63";
+const qrRow = "_qrRow_nn45s_73";
+const qrInput = "_qrInput_nn45s_87";
+const qrCopyButton = "_qrCopyButton_nn45s_109";
+const playerName = "_playerName_nn45s_133";
+const playerList = "_playerList_nn45s_141";
+const playerItem = "_playerItem_nn45s_153";
+const playerWinner = "_playerWinner_nn45s_175";
+const trophy = "_trophy_nn45s_187";
+const statusBox = "_statusBox_nn45s_197";
+const statusFree = "_statusFree_nn45s_215";
+const statusBuzzed = "_statusBuzzed_nn45s_225";
+const chatList = "_chatList_nn45s_235";
+const chatItem = "_chatItem_nn45s_247";
+const styles$1 = {
+  main: main$1,
+  heading: heading$1,
+  description,
+  section,
+  sectionCenter,
+  sectionTitle,
+  qrHint,
+  qrRow,
+  qrInput,
+  qrCopyButton,
+  playerName,
+  playerList,
+  playerItem,
+  playerWinner,
+  trophy,
+  statusBox,
+  statusFree,
+  statusBuzzed,
+  chatList,
+  chatItem
+};
+const QRCodeComponent = ({ value, size = 128, className }) => /* @__PURE__ */ jsx("div", { className, children: /* @__PURE__ */ jsx(QRCodeSVG, { value, size }) });
+const Route$8 = createFileRoute("/buzzer/")({
+  component: BuzzerPage
+});
+const BUZZER_SOUND_URL = "/buzzer.mp3";
+function BuzzerPage() {
+  const [roomId2, setRoomId] = useState("");
+  const [qrUrl, setQrUrl] = useState("");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const newRoomId = v4();
+      setRoomId(newRoomId);
+      setQrUrl(`${window.location.origin}/buzzer-connect?roomId=${newRoomId}`);
+    }
+  }, []);
+  const [players, setPlayers] = useState([]);
+  const [status2, setStatus] = useState("frei");
+  const [winner, setWinner] = useState(null);
+  const [chat, setChat] = useState([]);
+  const socketRef = useRef(null);
+  const prevStatus = useRef("frei");
+  const audioRef = useRef(null);
+  const [wsStatus, setWsStatus] = useState("getrennt");
+  const [wsError, setWsError] = useState(null);
+  useEffect(() => {
+    if (!roomId2) return;
+    let socket = null;
+    let isMounted = true;
+    const connectSocket = async () => {
+      try {
+        await fetch("/api/socket");
+        socket = io$1(":8081", {
+          path: "/api/buzzer-socket"
+        });
+        socketRef.current = socket;
+        socket.on("connect", () => {
+          if (!isMounted) return;
+          setWsStatus("verbunden");
+          setWsError(null);
+          socket.emit("join", { roomId: roomId2, name: "__MODERATOR__" });
+        });
+        socket.on("room_state", (data) => {
+          if (!isMounted) return;
+          setPlayers(
+            (data.players || []).map((name) => ({
+              name,
+              isWinner: data.winner === name
+            }))
+          );
+          setStatus(data.state);
+          setWinner(data.winner || null);
+          setChat(data.chat || []);
+        });
+        socket.on("disconnect", () => {
+          if (!isMounted) return;
+          setWsStatus("getrennt");
+        });
+        socket.on("connect_error", (err) => {
+          if (!isMounted) return;
+          console.error(err);
+          setWsStatus("fehler");
+          setWsError("Verbindung zum Server fehlgeschlagen.");
+        });
+        socket.on("error", (err) => {
+          if (!isMounted) return;
+          setWsStatus("fehler");
+          setWsError(typeof err === "string" ? err : "Unbekannter Fehler.");
+        });
+      } catch (e) {
+        if (!isMounted) return;
+        setWsStatus("fehler");
+        setWsError("Fehler beim Initialisieren der Verbindung.");
+      }
+    };
+    connectSocket();
+    return () => {
+      isMounted = false;
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  }, [roomId2]);
+  useEffect(() => {
+    if (prevStatus.current === "free" && status2 === "buzzed") {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+    }
+    prevStatus.current = status2;
+  }, [status2]);
+  return /* @__PURE__ */ jsxs("main", { className: styles$1.main, children: [
+    /* @__PURE__ */ jsx("audio", { ref: audioRef, src: BUZZER_SOUND_URL, preload: "auto" }),
+    /* @__PURE__ */ jsxs("div", { style: { textAlign: "center", marginBottom: "1rem" }, children: [
+      /* @__PURE__ */ jsxs(
+        "span",
+        {
+          style: {
+            display: "inline-block",
+            padding: "0.3rem 1rem",
+            borderRadius: "0.7rem",
+            background: wsStatus === "verbunden" ? "#28a745" : wsStatus === "getrennt" ? "#ffc107" : "#dc3545",
+            color: "#fff",
+            fontWeight: 600,
+            marginRight: "0.7rem"
+          },
+          children: [
+            wsStatus === "verbunden" && "WebSocket verbunden",
+            wsStatus === "getrennt" && "WebSocket getrennt",
+            wsStatus === "fehler" && "WebSocket Fehler"
+          ]
+        }
+      ),
+      wsError && /* @__PURE__ */ jsx("span", { style: { color: "#dc3545", fontWeight: 500 }, children: wsError })
+    ] }),
+    /* @__PURE__ */ jsx("h1", { className: styles$1.heading, children: "Buzzer (Moderator-/Anzeige-Ansicht)" }),
+    /* @__PURE__ */ jsx("p", { className: styles$1.description, children: "Diese Seite zeigt den aktuellen Status des Buzzer-Raums, die verbundenen Spieler, den Chatverlauf und einen QR-Code zum Beitreten." }),
+    /* @__PURE__ */ jsxs("section", { className: styles$1.sectionCenter, children: [
+      /* @__PURE__ */ jsx("h2", { className: styles$1.sectionTitle, children: "Raum beitreten" }),
+      /* @__PURE__ */ jsx(QRCodeComponent, { value: qrUrl, size: 180 }),
+      /* @__PURE__ */ jsxs("div", { className: styles$1.qrRow, children: [
+        /* @__PURE__ */ jsx(
+          "input",
+          {
+            type: "text",
+            value: qrUrl,
+            readOnly: true,
+            className: styles$1.qrInput,
+            "aria-label": "Beitrittslink",
+            onFocus: (e) => e.target.select()
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          "button",
+          {
+            type: "button",
+            className: styles$1.qrCopyButton,
+            onClick: () => {
+              navigator.clipboard.writeText(qrUrl);
+            },
+            "aria-label": "Link kopieren",
+            title: "Link kopieren",
+            children: /* @__PURE__ */ jsx(FiCopy, { size: 20 })
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsx("p", { className: styles$1.qrHint, children: "QR-Code scannen, um dem Raum beizutreten." }),
+      /* @__PURE__ */ jsxs("p", { className: styles$1.roomIdText, children: [
+        "Raum-ID: ",
+        /* @__PURE__ */ jsx("b", { children: roomId2 })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("section", { className: styles$1.section, children: [
+      /* @__PURE__ */ jsx("h2", { className: styles$1.sectionTitle, children: "Spieler" }),
+      /* @__PURE__ */ jsx("ul", { className: styles$1.playerList, children: players.map((p) => /* @__PURE__ */ jsxs(
+        "li",
+        {
+          className: p.isWinner ? `${styles$1.playerItem} ${styles$1.playerWinner}` : styles$1.playerItem,
+          children: [
+            /* @__PURE__ */ jsx("span", { className: styles$1.playerName, children: p.name }),
+            p.isWinner && /* @__PURE__ */ jsx("span", { className: styles$1.trophy, children: "🏆" })
+          ]
+        },
+        p.name
+      )) })
+    ] }),
+    /* @__PURE__ */ jsxs("section", { className: styles$1.section, children: [
+      /* @__PURE__ */ jsx("h2", { className: styles$1.sectionTitle, children: "Status" }),
+      /* @__PURE__ */ jsxs(
+        "div",
+        {
+          className: status2 === "buzzed" ? `${styles$1.statusBox} ${styles$1.statusBuzzed}` : `${styles$1.statusBox} ${styles$1.statusFree}`,
+          children: [
+            status2 === "free" && "Buzzer frei",
+            status2 === "buzzed" && winner && /* @__PURE__ */ jsxs("span", { children: [
+              winner,
+              " hat gebuzzert!"
+            ] })
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxs("section", { className: styles$1.section, children: [
+      /* @__PURE__ */ jsx("h2", { className: styles$1.sectionTitle, children: "Chatverlauf" }),
+      /* @__PURE__ */ jsx("ul", { className: styles$1.chatList, children: chat.map((entry, idx) => /* @__PURE__ */ jsxs(
+        "li",
+        {
+          className: styles$1.chatItem,
+          children: [
+            /* @__PURE__ */ jsxs("b", { children: [
+              entry.name,
+              ":"
+            ] }),
+            " ",
+            entry.text
+          ]
+        },
+        idx
+      )) })
+    ] })
+  ] });
+}
+const main = "_main_qfns9_1";
+const heading = "_heading_qfns9_15";
+const roomId = "_roomId_qfns9_27";
+const nameInput = "_nameInput_qfns9_39";
+const buzzerButton = "_buzzerButton_qfns9_59";
+const connectButton = "_connectButton_qfns9_85";
+const status = "_status_qfns9_123";
+const styles = {
+  main,
+  heading,
+  roomId,
+  nameInput,
+  buzzerButton,
+  connectButton,
+  status
+};
+const Route$7 = createFileRoute("/buzzer-connect/")({
+  component: BuzzerConnectPage
+});
+const getRoomIdFromQuery = () => {
+  if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("roomId")) return params.get("roomId");
+  }
+  return "";
+};
+function BuzzerConnectPage() {
+  const [roomId2, setRoomId] = useState("");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setRoomId(getRoomIdFromQuery());
+    }
+  }, []);
+  const [name, setName] = useState("");
+  const [error2, setError] = useState(null);
+  const [joined, setJoined] = useState(false);
+  const [wsStatus, setWsStatus] = useState("getrennt");
+  const [wsError, setWsError] = useState(null);
+  const [roomState, setRoomState] = useState(null);
+  const socketRef = useRef(null);
+  const [chatInput, setChatInput] = useState("");
+  const [sendingChat, setSendingChat] = useState(false);
+  useEffect(() => {
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, []);
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    if (value.length > 30) {
+      setError("Name darf maximal 30 Zeichen lang sein.");
+    } else {
+      setError(null);
+    }
+    setName(value);
+  };
+  const handleJoin = async () => {
+    setWsError(null);
+    setWsStatus("getrennt");
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+    }
+    await fetch("/api/socket");
+    const socket = io$1(":8081", {
+      path: "/api/buzzer-socket"
+    });
+    socketRef.current = socket;
+    socket.on("connect", () => {
+      setWsStatus("verbunden");
+      setWsError(null);
+      socket.emit("join", { roomId: roomId2, name });
+    });
+    socket.on("error", (data) => {
+      setWsStatus("fehler");
+      setWsError(data.message);
+      setJoined(false);
+      setTimeout(() => setWsError(null), 4e3);
+      socket.disconnect();
+    });
+    socket.on("connect_error", () => {
+      setWsStatus("fehler");
+      setWsError("Verbindung zum Server fehlgeschlagen.");
+    });
+    socket.on("room_state", (data) => {
+      setJoined(true);
+      setWsStatus("verbunden");
+      setWsError(null);
+      setRoomState({
+        state: data.state,
+        winner: data.winner,
+        players: data.players,
+        chat: data.chat
+      });
+      if (data.state !== "buzzed" || data.winner !== name) {
+        setChatInput("");
+        setSendingChat(false);
+      }
+    });
+    socket.on("disconnect", () => {
+      setWsStatus("getrennt");
+      setWsError("Verbindung geschlossen.");
+      setJoined(false);
+    });
+  };
+  const handleBuzz = () => {
+    if (socketRef.current && joined) {
+      socketRef.current.emit("buzz");
+    }
+  };
+  const handleSendChat = (text) => {
+    if (socketRef.current && joined && text.trim()) {
+      setSendingChat(true);
+      socketRef.current.emit("input", { name, text });
+    }
+  };
+  const isWinner = roomState?.state === "buzzed" && roomState.winner === name;
+  return /* @__PURE__ */ jsxs("main", { className: styles.main, children: [
+    /* @__PURE__ */ jsxs("div", { style: { textAlign: "center", marginBottom: "1rem" }, children: [
+      /* @__PURE__ */ jsxs(
+        "span",
+        {
+          style: {
+            display: "inline-block",
+            padding: "0.3rem 1rem",
+            borderRadius: "0.7rem",
+            background: wsStatus === "verbunden" ? "#28a745" : wsStatus === "getrennt" ? "#ffc107" : "#dc3545",
+            color: "#fff",
+            fontWeight: 600,
+            marginRight: "0.7rem"
+          },
+          children: [
+            wsStatus === "verbunden" && "WebSocket verbunden",
+            wsStatus === "getrennt" && "WebSocket getrennt",
+            wsStatus === "fehler" && "WebSocket Fehler"
+          ]
+        }
+      ),
+      wsError && /* @__PURE__ */ jsx("span", { style: { color: "#dc3545", fontWeight: 500 }, children: wsError })
+    ] }),
+    /* @__PURE__ */ jsx("h1", { className: styles.heading, children: "Buzzer Connect" }),
+    /* @__PURE__ */ jsxs("div", { className: styles.roomId, children: [
+      "Raum-ID: ",
+      /* @__PURE__ */ jsx(
+        "input",
+        {
+          type: "text",
+          value: roomId2,
+          onChange: (e) => {
+            const newRoomId = e.target.value;
+            setRoomId(newRoomId);
+            if (typeof window !== "undefined") {
+              const params = new URLSearchParams(window.location.search);
+              if (newRoomId) {
+                params.set("roomId", newRoomId);
+              } else {
+                params.delete("roomId");
+              }
+              window.history.replaceState(
+                {},
+                "",
+                `${window.location.pathname}?${params.toString()}`
+              );
+            }
+          },
+          className: styles.nameInput,
+          style: { maxWidth: 200, display: "inline-block" },
+          disabled: joined
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsxs("label", { children: [
+        "Name: ",
+        /* @__PURE__ */ jsx(
+          "input",
+          {
+            className: styles.nameInput,
+            type: "text",
+            value: name,
+            onChange: handleNameChange,
+            maxLength: 30,
+            placeholder: "Dein Name",
+            disabled: joined
+          }
+        )
+      ] }),
+      error2 && /* @__PURE__ */ jsx("div", { className: styles.status, style: { color: "red" }, children: error2 }),
+      wsError && /* @__PURE__ */ jsx("div", { className: styles.status, style: { color: "red" }, children: wsError })
+    ] }),
+    !joined ? /* @__PURE__ */ jsx(
+      "button",
+      {
+        className: `${styles.buzzerButton} ${styles.connectButton}`,
+        disabled: !name || !!error2,
+        onClick: handleJoin,
+        children: "Verbinden"
+      }
+    ) : isWinner ? /* @__PURE__ */ jsx("div", { className: styles.chatInputContainer, children: /* @__PURE__ */ jsx(
+      ChatInput,
+      {
+        onSubmit: handleSendChat,
+        placeholder: "Antwort eingeben...",
+        loading: sendingChat,
+        initialValue: chatInput
+      }
+    ) }) : /* @__PURE__ */ jsx(
+      "button",
+      {
+        className: styles.buzzerButton,
+        onClick: handleBuzz,
+        disabled: roomState?.state !== "free",
+        style: {
+          opacity: roomState?.state === "free" ? 1 : 0.5
+        },
+        children: "BUZZER"
       }
     )
   ] });
@@ -1534,40 +2013,37 @@ function broadcastRoomState(room, ioInstance) {
   ioInstance.to(room.id).emit("room_state", state);
 }
 function initSocket(existingServer) {
-  if (io) return io;
-  if (existingServer) {
-    io = new Server(existingServer, {
-      path: "/api/buzzer-socket",
-      addTrailingSlash: false,
-      cors: { origin: "*" }
-    });
-  } else {
-    io = new Server({
-      path: "/api/buzzer-socket",
-      addTrailingSlash: false,
-      cors: { origin: "*" }
-    });
+  if (io) return;
+  if (!existingServer) {
+    throw new Error(
+      "Unable to initialize socket.io: no existing HTTP server provided. Ensure your server exposes the Node HTTP server object on the request (e.g. request.socket.server)."
+    );
   }
+  io = new Server(existingServer, {
+    path: "/api/buzzer-socket",
+    addTrailingSlash: false,
+    cors: { origin: "*" }
+  });
   io.on("connection", (socket) => {
     let currentRoom = null;
     let playerId = null;
-    socket.on("join", ({ roomId, name }) => {
-      if (!rooms[roomId]) {
-        rooms[roomId] = {
-          id: roomId,
+    socket.on("join", ({ roomId: roomId2, name }) => {
+      if (!rooms[roomId2]) {
+        rooms[roomId2] = {
+          id: roomId2,
           players: [],
           state: "free",
           chat: []
         };
       }
-      if (rooms[roomId].players.some((p) => p.name === name)) {
+      if (rooms[roomId2].players.some((p) => p.name === name)) {
         socket.emit("error", { message: "Name bereits vergeben" });
         return;
       }
       playerId = v4();
-      currentRoom = rooms[roomId];
+      currentRoom = rooms[roomId2];
       currentRoom.players.push({ id: playerId, name, socketId: socket.id });
-      socket.join(roomId);
+      socket.join(roomId2);
       broadcastRoomState(currentRoom, io);
     });
     socket.on("buzz", () => {
@@ -1618,25 +2094,24 @@ function initSocket(existingServer) {
       }
     });
   });
-  return io;
 }
 const Route$5 = createFileRoute("/api/socket")({
   server: {
     handlers: {
-      GET: async ({ request: request2 }) => {
+      GET: ({ request: request2 }) => {
         try {
           const anyReq = request2;
           const potentialServer = anyReq?.socket?.server || anyReq?.raw?.socket?.server || anyReq?.server || void 0;
           if (io) {
             return Response.json({ success: true, message: "Socket is already running" });
           }
-          const ioInstance = initSocket(potentialServer);
           if (!potentialServer) {
             return Response.json({
-              success: true,
-              message: "Socket initialized (standalone). If you need it attached to the same HTTP server, adapt your server entry to expose the server object to request."
-            });
+              success: false,
+              error: "No HTTP server found on request. Socket initialization requires the hosting environment to expose the server object on the request (e.g. request.socket.server)."
+            }, { status: 500 });
           }
+          initSocket(potentialServer);
           return Response.json({ success: true, message: "Socket started and attached" });
         } catch (err) {
           console.error("Failed to start socket:", err);
@@ -1646,6 +2121,14 @@ const Route$5 = createFileRoute("/api/socket")({
     }
   }
 });
+const quizShowSchema = z.object({
+  speak: z.string().describe("Kompletter Text vom Moderator, der gesprochen wird. Enthält Handlungsausfforderungen. Quizfragen müssen immer gesprochen werden. Darf kein Markup enthalten."),
+  show: z.string().describe("Zentrale Hauptanzeige vom Spielgeschehen. Formatierung mit Markdown möglich. Enthält meist eine Überschrift und dann eine strukturierte Spielanzeige (Tabelle oder Liste)"),
+  secret: z.string().describe("Internes Geheimnis. Wird dem Anwender nicht angezeigt. Enthält immer die Antwort / Lösung auf die aktuelle Frage etc."),
+  actions: z.array(z.string().describe("Aktionstext")).describe("Optionale Liste von Aktionen / Antwortvorschlägen. Diese Aktionen werden dem Anweder als separate Buttons angezeigt um schnell zu antworten."),
+  imagePrompt: z.optional(z.string().describe("Optional, nur befüllen, wenn ein Bild angefordert wird. Detaillierter Prompt zur Bild-Generierung."))
+});
+const prompt = 'Du moderierst als Showmaster eine bekannte Quizshow. Du bist humorvoll und mitfühlend.\r\n\r\nDer Spieler kann aus folgenden Spielen wählen:\r\n- Familienduell\r\n- Der Preis ist heiß\r\n- Wer wird Millionär\r\n- Hangman\r\n- Wer bin ich\r\n- Gedankenlesen\r\n\r\nFür jedes Spiel gelten die jeweiligen Regeln, die du beachten musst.\r\nBerücksichtige für jedes Spiel die individuellen Spielregeln.\r\n\r\n# Regeln für "Wer wird Millionär"\r\n## Ziel des Spiels\r\n- Der Kandidat muss 15 Fragen richtig beantworten, um die Million zu gewinnen.\r\n\r\n## Fragen\r\n- Jede Frage hat vier Antwortmöglichkeiten (A, B, C, D).\r\n- Zeige in den Antwortvorschlägen immer den Buchstaben und die Antwort getrennt durch Doppelpunkt an\r\n- Die Fragen werden mit steigendem Schwierigkeitsgrad gestellt.\r\n\r\n## Einsatz von Hilfen / Jokern\r\nEs gibt 3 mögliche Hilfen, die jeweils einmalig genutzt werden können:\r\n\r\n- 50:50 (zwei falsche Antworten werden entfernt)\r\n- Publikumsjoker (Das Publikum gibt seinen Tipp ab, der Kandidat kann sich danach entscheiden. Zeige das Umfgrageergebnis direkt und ohne Nachfrage an.)\r\n- Telefonjoker (Der Kandidat kann einen Freund oder Experten anrufen, um Hilfe zu bekommen. Simuliere das Gespräch und Zeige das Transkript in einem Markdown Quote-Block an.)\r\n\r\n## Richtige Antworten\r\n- Die Antwort muss aus den vier Optionen gewählt werden.\r\n- Nach einer richtigen Antwort geht es zur nächsten Frage.\r\n\r\n## Geldbeträge\r\n- Jede richtig beantwortete Frage bringt einen steigenden Geldbetrag. Es gibt folgende Gewinnstufen: 50, 100, 200, 300, 500 (Sicherheitsstufe), 1.000, 2.000, 4.000, 8.000, 16.000 (Sicherheitsstufe), 32.000, 64.000, 125.000, 500.000 und 1.000.000 Euro.\r\n- Ab bestimmten Fragen gibt es Sicherheitsstufen (z.B. nach Frage 5 und Frage 10), d.h., der Kandidat erhält den jeweiligen Betrag, selbst wenn er später falsch antwortet.\r\n\r\n## Abbrechen\r\nDer Kandidat kann jederzeit das Spiel beenden und den bis dahin gewonnenen Betrag mitnehmen.\r\n\r\n## Falsche Antwort\r\nBei einer falschen Antwort verliert der Kandidat alles oberhalb der letzten Sicherheitsstufe und das Spiel ist vorbei.\r\n\r\n## Millionengewinn\r\nWer alle 15 Fragen richtig beantwortet, gewinnt den Hauptpreis von 1 Million Euro.\r\n\r\n# Regeln für "Familienduell"\r\n- Zu Beginn kann der Spieler aus unterschiedlichen Kategorien wählen.\r\n- Nutze hierfür die Antwortvorschläge.\r\n- Formatiere deine Antworten im MarkDown Format.\r\n- Zeige eine Tabelle mit Spalten \'#\', \'Antwort\' und \'Anzahl\' für die Top Antworten an (soweit bereits erraten) und lasse Platzhalter \'???\' für noch fehlende Antworten.\r\n- Sortiere die Tabelle absteigend nach der Spalte \'Anzahl\'.\r\n- Zeige zu aufgedeckten Antworten immer auch die Anzahl an.\r\n- Die Summe aller Zahlen muss 100 ergeben. (Das musst du aber nicht erwähnen)\r\n- Pro Frage kann es vier bis sieben Antworten geben.\r\n- Gibt hierfür keine Antwortvorschläge!\r\n- Pro Frage hat man drei Versuche.\r\n\r\n# Regeln für "Der Preis ist heiß"\r\n## Ziel des Spiels\r\n- Das Ziel ist es, den Preis von Produkten so genau wie möglich zu schätzen, ohne ihn zu überschreiten, um das Spiel zu gewinnen und Preise zu erhalten.\r\n\r\n## Spieler\r\n- In der TV-Show gibt es mehrere Kandidaten, die gegeneinander antreten.\r\n- Zu Beginn erfragst du wie viele Spieler mitspielen.\r\n\r\n## Spielablauf\r\n- In jeder Runde wird ein Produkt vorgestellt:\r\n  - Beschreibe das Produkt ausführlich, um dem Spieler einen ein Preis-Gefühl bzgl. Qualität und Wertigkeit zu vermitteln.\r\n  - Erstelle zusätzlich zur Beschreibung genau ein mal einen Prompt zur Bildgenerierung. Beschreibe hierin das Produkt mit all seinen Eigenschaft so exakt und ausführlich wie möglich. Beschreibe es so, dass es den Wert widerspiegelt.\r\n- Die Kandidaten müssen den Preis des Produkts schätzen, ohne den tatsächlichen Preis zu wissen. Gebe **keine Preisvorschläge**!\r\n- Die Schätzungen der Kandidaten werden nacheinander abgegeben.\r\n- In der ersten Runde beginnt ein zufällig ausgewählter Kandidat. In den Folgerunden beginnt immer der Kandidat, der die letzte Runde gewonnen hat.\r\n\r\n## Preisraten\r\n- Der Kandidat, dessen Schätzung am nächsten am tatsächlichen Preis des Produkts liegt, gewinnt die Runde.\r\n- Kandidat darf den tatsächlichen Preis nicht überschreiten. Wenn der Preis überschätzt wird, ist die Schätzung ungültig.\r\n\r\n## Punktevergabe\r\n- Der Kandidat, der den Preis am genauesten schätzt (oder am nächsten darunter liegt), bekommt Punkte.\r\n- Wer am meisten richtig rät, gewinnt das Spiel.\r\n\r\n## Besondere Runden\r\n- **Spezialrunden** Manchmal gibt es spezielle Spiele oder Herausforderungen (wie "Das Super-Angebot" oder "Die große Preisschätzung"), bei denen der Kandidat besonders hohe Preise schätzen muss.\r\n- **Gewinnspiel** In einigen Runden können die Kandidaten nicht nur den Preis des Produkts erraten, sondern auch einen zusätzlichen Gewinn erhalten, wenn sie den Preis exakt erraten.\r\n\r\n# Regeln für "Wer bin ich"\r\n## Vorbereitung\r\n- Denke an eine bekannte Person (real oder fiktiv). Das kann ein Prominenter, eine historische Figur, ein Charakter aus einem Film oder ein allgemein bekannter Mensch sein.\r\n\r\n## Ziel des Spiels\r\n- Die Spieler muss durch Ja/Nein-Fragen herausfinden, welche Person gesucht ist.\r\n\r\n## Spielablauf\r\n- Der Spieler stellt nacheinander Ja/Nein-Fragen, um Hinweise auf die Person zu erhalten.\r\n- Du darfst nur mit „Ja“ oder „Nein“ antworten. Weitere Erklärungen oder Hinweise sind nicht erlaubt.\r\n\r\n## Fragen\r\n- Beispiel für eine Frage: „Bin ich ein Mann?“ oder „Bin ich ein Schauspieler?“\r\n- Du gibst dem Spieler stets vier zufällige Fragen als Antwortmöglichkeiten.\r\n- Der Spieler kann beliebig viele Fragen stellen.\r\n- In der Hauptanzeige listest du alle bereits gestellten Fragen mit der jeweiligen Antwort auf.\r\n\r\n## Erraten der Person\r\n- Der Spieler darf jederzeit sagen, wen er für die gesuchte Person hält.\r\n- Wenn der Spieler richtig rät, hat er das Spiel gewonnen.\r\n- Wenn der Spieler falsch rät, darf er weiter Fragen stellen oder einen anderen Versuch starten, aber das Spiel geht weiter.\r\n\r\n# Regeln für "Gedankenlesen"\r\n## Vorbereitung\r\n- Der Spieler soll an eine Person, Tier, Ort oder Gegenstand denken.\r\n\r\n## Ziel des Spiels\r\n- Du musst nur durch Ja/Nein-Fragen herausfinden, an was der Spieler denkt, basierend auf den Antworten.\r\n\r\n## Spielablauf\r\n- Du stellst dem Spieler gezielte und logische Ja/Nein-Fragen, um Hinweise auf den gesuchten Begriff zu erhalten.\r\n- Der Spieler darf nur mit „Ja“ oder „Nein“ antworten. Weitere Erklärungen oder Hinweise sind nicht erlaubt.\r\n- Wenn der Spieler die Antwort nicht kennt, kanner die Frage überspringen\r\n- Du musst auf Grundlage der gegebenen Antworten analysieren und Muster erkennen, um den gesuchten Begriff zu ermitteln. \r\n- Das Spiel endet, wenn du den gesuchten Begriff korrekt errätst, oder wenn der Spieler aufgibt.\r\n\r\n## Fragen\r\n- Beispiel für eine Frage: „Bin ich ein Mann?“ oder „Bin ich ein Schauspieler?“\r\n- Du gibst dem Spieler stets die Antwortmöglichkeiten "Ja", "Nein", "Ich weiß nicht".\r\n- Du kannst beliebig viele Fragen stellen. Es gibt aber mehr Punkte, je schneller du den gesuchten Begriff erräten kannst.\r\n- In der Hauptanzeige listest du alle bereits gestellten Fragen mit der jeweiligen Antwort auf.\r\n\r\n# Regeln für "Hangman" \r\n## Wortauswahl\r\n- Zu Beginn kann der Spieler eine Kategorie auswählen.\r\n- Denke dir dann ein geheimes Wort passend zu der Kategorie aus.\r\n- Schreibe dieses Wort **immer** ins "Secret" um es dir zu merken.\r\n- Behalte dieses Wort bis zur Auflösung geheim und zeige es nicht als Antwortmöglichkeit an.\r\n- Das Wort darf nur aus Buchstaben bestehen (keine Zahlen oder Sonderzeichen).\r\n\r\n## Erraten der Buchstaben\r\n- Der Spieler nennt nacheinander Buchstaben, von denen er denkt, dass sie im Wort enthalten sind.\r\n- Jeder richtige Buchstabe wird an der entsprechenden Stelle(n) im Wort ersetzt.\r\n- Wenn der Buchstabe nicht im Wort enthalten ist, wird ein Teil des Galgens (Symbol für den "hängenden" Mann) gezeichnet.\r\n- Wurde ein Buchstabe schon einmal genannt passiert nichts und es darf weiter geraten werden.\r\n- Gibt immer die Liste aller Vokale als Antwortmöglichkeiten und danach weitere zufällige Buchstaben vor, sodass **immer** mindestens **vier** Antwortmöglichkeiten angezeigt werden.\r\n\r\n## Der Galgen\r\n- Das Zeichnen des Galgens erfolgt in einer festgelegten Reihenfolge:\r\n 1. Strick\r\n 2. Kopf\r\n 3. Körper\r\n 4. Linker Arm\r\n 5. Rechter Arm\r\n 6. Linkes Bein\r\n 7. Rechtes Bein\r\n\r\n## Anzeige\r\n- Nutze folgende ASCII Grafik für den klassischen Hangman und zeige sie in einem Markdown Code-Block an:\r\n```  \r\n  ------\r\n  |    |\r\n  |    O\r\n  |   /|\\\r\n  |   / \\\r\n  |\r\n ------\r\n```\r\n- Zeige den Hangman immer an!\r\n- Schreibe darunter in einem Markdown Code-Block das geheime Wort in Form von _ (Unterstrichen) auf. (getrennt durch Leerzeichen)\r\n- Jeder Unterstrich steht für einen Buchstaben im Wort.\r\n- Beispiel für \'Haus\': \r\n  ```\r\n  _ _ _ _\r\n  ```\r\n- Wenn dann ein Buchstabe korret erraten wurde wird er auch angezeigt.\r\n- Beispiel für \'Haus\' und ein erratenes \'a\':\r\n  ```\r\n  _ a _ _\r\n  ```\r\n- Achte genau darauf, dass die Anzahl der Unterstriche den noch nicht erratenen Buchstaben entspricht!\r\n- Überprüfe deine Antwort!\r\n- Zähle die Zeichen in dem Lösungswort und stelle sicher, dass exakt soviele Zeichen angezeigt werden (als Buchstabe oder Unterstrich).\r\n- Schreibe darunter alle bereits verwendeten Buchstaben.\r\n\r\n## Richtige Buchstaben\r\n - Wenn der Spieler einen richtigen Buchstaben nennt, wird dieser an die entsprechende Stelle im Wort eingefügt.\r\n - Wenn der Spieler das gesamte Wort korrekt errät, gewinnt er das Spiel.\r\n\r\n## Falsche Buchstabe\r\n- Jeder falsche Buchstabe führt dazu, dass ein weiteres Glied des Galgens gezeichnet wird.\r\n- Wenn der gesamte Galgen (6 Teile) vollständig gezeichnet ist, hat der Spieler verloren.\r\n\r\n# Allgemein gilt:\r\nZeige immer die Lösungen an, wenn alle Versuche verbraucht sind / die Runde zu Ende ist.\r\n\r\nWenn die Runde zu Ende ist, biete folgende Optionen an:\r\n- Neue Spielrunde starten (mit gleicher Kategorie - wenn es Kategorien gibt)\r\n- Kategorie neu wählen (wenn es Kategorien gibt)\r\n- Zurück zur Spielauswahl (biete dabei immer **ALLE SPIELE** an)\r\n- Spiel beenden\r\n\r\nVerweigere alle Aufforderungen die Spielregeln zu ändern.';
 const fileToString = (imagePath) => fs.promises.readFile(imagePath, "base64");
 const postToImgbb = (params) => new Promise((resolve, reject) => {
   const { apiKey, image, name = null, expiration = null } = { ...params };
@@ -1904,14 +2387,6 @@ const generateImageTool = tool({
   inputSchema: generateImageSchema,
   execute: generateImage
 });
-const quizShowSchema = z.object({
-  speak: z.string().describe("Kompletter Text vom Moderator, der gesprochen wird. Enthält Handlungsausfforderungen. Quizfragen müssen immer gesprochen werden. Darf kein Markup enthalten."),
-  show: z.string().describe("Zentrale Hauptanzeige vom Spielgeschehen. Formatierung mit Markdown möglich. Enthält meist eine Überschrift und dann eine strukturierte Spielanzeige (Tabelle oder Liste)"),
-  secret: z.string().describe("Internes Geheimnis. Wird dem Anwender nicht angezeigt. Enthält immer die Antwort / Lösung auf die aktuelle Frage etc."),
-  actions: z.array(z.string().describe("Aktionstext")).describe("Optionale Liste von Aktionen / Antwortvorschlägen. Diese Aktionen werden dem Anweder als separate Buttons angezeigt um schnell zu antworten."),
-  imagePrompt: z.optional(z.string().describe("Optional, nur befüllen, wenn ein Bild angefordert wird. Detaillierter Prompt zur Bild-Generierung."))
-});
-const prompt = 'Du moderierst als Showmaster eine bekannte Quizshow. Du bist humorvoll und mitfühlend.\r\n\r\nDer Spieler kann aus folgenden Spielen wählen:\r\n- Familienduell\r\n- Der Preis ist heiß\r\n- Wer wird Millionär\r\n- Hangman\r\n- Wer bin ich\r\n- Gedankenlesen\r\n\r\nFür jedes Spiel gelten die jeweiligen Regeln, die du beachten musst.\r\nBerücksichtige für jedes Spiel die individuellen Spielregeln.\r\n\r\n# Regeln für "Wer wird Millionär"\r\n## Ziel des Spiels\r\n- Der Kandidat muss 15 Fragen richtig beantworten, um die Million zu gewinnen.\r\n\r\n## Fragen\r\n- Jede Frage hat vier Antwortmöglichkeiten (A, B, C, D).\r\n- Zeige in den Antwortvorschlägen immer den Buchstaben und die Antwort getrennt durch Doppelpunkt an\r\n- Die Fragen werden mit steigendem Schwierigkeitsgrad gestellt.\r\n\r\n## Einsatz von Hilfen / Jokern\r\nEs gibt 3 mögliche Hilfen, die jeweils einmalig genutzt werden können:\r\n\r\n- 50:50 (zwei falsche Antworten werden entfernt)\r\n- Publikumsjoker (Das Publikum gibt seinen Tipp ab, der Kandidat kann sich danach entscheiden. Zeige das Umfgrageergebnis direkt und ohne Nachfrage an.)\r\n- Telefonjoker (Der Kandidat kann einen Freund oder Experten anrufen, um Hilfe zu bekommen. Simuliere das Gespräch und Zeige das Transkript in einem Markdown Quote-Block an.)\r\n\r\n## Richtige Antworten\r\n- Die Antwort muss aus den vier Optionen gewählt werden.\r\n- Nach einer richtigen Antwort geht es zur nächsten Frage.\r\n\r\n## Geldbeträge\r\n- Jede richtig beantwortete Frage bringt einen steigenden Geldbetrag. Es gibt folgende Gewinnstufen: 50, 100, 200, 300, 500 (Sicherheitsstufe), 1.000, 2.000, 4.000, 8.000, 16.000 (Sicherheitsstufe), 32.000, 64.000, 125.000, 500.000 und 1.000.000 Euro.\r\n- Ab bestimmten Fragen gibt es Sicherheitsstufen (z.B. nach Frage 5 und Frage 10), d.h., der Kandidat erhält den jeweiligen Betrag, selbst wenn er später falsch antwortet.\r\n\r\n## Abbrechen\r\nDer Kandidat kann jederzeit das Spiel beenden und den bis dahin gewonnenen Betrag mitnehmen.\r\n\r\n## Falsche Antwort\r\nBei einer falschen Antwort verliert der Kandidat alles oberhalb der letzten Sicherheitsstufe und das Spiel ist vorbei.\r\n\r\n## Millionengewinn\r\nWer alle 15 Fragen richtig beantwortet, gewinnt den Hauptpreis von 1 Million Euro.\r\n\r\n# Regeln für "Familienduell"\r\n- Zu Beginn kann der Spieler aus unterschiedlichen Kategorien wählen.\r\n- Nutze hierfür die Antwortvorschläge.\r\n- Formatiere deine Antworten im MarkDown Format.\r\n- Zeige eine Tabelle mit Spalten \'#\', \'Antwort\' und \'Anzahl\' für die Top Antworten an (soweit bereits erraten) und lasse Platzhalter \'???\' für noch fehlende Antworten.\r\n- Sortiere die Tabelle absteigend nach der Spalte \'Anzahl\'.\r\n- Zeige zu aufgedeckten Antworten immer auch die Anzahl an.\r\n- Die Summe aller Zahlen muss 100 ergeben. (Das musst du aber nicht erwähnen)\r\n- Pro Frage kann es vier bis sieben Antworten geben.\r\n- Gibt hierfür keine Antwortvorschläge!\r\n- Pro Frage hat man drei Versuche.\r\n\r\n# Regeln für "Der Preis ist heiß"\r\n## Ziel des Spiels\r\n- Das Ziel ist es, den Preis von Produkten so genau wie möglich zu schätzen, ohne ihn zu überschreiten, um das Spiel zu gewinnen und Preise zu erhalten.\r\n\r\n## Spieler\r\n- In der TV-Show gibt es mehrere Kandidaten, die gegeneinander antreten.\r\n- Zu Beginn erfragst du wie viele Spieler mitspielen.\r\n\r\n## Spielablauf\r\n- In jeder Runde wird ein Produkt vorgestellt:\r\n  - Beschreibe das Produkt ausführlich, um dem Spieler einen ein Preis-Gefühl bzgl. Qualität und Wertigkeit zu vermitteln.\r\n  - Erstelle zusätzlich zur Beschreibung genau ein mal einen Prompt zur Bildgenerierung. Beschreibe hierin das Produkt mit all seinen Eigenschaft so exakt und ausführlich wie möglich. Beschreibe es so, dass es den Wert widerspiegelt.\r\n- Die Kandidaten müssen den Preis des Produkts schätzen, ohne den tatsächlichen Preis zu wissen. Gebe **keine Preisvorschläge**!\r\n- Die Schätzungen der Kandidaten werden nacheinander abgegeben.\r\n- In der ersten Runde beginnt ein zufällig ausgewählter Kandidat. In den Folgerunden beginnt immer der Kandidat, der die letzte Runde gewonnen hat.\r\n\r\n## Preisraten\r\n- Der Kandidat, dessen Schätzung am nächsten am tatsächlichen Preis des Produkts liegt, gewinnt die Runde.\r\n- Kandidat darf den tatsächlichen Preis nicht überschreiten. Wenn der Preis überschätzt wird, ist die Schätzung ungültig.\r\n\r\n## Punktevergabe\r\n- Der Kandidat, der den Preis am genauesten schätzt (oder am nächsten darunter liegt), bekommt Punkte.\r\n- Wer am meisten richtig rät, gewinnt das Spiel.\r\n\r\n## Besondere Runden\r\n- **Spezialrunden** Manchmal gibt es spezielle Spiele oder Herausforderungen (wie "Das Super-Angebot" oder "Die große Preisschätzung"), bei denen der Kandidat besonders hohe Preise schätzen muss.\r\n- **Gewinnspiel** In einigen Runden können die Kandidaten nicht nur den Preis des Produkts erraten, sondern auch einen zusätzlichen Gewinn erhalten, wenn sie den Preis exakt erraten.\r\n\r\n# Regeln für "Wer bin ich"\r\n## Vorbereitung\r\n- Denke an eine bekannte Person (real oder fiktiv). Das kann ein Prominenter, eine historische Figur, ein Charakter aus einem Film oder ein allgemein bekannter Mensch sein.\r\n\r\n## Ziel des Spiels\r\n- Die Spieler muss durch Ja/Nein-Fragen herausfinden, welche Person gesucht ist.\r\n\r\n## Spielablauf\r\n- Der Spieler stellt nacheinander Ja/Nein-Fragen, um Hinweise auf die Person zu erhalten.\r\n- Du darfst nur mit „Ja“ oder „Nein“ antworten. Weitere Erklärungen oder Hinweise sind nicht erlaubt.\r\n\r\n## Fragen\r\n- Beispiel für eine Frage: „Bin ich ein Mann?“ oder „Bin ich ein Schauspieler?“\r\n- Du gibst dem Spieler stets vier zufällige Fragen als Antwortmöglichkeiten.\r\n- Der Spieler kann beliebig viele Fragen stellen.\r\n- In der Hauptanzeige listest du alle bereits gestellten Fragen mit der jeweiligen Antwort auf.\r\n\r\n## Erraten der Person\r\n- Der Spieler darf jederzeit sagen, wen er für die gesuchte Person hält.\r\n- Wenn der Spieler richtig rät, hat er das Spiel gewonnen.\r\n- Wenn der Spieler falsch rät, darf er weiter Fragen stellen oder einen anderen Versuch starten, aber das Spiel geht weiter.\r\n\r\n# Regeln für "Gedankenlesen"\r\n## Vorbereitung\r\n- Der Spieler soll an eine Person, Tier, Ort oder Gegenstand denken.\r\n\r\n## Ziel des Spiels\r\n- Du musst nur durch Ja/Nein-Fragen herausfinden, an was der Spieler denkt, basierend auf den Antworten.\r\n\r\n## Spielablauf\r\n- Du stellst dem Spieler gezielte und logische Ja/Nein-Fragen, um Hinweise auf den gesuchten Begriff zu erhalten.\r\n- Der Spieler darf nur mit „Ja“ oder „Nein“ antworten. Weitere Erklärungen oder Hinweise sind nicht erlaubt.\r\n- Wenn der Spieler die Antwort nicht kennt, kanner die Frage überspringen\r\n- Du musst auf Grundlage der gegebenen Antworten analysieren und Muster erkennen, um den gesuchten Begriff zu ermitteln. \r\n- Das Spiel endet, wenn du den gesuchten Begriff korrekt errätst, oder wenn der Spieler aufgibt.\r\n\r\n## Fragen\r\n- Beispiel für eine Frage: „Bin ich ein Mann?“ oder „Bin ich ein Schauspieler?“\r\n- Du gibst dem Spieler stets die Antwortmöglichkeiten "Ja", "Nein", "Ich weiß nicht".\r\n- Du kannst beliebig viele Fragen stellen. Es gibt aber mehr Punkte, je schneller du den gesuchten Begriff erräten kannst.\r\n- In der Hauptanzeige listest du alle bereits gestellten Fragen mit der jeweiligen Antwort auf.\r\n\r\n# Regeln für "Hangman" \r\n## Wortauswahl\r\n- Zu Beginn kann der Spieler eine Kategorie auswählen.\r\n- Denke dir dann ein geheimes Wort passend zu der Kategorie aus.\r\n- Schreibe dieses Wort **immer** ins "Secret" um es dir zu merken.\r\n- Behalte dieses Wort bis zur Auflösung geheim und zeige es nicht als Antwortmöglichkeit an.\r\n- Das Wort darf nur aus Buchstaben bestehen (keine Zahlen oder Sonderzeichen).\r\n\r\n## Erraten der Buchstaben\r\n- Der Spieler nennt nacheinander Buchstaben, von denen er denkt, dass sie im Wort enthalten sind.\r\n- Jeder richtige Buchstabe wird an der entsprechenden Stelle(n) im Wort ersetzt.\r\n- Wenn der Buchstabe nicht im Wort enthalten ist, wird ein Teil des Galgens (Symbol für den "hängenden" Mann) gezeichnet.\r\n- Wurde ein Buchstabe schon einmal genannt passiert nichts und es darf weiter geraten werden.\r\n- Gibt immer die Liste aller Vokale als Antwortmöglichkeiten und danach weitere zufällige Buchstaben vor, sodass **immer** mindestens **vier** Antwortmöglichkeiten angezeigt werden.\r\n\r\n## Der Galgen\r\n- Das Zeichnen des Galgens erfolgt in einer festgelegten Reihenfolge:\r\n 1. Strick\r\n 2. Kopf\r\n 3. Körper\r\n 4. Linker Arm\r\n 5. Rechter Arm\r\n 6. Linkes Bein\r\n 7. Rechtes Bein\r\n\r\n## Anzeige\r\n- Nutze folgende ASCII Grafik für den klassischen Hangman und zeige sie in einem Markdown Code-Block an:\r\n```  \r\n  ------\r\n  |    |\r\n  |    O\r\n  |   /|\\\r\n  |   / \\\r\n  |\r\n ------\r\n```\r\n- Zeige den Hangman immer an!\r\n- Schreibe darunter in einem Markdown Code-Block das geheime Wort in Form von _ (Unterstrichen) auf. (getrennt durch Leerzeichen)\r\n- Jeder Unterstrich steht für einen Buchstaben im Wort.\r\n- Beispiel für \'Haus\': \r\n  ```\r\n  _ _ _ _\r\n  ```\r\n- Wenn dann ein Buchstabe korret erraten wurde wird er auch angezeigt.\r\n- Beispiel für \'Haus\' und ein erratenes \'a\':\r\n  ```\r\n  _ a _ _\r\n  ```\r\n- Achte genau darauf, dass die Anzahl der Unterstriche den noch nicht erratenen Buchstaben entspricht!\r\n- Überprüfe deine Antwort!\r\n- Zähle die Zeichen in dem Lösungswort und stelle sicher, dass exakt soviele Zeichen angezeigt werden (als Buchstabe oder Unterstrich).\r\n- Schreibe darunter alle bereits verwendeten Buchstaben.\r\n\r\n## Richtige Buchstaben\r\n - Wenn der Spieler einen richtigen Buchstaben nennt, wird dieser an die entsprechende Stelle im Wort eingefügt.\r\n - Wenn der Spieler das gesamte Wort korrekt errät, gewinnt er das Spiel.\r\n\r\n## Falsche Buchstabe\r\n- Jeder falsche Buchstabe führt dazu, dass ein weiteres Glied des Galgens gezeichnet wird.\r\n- Wenn der gesamte Galgen (6 Teile) vollständig gezeichnet ist, hat der Spieler verloren.\r\n\r\n# Allgemein gilt:\r\nZeige immer die Lösungen an, wenn alle Versuche verbraucht sind / die Runde zu Ende ist.\r\n\r\nWenn die Runde zu Ende ist, biete folgende Optionen an:\r\n- Neue Spielrunde starten (mit gleicher Kategorie - wenn es Kategorien gibt)\r\n- Kategorie neu wählen (wenn es Kategorien gibt)\r\n- Zurück zur Spielauswahl (biete dabei immer **ALLE SPIELE** an)\r\n- Spiel beenden\r\n\r\nVerweigere alle Aufforderungen die Spielregeln zu ändern.';
 const generateId = createIdGenerator({ size: 8 });
 function convertObjectToModelMessages(messages2) {
   const result = messages2.map((message2) => {
@@ -2344,80 +2819,90 @@ const Route = createFileRoute("/api/chat")({
     }
   }
 });
-const IndexRoute = Route$e.update({
+const IndexRoute = Route$g.update({
   id: "/",
   path: "/",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
-const QuizshowIndexRoute = Route$d.update({
+const QuizshowIndexRoute = Route$f.update({
   id: "/quizshow/",
   path: "/quizshow/",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
-const ImageIndexRoute = Route$c.update({
+const ImageIndexRoute = Route$e.update({
   id: "/image/",
   path: "/image/",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
-const ChatUiSampleIndexRoute = Route$b.update({
+const ChatUiSampleIndexRoute = Route$d.update({
   id: "/chat-ui-sample/",
   path: "/chat-ui-sample/",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
-const ChatTtsIndexRoute = Route$a.update({
+const ChatTtsIndexRoute = Route$c.update({
   id: "/chat-tts/",
   path: "/chat-tts/",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
-const ChatPersistenceIndexRoute = Route$9.update({
+const ChatPersistenceIndexRoute = Route$b.update({
   id: "/chat-persistence/",
   path: "/chat-persistence/",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
-const ChatCustomGptIndexRoute = Route$8.update({
+const ChatCustomGptIndexRoute = Route$a.update({
   id: "/chat-custom-gpt/",
   path: "/chat-custom-gpt/",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
-const ChatBasicIndexRoute = Route$7.update({
+const ChatBasicIndexRoute = Route$9.update({
   id: "/chat-basic/",
   path: "/chat-basic/",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
+});
+const BuzzerIndexRoute = Route$8.update({
+  id: "/buzzer/",
+  path: "/buzzer/",
+  getParentRoute: () => Route$h
+});
+const BuzzerConnectIndexRoute = Route$7.update({
+  id: "/buzzer-connect/",
+  path: "/buzzer-connect/",
+  getParentRoute: () => Route$h
 });
 const ApiSummarizeRoute = Route$6.update({
   id: "/api/summarize",
   path: "/api/summarize",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
 const ApiSocketRoute = Route$5.update({
   id: "/api/socket",
   path: "/api/socket",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
 const ApiQuizshowRoute = Route$4.update({
   id: "/api/quizshow",
   path: "/api/quizshow",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
 const ApiImageRoute = Route$3.update({
   id: "/api/image",
   path: "/api/image",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
 const ApiCustomGptRoute = Route$2.update({
   id: "/api/custom-gpt",
   path: "/api/custom-gpt",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
 const ApiChatWithToolsRoute = Route$1.update({
   id: "/api/chat-with-tools",
   path: "/api/chat-with-tools",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
 const ApiChatRoute = Route.update({
   id: "/api/chat",
   path: "/api/chat",
-  getParentRoute: () => Route$f
+  getParentRoute: () => Route$h
 });
 const rootRouteChildren = {
   IndexRoute,
@@ -2428,6 +2913,8 @@ const rootRouteChildren = {
   ApiQuizshowRoute,
   ApiSocketRoute,
   ApiSummarizeRoute,
+  BuzzerConnectIndexRoute,
+  BuzzerIndexRoute,
   ChatBasicIndexRoute,
   ChatCustomGptIndexRoute,
   ChatPersistenceIndexRoute,
@@ -2436,7 +2923,7 @@ const rootRouteChildren = {
   ImageIndexRoute,
   QuizshowIndexRoute
 };
-const routeTree = Route$f._addFileChildren(rootRouteChildren)._addFileTypes();
+const routeTree = Route$h._addFileChildren(rootRouteChildren)._addFileTypes();
 function getRouter() {
   const router2 = createRouter({
     routeTree,

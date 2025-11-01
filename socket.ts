@@ -1,7 +1,6 @@
-
-import { createFileRoute } from '@tanstack/react-router';
 import { Server as IOServer } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
+import type { NextFunction, Request, Response } from 'express';
 
 type Player = {
   id: string;
@@ -39,19 +38,17 @@ function broadcastRoomState(room: Room, ioInstance: IOServer) {
 /*
  Initialize socket.io on an existing HTTP server.
 
- The previous implementation attempted to create a standalone io instance when no
- server object was discoverable on the request. That fallback has been removed:
- the socket now requires an existing HTTP server (provided via the request).
- This avoids ambiguous behavior and the need to manage a separate listener here.
+ This function is idempotent. It requires an existing Node HTTP server (like the one
+ exposed on req.socket.server) to attach socket.io to.
 */
-function initSocket(existingServer: any) {
+export function initSocket(existingServer: any) {
   if (io) return;
 
   if (!existingServer) {
     // Fail fast: require the hosting environment to expose the server object.
     throw new Error(
       'Unable to initialize socket.io: no existing HTTP server provided. ' +
-      'Ensure your server exposes the Node HTTP server object on the request (e.g. request.socket.server).'
+      'Ensure your server exposes the Node HTTP server object on the request (e.g. req.socket.server).'
     );
   }
 
@@ -81,7 +78,7 @@ function initSocket(existingServer: any) {
         return;
       }
       playerId = uuidv4();
-      currentRoom = rooms[roomId];
+      currentRoom = rooms[roomId]!;
       currentRoom.players.push({ id: playerId, name, socketId: socket.id });
       socket.join(roomId);
       broadcastRoomState(currentRoom, io!);
@@ -141,41 +138,40 @@ function initSocket(existingServer: any) {
   });
 }
 
-// TanStack Start file-route: initiiert socket.io beim ersten GET-Aufruf und versucht, an vorhandenen Server anzuhängen.
-// Falls das Framework Request-Objekt eine server-Referenz enthält (wie in manchen Node-Server-Hosts), wird diese verwendet.
-export const Route = createFileRoute('/api/socket')({
-  server: {
-    handlers: {
-      GET: ({ request }: { request: Request }) => {
-        try {
-          // Try to discover an existing Node HTTP server:
-          // Some platforms expose it as (request as any).socket.server or request['socket']?.server
-          // This is environment-dependent; we pass it to initSocket if present.
-          const anyReq = request as any;
-          const potentialServer = anyReq?.socket?.server || anyReq?.raw?.socket?.server || anyReq?.server || undefined;
+/*
+ Express-Middleware zur Initialisierung von socket.io.
 
-          if (io) {
-            return Response.json({ success: true, message: 'Socket is already running' });
-          }
+ Diese Middleware versucht, das Node HTTP server-Objekt vom Request zu lesen
+ (req.socket.server). Falls vorhanden, wird initSocket mit diesem Server aufgerufen.
+ Die Middleware ist idempotent — sie macht nichts, wenn io bereits initialisiert ist.
+*/
+export function socketMiddleware(req: Request, _res: Response, next: NextFunction) {
+  try {
+    // Express' Request hat ein 'socket' Feld, das das Node socket enthält.
+    const anyReq: any = req as any;
+    const potentialServer = anyReq?.socket?.server || anyReq?.raw?.socket?.server || anyReq?.server || undefined;
 
-          // Require an existing HTTP server to attach the socket to.
-          if (!potentialServer) {
-            return Response.json({
-              success: false,
-              error:
-                'No HTTP server found on request. Socket initialization requires the hosting environment to expose the server object on the request (e.g. request.socket.server).',
-            }, { status: 500 });
-          }
+    if (io) {
+      // Bereits initialisiert — nichts zu tun
+      return next();
+    }
 
-          // Initialize and attach to the discovered server
-          initSocket(potentialServer);
+    if (!potentialServer) {
+      // Kein Server gefunden — Log und weiter, wir wollen nicht blocken, aber informieren.
+      console.warn(
+        '[socketMiddleware] Kein HTTP-Server auf req gefunden. Socket.IO wurde nicht initialisiert. ' +
+        'Wenn der Host das HTTP-Server-Objekt nicht bereitstellt, funktioniert WebSocket nicht.'
+      );
+      return next();
+    }
 
-          return Response.json({ success: true, message: 'Socket started and attached' });
-        } catch (err) {
-          console.error('Failed to start socket:', err);
-          return Response.json({ success: false, error: String(err) }, { status: 500 });
-        }
-      },
-    },
-  },
-});
+    initSocket(potentialServer);
+    return next();
+  } catch (err) {
+    console.error('socketMiddleware failed to init socket:', err);
+    // Weiterleiten des Fehlers an Express error handler
+    return next(err);
+  }
+}
+
+export default socketMiddleware;

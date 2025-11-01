@@ -94,7 +94,7 @@ const VIRTUAL_MODULES = {
 async function loadVirtualModule(id) {
   switch (id) {
     case VIRTUAL_MODULES.startManifest:
-      return await import("./assets/_tanstack-start-manifest_v-LM1BJAbZ.js");
+      return await import("./assets/_tanstack-start-manifest_v-DRndIWyV.js");
     case VIRTUAL_MODULES.injectedHeadScripts:
       return await import("./assets/_tanstack-start-injected-head-scripts_v-cda0Ky0D.js");
     default:
@@ -414,7 +414,7 @@ function createStartHandler(cb) {
   let routerEntry = null;
   const getEntries = async () => {
     if (routerEntry === null) {
-      routerEntry = await import("./assets/router-DRB5njeR.js").then((n) => n.r);
+      routerEntry = await import("./assets/router-Dg47pI_j.js").then((n) => n.r);
     }
     if (startEntry === null) {
       startEntry = await import("./assets/start-HYkvq4Ni.js");
@@ -627,12 +627,12 @@ async function handleServerRoutes({
   const middlewares = flattenMiddlewares(
     matchedRoutes.flatMap((r) => r.options.server?.middleware).filter(Boolean)
   ).map((d) => d.options.server);
-  const server = foundRoute?.options.server;
-  if (server) {
-    if (server.handlers) {
-      const handlers = typeof server.handlers === "function" ? server.handlers({
+  const server2 = foundRoute?.options.server;
+  if (server2) {
+    if (server2.handlers) {
+      const handlers = typeof server2.handlers === "function" ? server2.handlers({
         createHandlers: (d) => d
-      }) : server.handlers;
+      }) : server2.handlers;
       const requestMethod = request.method.toUpperCase();
       const handler = handlers[requestMethod] ?? handlers["ANY"];
       if (handler) {
@@ -750,6 +750,11 @@ const serverEntry = {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
   fetch
 };
+const server = {
+  fetch(request) {
+    return serverEntry.fetch(request);
+  }
+};
 export {
-  serverEntry as default
+  server as default
 };

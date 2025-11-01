@@ -8,20 +8,11 @@ export default defineConfig({
   server: { port: 3000 },
   plugins: [
     tsconfigPaths(),
-    tanstackStart(),
+    tanstackStart({
+      vite: { installDevServerMiddleware: true },
+    }),
     viteReact(),
   ],
-  // css: {
-  //   modules: {
-  //     // Use local scoping by default and a readable generated name for dev.
-  //     scopeBehaviour: 'local',
-  //     generateScopedName: process.env.NODE_ENV === 'production'
-  //       ? '[hash:base64:8]'
-  //       : '[name]__[local]__[hash:base64:5]',
-  //   },
-  //   // You can add preprocessorOptions here if needed (e.g., for sass)
-  //   preprocessorOptions: {},
-  // },
   assetsInclude: ['**/*.md'],
   ssr: {
     noExternal: ["react-use", "imgbb-uploader"],

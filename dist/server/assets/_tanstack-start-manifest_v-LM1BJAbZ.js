@@ -1,4 +1,0 @@
-const tsrStartManifest = () => ({ "routes": { "__root__": { "filePath": "E:/git/ai-demo/src/routes/__root.tsx", "children": ["/", "/api/chat", "/api/chat-with-tools", "/api/custom-gpt", "/api/image", "/api/quizshow", "/api/socket", "/api/summarize", "/chat-basic/", "/chat-custom-gpt/", "/chat-persistence/", "/chat-tts/", "/chat-ui-sample/", "/image/", "/quizshow/"], "preloads": ["/assets/main-DzEuCq2x.js"], "assets": [{ "tag": "link", "attrs": { "rel": "stylesheet", "href": "/assets/main-CZJZBF_T.css", "type": "text/css" } }] }, "/": { "filePath": "E:/git/ai-demo/src/routes/index.tsx", "assets": [{ "tag": "link", "attrs": { "rel": "stylesheet", "href": "/assets/main-CZJZBF_T.css", "type": "text/css" } }], "preloads": ["/assets/index-CUDG8fft.js"] } }, "clientEntry": "/assets/main-DzEuCq2x.js" });
-export {
-  tsrStartManifest
-};
