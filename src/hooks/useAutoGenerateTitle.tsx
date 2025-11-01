@@ -23,7 +23,6 @@ export function useAutoGenerateTitle(): UseAutoGenerateTitleResult {
       if (!response.ok) throw new Error("Fehler beim Abrufen des Titels");
       const data = await response.json();
       return data.text || "";
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       setError(e.message || "Unbekannter Fehler");
     } finally {

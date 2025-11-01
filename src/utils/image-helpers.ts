@@ -34,6 +34,7 @@ export const imageHelpers = {
     const file = new File([blob], `${fileName}.png`, { type: mimeType });
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (navigator.share) {
         await navigator.share({
           files: [file],

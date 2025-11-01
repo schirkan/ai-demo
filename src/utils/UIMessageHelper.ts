@@ -1,7 +1,8 @@
-import { UIMessage } from "ai";
+import type { UIMessage } from "ai";
 
 function isTextPart(part: UIMessage["parts"][number]): part is { type: 'text'; text: string } {
-  return part?.type === 'text' && typeof part.text === 'string';
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  return part?.type === 'text' && typeof part?.text === 'string';
 }
 
 export function getMessageText(message: UIMessage | null | undefined): string {
@@ -12,7 +13,7 @@ export function getMessageText(message: UIMessage | null | undefined): string {
 export function getDataPart<TData>(message: UIMessage | null | undefined, type: string): TData | undefined {
   if (!message) return undefined;
   const dataParts = message.parts.filter(x => x.type === type);
-  const firstPart = dataParts[0] as { data: TData };
+  const firstPart = dataParts[0] as { data: TData } | undefined;
   return firstPart?.data;
 }
 

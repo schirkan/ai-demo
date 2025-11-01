@@ -72,8 +72,8 @@ export function ImageDisplay({ prompt, image, timing, error, reload, edit }: Ima
     imageData: string
   ) => {
     e.stopPropagation();
-    imageHelpers.shareOrDownload(imageData, 'image').catch((error) => {
-      console.error("Failed to share/download image:", error);
+    imageHelpers.shareOrDownload(imageData, 'image').catch((err) => {
+      console.error("Failed to share/download image:", err);
     });
   };
 

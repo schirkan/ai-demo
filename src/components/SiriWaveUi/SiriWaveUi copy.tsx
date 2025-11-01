@@ -2,14 +2,14 @@
 
 import React, { useEffect, useRef } from "react";
 import { useSiriWave } from "./useSiriWave";
-import SiriWave from "siriwave";
+import type SiriWave from "siriwave";
 
 interface SiriWaveUiProps extends React.ComponentProps<"div"> {
     active: boolean;
 }
 
 function handleSuccess(stream: MediaStream, siriWave: SiriWave): () => void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     const source = audioContext.createMediaStreamSource(stream);
     const processor = audioContext.createScriptProcessor(1024, 1, 1);
@@ -52,17 +52,11 @@ function handleSuccess(stream: MediaStream, siriWave: SiriWave): () => void {
     };
 
     return () => {
-        siriWave?.setAmplitude(0);
-        siriWave?.setSpeed(0);
-        if (source) {
-            source.disconnect();
-        }
-        if (processor) {
-            processor.disconnect();
-        }
-        if (audioContext) {
-            audioContext.close();
-        }
+        siriWave.setAmplitude(0);
+        siriWave.setSpeed(0);
+        source.disconnect();
+        processor.disconnect();
+        audioContext.close();
     }
 }
 
