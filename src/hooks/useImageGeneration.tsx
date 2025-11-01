@@ -1,5 +1,5 @@
-import { ImageRequest, ImageResponse } from "@/app/api/image/route";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { ImageRequest, ImageResponse } from "@/routes/api/image";
 
 export interface ProviderTiming {
   startTime?: number;

@@ -1,9 +1,8 @@
 'use-client';
 
 import React, { useEffect, useRef } from "react";
-import SiriWave from "siriwave";
-
 import { useSiriWave } from "./useSiriWave";
+import type SiriWave from "siriwave";
 
 interface SiriWaveUiProps extends React.ComponentProps<"div"> {
     active: boolean;

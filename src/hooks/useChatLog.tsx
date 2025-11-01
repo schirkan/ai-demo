@@ -10,7 +10,7 @@ export interface ChatLogMeta {
 const CHAT_LOGS_KEY = 'chat-logs';
 const SELECTED_CHAT_LOG_ID_KEY = 'selected-chat-log-id';
 
-function loadChatLogs(props: Required<ChatLogProps>): ChatLogMeta[] {
+function loadChatLogs(props: Required<ChatLogProps>): Array<ChatLogMeta> {
   console.log('loadChatLogs');
   const stored = props.storage.getItem(CHAT_LOGS_KEY + '.' + props.storageKey);
   if (stored) {
@@ -26,7 +26,7 @@ function loadChatLogs(props: Required<ChatLogProps>): ChatLogMeta[] {
   return [];
 }
 
-function saveChatLogs(props: Required<ChatLogProps>, logs: ChatLogMeta[]) {
+function saveChatLogs(props: Required<ChatLogProps>, logs: Array<ChatLogMeta>) {
   console.log('saveChatLogs', logs);
   props.storage.setItem(CHAT_LOGS_KEY + '.' + props.storageKey, JSON.stringify(logs));
 }
@@ -54,7 +54,7 @@ export function useChatLog(props: ChatLogProps) {
   props.storage = props.storage || (typeof window !== "undefined" ? localStorage : undefined);
   const latestProps = useLatest(props as Required<ChatLogProps>);
 
-  const [chatLogs, setChatLogs] = useState<ChatLogMeta[]>([]);
+  const [chatLogs, setChatLogs] = useState<Array<ChatLogMeta>>([]);
   const [selectedChatLogId, setSelectedChatLogId] = useState<string | null>(null);
 
   // Initial laden
@@ -66,19 +66,16 @@ export function useChatLog(props: ChatLogProps) {
     if (initialChatLog.length === 0) {
       addChatLog();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Speichern, wenn sich chatLogs ändern
   useEffect(() => {
     saveChatLogs(latestProps.current, chatLogs);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatLogs]);
 
   // Speichern, wenn sich selectedChatLogId ändert
   useEffect(() => {
     saveSelectedChatLogId(latestProps.current, selectedChatLogId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChatLogId]);
 
   const addChatLog = useCallback(() => {

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 type TextareaAutosizeProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
@@ -12,7 +12,7 @@ export default function TextareaAutosize(props: TextareaAutosizeProps & { ref?: 
     if (typeof ref === "function") {
       ref(textareaRef.current);
     } else {
-      (ref as React.RefObject<HTMLTextAreaElement | null>).current = textareaRef.current;
+      (ref).current = textareaRef.current;
     }
   }, [ref]);
 
@@ -35,7 +35,6 @@ export default function TextareaAutosize(props: TextareaAutosizeProps & { ref?: 
       ref={textareaRef}
       onInput={(e) => {
         resizeTextarea();
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         props.onInput && props.onInput(e);
       }}
       style={{

@@ -2,7 +2,7 @@
 
 ## HIGH LEVEL UNDERSTANDING
 
-Dieses Projekt ist eine moderne, modulare Webanwendung, die auf Next.js und React basiert. Die Architektur folgt dem Prinzip der Trennung von Präsentation, Logik und Datenzugriff. Die wichtigsten Bereiche sind:
+Dieses Projekt ist eine moderne, modulare Webanwendung, die auf TanStack Start (mit Vite) und React basiert. Die Architektur folgt dem Prinzip der Trennung von Präsentation, Logik und Datenzugriff. Die wichtigsten Bereiche sind:
 
 - **Frontend**: React-Komponenten, CSS-Module, Hooks für State- und Logikverwaltung.
 - **Backend/API**: Next.js API-Routen für serverseitige Logik und KI-Integration.
@@ -14,14 +14,14 @@ graph TD
     A[User] -->|UI Interaktion| B[React Components]
     B -->|Hooks & State| C[Hooks]
     B -->|Styles| D[CSS Modules]
-    B -->|API Calls| E[Next.js API Routes]
+    B -->|API Calls| E[Server handlers / API routes]
     E -->|KI/Logik| F[AI SDKs & Utilities]
     F -->|Assets| G[Public]
 ```
 
 ## TECHNOLOGY STACK
 
-- **Frameworks:** Next.js, React
+- **Frameworks:** TanStack Start (Vite), React
 - **Sprache:** TypeScript, JavaScript
 - **Styling:** CSS Modules
 - **KI & Speech:** @ai-sdk/azure, @ai-sdk/react, ai, react-speech-recognition, react-text-to-speech
@@ -30,7 +30,7 @@ graph TD
 
 ## DESIGN DECISIONS
 
-- **Next.js als Basis:** Ermöglicht SSR, API-Routen und schnelle Entwicklung.
+- **TanStack Start (mit Vite) als Basis:** Nutzt Vite für Entwicklung und Build; bietet file-based routing via routesDirectory oder route-objects sowie Server-Handler für API-Routen.
 - **Modulare Komponentenstruktur:** Wiederverwendbare UI-Komponenten in `src/components`.
 - **Hooks für State-Management:** Eigene Hooks in `src/hooks` kapseln Logik und fördern Wiederverwendbarkeit.
 - **API-Routen:** Serverseitige Logik und KI-Integration über Next.js API-Routen in `src/app/api`.
@@ -62,8 +62,8 @@ graph TD
 
 ## ENTRY POINTS
 
-- **Frontend:** `src/app/page.tsx` – Hauptseite der Anwendung.
-- **API:** `src/app/api/` – Enthält alle serverseitigen Endpunkte.
+- **Frontend:** `src/app/index.tsx` – Hauptseite der Anwendung. Bei TanStack Start wird `src/app/__root.tsx` für das Root-Layout und `src/app/index.tsx` (createFileRoute) für die Root-Route empfohlen.
+- **API:** `src/app/api/` – Server handlers / API routes (bei TanStack Start als server.handlers / createServerFn nutzbar).
 - **Komponenten:** `src/components/` – Wiederverwendbare UI-Bausteine.
 - **Hooks:** `src/hooks/` – Eigene React-Hooks für Logik und State.
 - **Utils:** `src/utils/` – Hilfsfunktionen für verschiedene Aufgaben.
@@ -128,5 +128,5 @@ graph TD
 
 - `package.json` – Projektkonfiguration und Abhängigkeiten
 - `tsconfig.json` – TypeScript-Konfiguration
-- `next.config.ts` – Next.js-Konfiguration
+- `vite.config.mts` (oder `vite.config.ts`) – Vite + TanStack Start Plugin Konfiguration (ersetzt `next.config.ts` nach Migration)
 - `README.md` – Projektübersicht

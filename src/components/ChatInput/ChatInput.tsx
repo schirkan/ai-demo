@@ -1,14 +1,15 @@
 'use client';
 
-import { BsMicFill, BsSendFill, BsFillStopFill } from 'react-icons/bs';
+import { BsFillStopFill, BsMicFill, BsSendFill } from 'react-icons/bs';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { ChangeEventHandler, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { useLatest, useUnmount } from 'react-use';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import styles from './styles.module.css';
+import { useLatest, useUnmount } from 'react-use';
 import buttonStyles from '../../css/buttonStyles.module.css';
 import TextareaAutosize from '../TextareaAutosize/TextareaAutosize';
 import { SiriWaveUi } from '../SiriWaveUi/SiriWaveUi';
+import styles from './styles.module.css';
+import type { ChangeEventHandler, FormEvent } from 'react';
 
 export interface ChatInputProps {
   style?: 'default' | 'combined' | undefined;
@@ -81,8 +82,8 @@ export default function ChatInput({ onSubmit, placeholder, showVoiceInput, loadi
         return;
       }
 
-      // submit on Ctrl + Enter
-      if (event.code === "Enter" && !event.shiftKey && document.activeElement === inputRef.current) {
+      // submit on Enter - new line on shift + Enter
+      if ((event.code === 'Enter' || event.code === 'NumpadEnter') && !event.shiftKey && document.activeElement === inputRef.current) {
         event.preventDefault();
         handleSubmit();
         return

@@ -3,8 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSpeech, useVoices } from 'react-text-to-speech';
 import { BsFillGearFill, BsFillStopFill } from "react-icons/bs";
-import { HiSpeakerWave } from "react-icons/hi2";
-import { HiSpeakerXMark } from "react-icons/hi2";
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 
 import buttonStyles from '../../css/buttonStyles.module.css';
 import styles from './styles.module.css';
@@ -16,7 +15,7 @@ export interface SpeechOptionsProps {
 
 const key = `SpeechAutoPlayEnabled`;
 
-export default function SpeechOptions(props: SpeechOptionsProps) {
+export default function SpeechOptions({ text, position }: SpeechOptionsProps) {
   const [enabled, setEnabled] = useState(false);
   const [lang, setLang] = useState('de-DE');
   const [voiceURI, setVoiceURI] = useState('Microsoft Conrad Online (Natural) - German (Germany)');
@@ -29,7 +28,7 @@ export default function SpeechOptions(props: SpeechOptionsProps) {
     setEnabled(stored !== "false");
   }, []);
 
-  const text = props?.text?.replaceAll('**', '');
+  text = text?.replaceAll('**', '');
 
   const { voices, languages } = useVoices();
   const { speechStatus, stop } = useSpeech({ text, autoPlay: enabled, lang, voiceURI, });
@@ -42,7 +41,7 @@ export default function SpeechOptions(props: SpeechOptionsProps) {
   }, [enabled]);
 
   return (
-    <div className={styles.container} data-position={props.position || 'top-right'}>
+    <div className={styles.container} data-position={position || 'top-right'}>
       <div className={styles.buttons}>
         <button className={buttonStyles.iconButton} data-visible={enabled} disabled={speechStatus === "stopped"} onClick={stop}>
           <BsFillStopFill />

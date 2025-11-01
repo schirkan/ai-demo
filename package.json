@@ -2,21 +2,24 @@
   "name": "ai-demo",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build && cp -r ./public ./.next/standalone/ && cp -r ./.next/static ./.next/standalone/.next/",
-    "start": "node server.js",
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node .output/server/index.mjs",
     "lint": "eslint .",
-    "clean:next": "rm -rf .next",
-    "clean:npm": "rm -rf node_modules",
-    "postinstall": "next telemetry disable"
+    "clean:npm": "rm -rf node_modules"
   },
   "dependencies": {
     "@ai-sdk/azure": "^2.0.0",
     "@ai-sdk/react": "^2.0.0",
+    "@tanstack/react-devtools": "^0.8.0",
+    "@tanstack/react-router": "^1.133.32",
+    "@tanstack/react-router-devtools": "^1.133.36",
+    "@tanstack/react-start": "^1.134.0",
     "ai": "^5.0.0",
     "imgbb-uploader": "^1.5.1",
-    "next": "^16.0.0",
     "qrcode.react": "^4.2.0",
     "raw-loader": "^4.0.2",
     "react": "^19.2.0",
@@ -34,14 +37,16 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@tanstack/eslint-config": "^0.3.2",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-speech-recognition": "^3.9.6",
+    "@vitejs/plugin-react": "^5.1.0",
     "eslint": "^9",
-    "eslint-config-next": "^16.0.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^7.1.12",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "browserslist": [
     "last 1 version"

@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { BsPlus, BsPencil, BsTrash } from "react-icons/bs";
+import { BsPencil, BsPlus, BsTrash } from "react-icons/bs";
 
 import buttonStyles from '../../css/buttonStyles.module.css';
 import styles from './styles.module.css';
-import { ChatLogMeta } from "@/hooks/useChatLog";
+import type { ChatLogMeta } from "@/hooks/useChatLog";
 
 export interface ChatLogUiProps {
-  chatLogs: ChatLogMeta[];
+  chatLogs: Array<ChatLogMeta>;
   selectedChatLogId: string | null;
   onAdd: () => void;
   onSelect: (id: string) => void;

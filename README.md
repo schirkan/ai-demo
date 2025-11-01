@@ -6,7 +6,7 @@ Demo: https://my-ai-demo.azurewebsites.net
 
 This application demonstrates various AI-powered features such as chatbots, image generation, quiz games, and text-to-speech.
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This project uses TanStack Start with Vite as the application framework and build tool. See https://tanstack.com/start for the official guide and migration notes.
 
 ## Features
 

@@ -1,19 +1,19 @@
 'use client';
 
-import { UIDataTypes, UIMessage, UIMessagePart, UITools } from 'ai';
 import { BsArrowClockwise } from "react-icons/bs";
 import { useRef } from 'react';
 
 import buttonStyles from '../../css/buttonStyles.module.css';
 import ScrollToButton from '../ScrollToButton/ScrollToButton';
+import { ImageDisplay } from '../ImageDisplay/ImageDisplay';
 import styles from './styles.module.css';
+import type { UIDataTypes, UIMessage, UIMessagePart, UITools } from 'ai';
 import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';
 import ScrollIntoView from '@/components/ScrollIntoView/ScrollIntoView';
-import { ImageDisplay } from '../ImageDisplay/ImageDisplay';
 
 export interface ChatMessagesProps {
   style?: 'default' | 'whatsapp' | 'ios' | undefined;
-  messages: UIMessage[];
+  messages: Array<UIMessage>;
   loading?: boolean;
   error?: Error;
   regenerate?: () => void;
@@ -39,7 +39,7 @@ function renderPart(part: UIMessagePart<UIDataTypes, UITools>, message: UIMessag
       // TODO: auslagern
       if (part.input) {
         const { prompt } = part.input as { prompt: string };
-        const output = part.output as { url?: string };
+        const output = part.output as { url?: string } | null;
         return <ImageDisplay key={message.id + '|' + index} prompt={prompt} image={output?.url} />;
       }
       break;

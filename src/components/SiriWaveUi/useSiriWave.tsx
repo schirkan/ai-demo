@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
-import SiriWave, { ICurveDefinition } from 'siriwave'
-import { useState } from 'react';
+import { useEffect, useState } from 'react'
+import SiriWave from 'siriwave'
+import type { ICurveDefinition } from 'siriwave';
+import type React from 'react';
 
 declare type CurveStyle = 'ios' | 'ios9'
 
@@ -18,11 +19,11 @@ export interface IReactSiriwaveProps {
   autostart?: boolean;
   pixelDepth?: number;
   lerpSpeed?: number;
-  curveDefinition?: ICurveDefinition[];
+  curveDefinition?: Array<ICurveDefinition>;
 }
 
 export function useSiriWave(props: IReactSiriwaveProps) {
-  const [siriWave, setSiriWave] = useState<SiriWave | null>(null); //useRef<SiriWave | null>(null);
+  const [siriWave, setSiriWave] = useState<SiriWave | null>(null); // useRef<SiriWave | null>(null);
 
   useEffect(() => {
     if (!props.container.current) return;
@@ -46,7 +47,7 @@ export function useSiriWave(props: IReactSiriwaveProps) {
     setSiriWave(instance);
 
     return () => {
-      instance?.dispose()
+      instance.dispose()
     }
   }, [
     props.container,

@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { LuPaintRoller, LuPaintbrush, LuPaintbrushVertical, LuPalette, LuPaintBucket, LuImage, LuCircleAlert, LuShare } from "react-icons/lu";
-import { imageHelpers } from "@/utils/image-helpers";
-import { ProviderTiming } from "@/hooks/useImageGeneration";
+import { LuCircleAlert, LuImage, LuPaintBucket, LuPaintRoller, LuPaintbrush, LuPaintbrushVertical, LuPalette, LuShare } from "react-icons/lu";
 import { BsArrowClockwise, BsPencilSquare } from "react-icons/bs";
-import styles from './styles.module.css';
 import buttonStyles from '../../css/buttonStyles.module.css';
+import styles from './styles.module.css';
+import type { ProviderTiming } from "@/hooks/useImageGeneration";
+import { imageHelpers } from "@/utils/image-helpers";
 
 interface ImageDisplayProps {
   prompt?: string;
@@ -29,7 +29,7 @@ export function ImageDisplay({ prompt, image, timing, error, reload, edit }: Ima
   const [iconIndex, setIconIndex] = useState(0);
 
   useEffect(() => {
-    if (!timing?.startTime || timing?.completionTime) return;
+    if (!timing?.startTime || timing.completionTime) return;
     const interval = setInterval(() => {
       setIconIndex((prev) => (prev + 1) % icons.length);
     }, 2000);
@@ -87,7 +87,6 @@ export function ImageDisplay({ prompt, image, timing, error, reload, edit }: Ima
         )}
 
         {image && (
-          /* eslint-disable-next-line @next/next/no-img-element */
           <img src={image} alt={prompt} onClick={handleImageClick} />
         )}
 
@@ -100,7 +99,7 @@ export function ImageDisplay({ prompt, image, timing, error, reload, edit }: Ima
           </>
         )}
 
-        {timing?.startTime && !timing?.completionTime && (
+        {timing?.startTime && !timing.completionTime && (
           <div className={styles.loading}>
             <div className={styles.loader}></div>
             {icons[iconIndex]}
@@ -138,7 +137,6 @@ export function ImageDisplay({ prompt, image, timing, error, reload, edit }: Ima
 
       {isZoomed && image && createPortal(
         <div className={styles.zoomedOverlay} onClick={() => setIsZoomed(false)}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={image} alt={prompt || `AI Generated`} />
         </div>,
         document.body,

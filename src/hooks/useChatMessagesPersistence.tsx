@@ -1,12 +1,12 @@
-import { UIMessage } from '@ai-sdk/react';
 import { useEffect, useMemo } from 'react';
 import { useLatest } from 'react-use';
+import type { UIMessage } from '@ai-sdk/react';
 
 interface ChatMessagesPersistenceProps {
   storageKey: string,
   status: string,
-  messages: UIMessage[],
-  setMessages: (messages: UIMessage[] | ((messages: UIMessage[]) => UIMessage[])) => void,
+  messages: Array<UIMessage>,
+  setMessages: (messages: Array<UIMessage> | ((messages: Array<UIMessage>) => Array<UIMessage>)) => void,
   storage?: Storage
 }
 
@@ -51,14 +51,11 @@ export function useChatMessagesPersistence(props: ChatMessagesPersistenceProps) 
   props.storage = props.storage || (typeof window !== "undefined" ? localStorage : undefined);
   const latestProps = useLatest(props as Required<ChatMessagesPersistenceProps>);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => loadMessages(latestProps.current), [props.storageKey]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => saveMessages(latestProps.current), [props.status]);
 
   return useMemo(() => ({
     deleteMessages: (storageKey?: string) => deleteMessages(latestProps.current, storageKey),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }), []);
 }

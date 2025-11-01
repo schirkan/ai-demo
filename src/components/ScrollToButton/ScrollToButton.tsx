@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 
-import styles from './styles.module.css';
 import buttonStyles from '../../css/buttonStyles.module.css';
+import styles from './styles.module.css';
 
 export default function ScrollToButton<T extends HTMLElement>({
   direction,

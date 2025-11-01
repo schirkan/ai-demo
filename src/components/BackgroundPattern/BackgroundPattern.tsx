@@ -1,10 +1,10 @@
-import { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 
 // see https://github.com/megh-bari/pattern-craft/blob/main/src/app/utils/patterns.ts
 
 export type StyleName = 'basic-grid' | 'grid-fade-diagonal-left' | 'grid-fade-sides' | 'blueprint';
 
-const styles: Record<StyleName, CSSProperties> = {
+const styles: Record<StyleName, CSSProperties | null> = {
   'basic-grid': {
     background: "light-dark( #ffffff, #0f172a )",
     backgroundImage: `
