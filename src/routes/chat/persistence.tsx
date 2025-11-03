@@ -7,7 +7,7 @@ import { BsMagic } from 'react-icons/bs';
 
 import { DefaultChatTransport } from 'ai';
 import buttonStyles from '../../css/buttonStyles.module.css';
-import styles from './styles.module.css';
+import styles from './persistence.module.css';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
@@ -18,7 +18,7 @@ import { useChatLog } from '@/hooks/useChatLog';
 import { useAutoGenerateTitle } from '@/hooks/useAutoGenerateTitle';
 import { getMessageText } from '@/utils/UIMessageHelper';
 
-export const Route = createFileRoute('/chat-persistence/')({
+export const Route = createFileRoute('/chat/persistence')({
   component: Page,
 });
 

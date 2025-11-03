@@ -6,7 +6,7 @@ import { DefaultChatTransport } from 'ai';
 import { useChat } from '@ai-sdk/react';
 import { createFileRoute } from '@tanstack/react-router';
 
-import styles from './styles.module.css';
+import styles from './quizshow.module.css';
 import type { UIMessage } from 'ai';
 import type { QuizShowType } from '@/data/quizshow/schema';
 import { MemoizedMarkdown } from '@/components/MemoizedMarkdown/MemoizedMarkdown';

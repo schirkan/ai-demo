@@ -3,13 +3,13 @@
 import { useChat } from '@ai-sdk/react';
 import { useCallback } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import styles from './styles.module.css';
+import styles from './tts.module.css';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
 import { getMessageText } from '@/utils/UIMessageHelper';
 
-export const Route = createFileRoute('/chat-tts/')({
+export const Route = createFileRoute('/chat/tts')({
   component: Page,
 });
 

@@ -9,7 +9,7 @@ import styles from "./buzzer.module.css";
 import type { Socket } from "socket.io-client";
 import QRCodeComponent from "@/components/QRCode/QRCode";
 
-export const Route = createFileRoute('/buzzer/')({
+export const Route = createFileRoute('/buzzer/buzzer')({
   component: BuzzerPage,
 });
 
@@ -33,7 +33,7 @@ export default function BuzzerPage() {
     if (typeof window !== "undefined") {
       const newRoomId = uuidv4();
       setRoomId(newRoomId);
-      setQrUrl(`${window.location.origin}/buzzer-connect?roomId=${newRoomId}`);
+      setQrUrl(`${window.location.origin}/buzzer/connect?roomId=${newRoomId}`);
     }
   }, []);
 
@@ -228,11 +228,8 @@ export default function BuzzerPage() {
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Chatverlauf</h2>
         <ul className={styles.chatList}>
-          {chat.map((entry, idx) => (
-            <li
-              key={idx}
-              className={styles.chatItem}
-            >
+          {chat.toReversed().map((entry, idx) => (
+            <li key={idx} className={styles.chatItem}>
               <b>{entry.name}:</b> {entry.text}
             </li>
           ))}

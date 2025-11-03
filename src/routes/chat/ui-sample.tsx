@@ -3,13 +3,13 @@
 import { useCallback, useState } from "react";
 
 import { createFileRoute } from '@tanstack/react-router'
-import styles from "./styles.module.css"
+import styles from "./ui-sample.module.css"
 import type { UIMessage } from 'ai';
 import ChatMessages from "@/components/ChatMessages/ChatMessages";
 import ChatInput from "@/components/ChatInput/ChatInput";
 import BackgroundPattern from "@/components/BackgroundPattern/BackgroundPattern";
 
-export const Route = createFileRoute('/chat-ui-sample/')({
+export const Route = createFileRoute('/chat/ui-sample')({
   component: Page,
 })
 

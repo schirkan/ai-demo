@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 
 import { DefaultChatTransport } from 'ai';
-import styles from './styles.module.css';
+import styles from './custom-gpt.module.css';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import SpeechOptions from '@/components/SpeechOptions/SpeechOptions';
@@ -13,7 +13,7 @@ import { getMessageText } from '@/utils/UIMessageHelper';
 
 const gpts = ['Generic Chatbot', 'DungeonsAndDragons', 'GameMaster', 'InformationGathering', 'PromptOptimization'];
 
-export const Route = createFileRoute(('/chat-custom-gpt/'))({
+export const Route = createFileRoute(('/chat/custom-gpt'))({
   component: Page,
 });
 

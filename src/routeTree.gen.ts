@@ -11,14 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as QuizshowIndexRouteImport } from './routes/quizshow/index'
-import { Route as ImageIndexRouteImport } from './routes/image/index'
-import { Route as ChatUiSampleIndexRouteImport } from './routes/chat-ui-sample/index'
-import { Route as ChatTtsIndexRouteImport } from './routes/chat-tts/index'
-import { Route as ChatPersistenceIndexRouteImport } from './routes/chat-persistence/index'
-import { Route as ChatCustomGptIndexRouteImport } from './routes/chat-custom-gpt/index'
-import { Route as ChatBasicIndexRouteImport } from './routes/chat-basic/index'
-import { Route as BuzzerIndexRouteImport } from './routes/buzzer/index'
-import { Route as BuzzerConnectIndexRouteImport } from './routes/buzzer-connect/index'
+import { Route as ChatUiSampleRouteImport } from './routes/chat/ui-sample'
+import { Route as ChatTtsRouteImport } from './routes/chat/tts'
+import { Route as ChatPersistenceRouteImport } from './routes/chat/persistence'
+import { Route as ChatImageRouteImport } from './routes/chat/image'
+import { Route as ChatCustomGptRouteImport } from './routes/chat/custom-gpt'
+import { Route as ChatBasicRouteImport } from './routes/chat/basic'
+import { Route as BuzzerConnectRouteImport } from './routes/buzzer/connect'
+import { Route as BuzzerBuzzerRouteImport } from './routes/buzzer/buzzer'
 import { Route as ApiSummarizeRouteImport } from './routes/api/summarize'
 import { Route as ApiQuizshowRouteImport } from './routes/api/quizshow'
 import { Route as ApiImageRouteImport } from './routes/api/image'
@@ -36,44 +36,44 @@ const QuizshowIndexRoute = QuizshowIndexRouteImport.update({
   path: '/quizshow/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ImageIndexRoute = ImageIndexRouteImport.update({
-  id: '/image/',
-  path: '/image/',
+const ChatUiSampleRoute = ChatUiSampleRouteImport.update({
+  id: '/chat/ui-sample',
+  path: '/chat/ui-sample',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChatUiSampleIndexRoute = ChatUiSampleIndexRouteImport.update({
-  id: '/chat-ui-sample/',
-  path: '/chat-ui-sample/',
+const ChatTtsRoute = ChatTtsRouteImport.update({
+  id: '/chat/tts',
+  path: '/chat/tts',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChatTtsIndexRoute = ChatTtsIndexRouteImport.update({
-  id: '/chat-tts/',
-  path: '/chat-tts/',
+const ChatPersistenceRoute = ChatPersistenceRouteImport.update({
+  id: '/chat/persistence',
+  path: '/chat/persistence',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChatPersistenceIndexRoute = ChatPersistenceIndexRouteImport.update({
-  id: '/chat-persistence/',
-  path: '/chat-persistence/',
+const ChatImageRoute = ChatImageRouteImport.update({
+  id: '/chat/image',
+  path: '/chat/image',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChatCustomGptIndexRoute = ChatCustomGptIndexRouteImport.update({
-  id: '/chat-custom-gpt/',
-  path: '/chat-custom-gpt/',
+const ChatCustomGptRoute = ChatCustomGptRouteImport.update({
+  id: '/chat/custom-gpt',
+  path: '/chat/custom-gpt',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChatBasicIndexRoute = ChatBasicIndexRouteImport.update({
-  id: '/chat-basic/',
-  path: '/chat-basic/',
+const ChatBasicRoute = ChatBasicRouteImport.update({
+  id: '/chat/basic',
+  path: '/chat/basic',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BuzzerIndexRoute = BuzzerIndexRouteImport.update({
-  id: '/buzzer/',
-  path: '/buzzer/',
+const BuzzerConnectRoute = BuzzerConnectRouteImport.update({
+  id: '/buzzer/connect',
+  path: '/buzzer/connect',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BuzzerConnectIndexRoute = BuzzerConnectIndexRouteImport.update({
-  id: '/buzzer-connect/',
-  path: '/buzzer-connect/',
+const BuzzerBuzzerRoute = BuzzerBuzzerRouteImport.update({
+  id: '/buzzer/buzzer',
+  path: '/buzzer/buzzer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSummarizeRoute = ApiSummarizeRouteImport.update({
@@ -115,14 +115,14 @@ export interface FileRoutesByFullPath {
   '/api/image': typeof ApiImageRoute
   '/api/quizshow': typeof ApiQuizshowRoute
   '/api/summarize': typeof ApiSummarizeRoute
-  '/buzzer-connect': typeof BuzzerConnectIndexRoute
-  '/buzzer': typeof BuzzerIndexRoute
-  '/chat-basic': typeof ChatBasicIndexRoute
-  '/chat-custom-gpt': typeof ChatCustomGptIndexRoute
-  '/chat-persistence': typeof ChatPersistenceIndexRoute
-  '/chat-tts': typeof ChatTtsIndexRoute
-  '/chat-ui-sample': typeof ChatUiSampleIndexRoute
-  '/image': typeof ImageIndexRoute
+  '/buzzer/buzzer': typeof BuzzerBuzzerRoute
+  '/buzzer/connect': typeof BuzzerConnectRoute
+  '/chat/basic': typeof ChatBasicRoute
+  '/chat/custom-gpt': typeof ChatCustomGptRoute
+  '/chat/image': typeof ChatImageRoute
+  '/chat/persistence': typeof ChatPersistenceRoute
+  '/chat/tts': typeof ChatTtsRoute
+  '/chat/ui-sample': typeof ChatUiSampleRoute
   '/quizshow': typeof QuizshowIndexRoute
 }
 export interface FileRoutesByTo {
@@ -133,14 +133,14 @@ export interface FileRoutesByTo {
   '/api/image': typeof ApiImageRoute
   '/api/quizshow': typeof ApiQuizshowRoute
   '/api/summarize': typeof ApiSummarizeRoute
-  '/buzzer-connect': typeof BuzzerConnectIndexRoute
-  '/buzzer': typeof BuzzerIndexRoute
-  '/chat-basic': typeof ChatBasicIndexRoute
-  '/chat-custom-gpt': typeof ChatCustomGptIndexRoute
-  '/chat-persistence': typeof ChatPersistenceIndexRoute
-  '/chat-tts': typeof ChatTtsIndexRoute
-  '/chat-ui-sample': typeof ChatUiSampleIndexRoute
-  '/image': typeof ImageIndexRoute
+  '/buzzer/buzzer': typeof BuzzerBuzzerRoute
+  '/buzzer/connect': typeof BuzzerConnectRoute
+  '/chat/basic': typeof ChatBasicRoute
+  '/chat/custom-gpt': typeof ChatCustomGptRoute
+  '/chat/image': typeof ChatImageRoute
+  '/chat/persistence': typeof ChatPersistenceRoute
+  '/chat/tts': typeof ChatTtsRoute
+  '/chat/ui-sample': typeof ChatUiSampleRoute
   '/quizshow': typeof QuizshowIndexRoute
 }
 export interface FileRoutesById {
@@ -152,14 +152,14 @@ export interface FileRoutesById {
   '/api/image': typeof ApiImageRoute
   '/api/quizshow': typeof ApiQuizshowRoute
   '/api/summarize': typeof ApiSummarizeRoute
-  '/buzzer-connect/': typeof BuzzerConnectIndexRoute
-  '/buzzer/': typeof BuzzerIndexRoute
-  '/chat-basic/': typeof ChatBasicIndexRoute
-  '/chat-custom-gpt/': typeof ChatCustomGptIndexRoute
-  '/chat-persistence/': typeof ChatPersistenceIndexRoute
-  '/chat-tts/': typeof ChatTtsIndexRoute
-  '/chat-ui-sample/': typeof ChatUiSampleIndexRoute
-  '/image/': typeof ImageIndexRoute
+  '/buzzer/buzzer': typeof BuzzerBuzzerRoute
+  '/buzzer/connect': typeof BuzzerConnectRoute
+  '/chat/basic': typeof ChatBasicRoute
+  '/chat/custom-gpt': typeof ChatCustomGptRoute
+  '/chat/image': typeof ChatImageRoute
+  '/chat/persistence': typeof ChatPersistenceRoute
+  '/chat/tts': typeof ChatTtsRoute
+  '/chat/ui-sample': typeof ChatUiSampleRoute
   '/quizshow/': typeof QuizshowIndexRoute
 }
 export interface FileRouteTypes {
@@ -172,14 +172,14 @@ export interface FileRouteTypes {
     | '/api/image'
     | '/api/quizshow'
     | '/api/summarize'
-    | '/buzzer-connect'
-    | '/buzzer'
-    | '/chat-basic'
-    | '/chat-custom-gpt'
-    | '/chat-persistence'
-    | '/chat-tts'
-    | '/chat-ui-sample'
-    | '/image'
+    | '/buzzer/buzzer'
+    | '/buzzer/connect'
+    | '/chat/basic'
+    | '/chat/custom-gpt'
+    | '/chat/image'
+    | '/chat/persistence'
+    | '/chat/tts'
+    | '/chat/ui-sample'
     | '/quizshow'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -190,14 +190,14 @@ export interface FileRouteTypes {
     | '/api/image'
     | '/api/quizshow'
     | '/api/summarize'
-    | '/buzzer-connect'
-    | '/buzzer'
-    | '/chat-basic'
-    | '/chat-custom-gpt'
-    | '/chat-persistence'
-    | '/chat-tts'
-    | '/chat-ui-sample'
-    | '/image'
+    | '/buzzer/buzzer'
+    | '/buzzer/connect'
+    | '/chat/basic'
+    | '/chat/custom-gpt'
+    | '/chat/image'
+    | '/chat/persistence'
+    | '/chat/tts'
+    | '/chat/ui-sample'
     | '/quizshow'
   id:
     | '__root__'
@@ -208,14 +208,14 @@ export interface FileRouteTypes {
     | '/api/image'
     | '/api/quizshow'
     | '/api/summarize'
-    | '/buzzer-connect/'
-    | '/buzzer/'
-    | '/chat-basic/'
-    | '/chat-custom-gpt/'
-    | '/chat-persistence/'
-    | '/chat-tts/'
-    | '/chat-ui-sample/'
-    | '/image/'
+    | '/buzzer/buzzer'
+    | '/buzzer/connect'
+    | '/chat/basic'
+    | '/chat/custom-gpt'
+    | '/chat/image'
+    | '/chat/persistence'
+    | '/chat/tts'
+    | '/chat/ui-sample'
     | '/quizshow/'
   fileRoutesById: FileRoutesById
 }
@@ -227,14 +227,14 @@ export interface RootRouteChildren {
   ApiImageRoute: typeof ApiImageRoute
   ApiQuizshowRoute: typeof ApiQuizshowRoute
   ApiSummarizeRoute: typeof ApiSummarizeRoute
-  BuzzerConnectIndexRoute: typeof BuzzerConnectIndexRoute
-  BuzzerIndexRoute: typeof BuzzerIndexRoute
-  ChatBasicIndexRoute: typeof ChatBasicIndexRoute
-  ChatCustomGptIndexRoute: typeof ChatCustomGptIndexRoute
-  ChatPersistenceIndexRoute: typeof ChatPersistenceIndexRoute
-  ChatTtsIndexRoute: typeof ChatTtsIndexRoute
-  ChatUiSampleIndexRoute: typeof ChatUiSampleIndexRoute
-  ImageIndexRoute: typeof ImageIndexRoute
+  BuzzerBuzzerRoute: typeof BuzzerBuzzerRoute
+  BuzzerConnectRoute: typeof BuzzerConnectRoute
+  ChatBasicRoute: typeof ChatBasicRoute
+  ChatCustomGptRoute: typeof ChatCustomGptRoute
+  ChatImageRoute: typeof ChatImageRoute
+  ChatPersistenceRoute: typeof ChatPersistenceRoute
+  ChatTtsRoute: typeof ChatTtsRoute
+  ChatUiSampleRoute: typeof ChatUiSampleRoute
   QuizshowIndexRoute: typeof QuizshowIndexRoute
 }
 
@@ -254,60 +254,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizshowIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/image/': {
-      id: '/image/'
-      path: '/image'
-      fullPath: '/image'
-      preLoaderRoute: typeof ImageIndexRouteImport
+    '/chat/ui-sample': {
+      id: '/chat/ui-sample'
+      path: '/chat/ui-sample'
+      fullPath: '/chat/ui-sample'
+      preLoaderRoute: typeof ChatUiSampleRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/chat-ui-sample/': {
-      id: '/chat-ui-sample/'
-      path: '/chat-ui-sample'
-      fullPath: '/chat-ui-sample'
-      preLoaderRoute: typeof ChatUiSampleIndexRouteImport
+    '/chat/tts': {
+      id: '/chat/tts'
+      path: '/chat/tts'
+      fullPath: '/chat/tts'
+      preLoaderRoute: typeof ChatTtsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/chat-tts/': {
-      id: '/chat-tts/'
-      path: '/chat-tts'
-      fullPath: '/chat-tts'
-      preLoaderRoute: typeof ChatTtsIndexRouteImport
+    '/chat/persistence': {
+      id: '/chat/persistence'
+      path: '/chat/persistence'
+      fullPath: '/chat/persistence'
+      preLoaderRoute: typeof ChatPersistenceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/chat-persistence/': {
-      id: '/chat-persistence/'
-      path: '/chat-persistence'
-      fullPath: '/chat-persistence'
-      preLoaderRoute: typeof ChatPersistenceIndexRouteImport
+    '/chat/image': {
+      id: '/chat/image'
+      path: '/chat/image'
+      fullPath: '/chat/image'
+      preLoaderRoute: typeof ChatImageRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/chat-custom-gpt/': {
-      id: '/chat-custom-gpt/'
-      path: '/chat-custom-gpt'
-      fullPath: '/chat-custom-gpt'
-      preLoaderRoute: typeof ChatCustomGptIndexRouteImport
+    '/chat/custom-gpt': {
+      id: '/chat/custom-gpt'
+      path: '/chat/custom-gpt'
+      fullPath: '/chat/custom-gpt'
+      preLoaderRoute: typeof ChatCustomGptRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/chat-basic/': {
-      id: '/chat-basic/'
-      path: '/chat-basic'
-      fullPath: '/chat-basic'
-      preLoaderRoute: typeof ChatBasicIndexRouteImport
+    '/chat/basic': {
+      id: '/chat/basic'
+      path: '/chat/basic'
+      fullPath: '/chat/basic'
+      preLoaderRoute: typeof ChatBasicRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/buzzer/': {
-      id: '/buzzer/'
-      path: '/buzzer'
-      fullPath: '/buzzer'
-      preLoaderRoute: typeof BuzzerIndexRouteImport
+    '/buzzer/connect': {
+      id: '/buzzer/connect'
+      path: '/buzzer/connect'
+      fullPath: '/buzzer/connect'
+      preLoaderRoute: typeof BuzzerConnectRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/buzzer-connect/': {
-      id: '/buzzer-connect/'
-      path: '/buzzer-connect'
-      fullPath: '/buzzer-connect'
-      preLoaderRoute: typeof BuzzerConnectIndexRouteImport
+    '/buzzer/buzzer': {
+      id: '/buzzer/buzzer'
+      path: '/buzzer/buzzer'
+      fullPath: '/buzzer/buzzer'
+      preLoaderRoute: typeof BuzzerBuzzerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/summarize': {
@@ -363,14 +363,14 @@ const rootRouteChildren: RootRouteChildren = {
   ApiImageRoute: ApiImageRoute,
   ApiQuizshowRoute: ApiQuizshowRoute,
   ApiSummarizeRoute: ApiSummarizeRoute,
-  BuzzerConnectIndexRoute: BuzzerConnectIndexRoute,
-  BuzzerIndexRoute: BuzzerIndexRoute,
-  ChatBasicIndexRoute: ChatBasicIndexRoute,
-  ChatCustomGptIndexRoute: ChatCustomGptIndexRoute,
-  ChatPersistenceIndexRoute: ChatPersistenceIndexRoute,
-  ChatTtsIndexRoute: ChatTtsIndexRoute,
-  ChatUiSampleIndexRoute: ChatUiSampleIndexRoute,
-  ImageIndexRoute: ImageIndexRoute,
+  BuzzerBuzzerRoute: BuzzerBuzzerRoute,
+  BuzzerConnectRoute: BuzzerConnectRoute,
+  ChatBasicRoute: ChatBasicRoute,
+  ChatCustomGptRoute: ChatCustomGptRoute,
+  ChatImageRoute: ChatImageRoute,
+  ChatPersistenceRoute: ChatPersistenceRoute,
+  ChatTtsRoute: ChatTtsRoute,
+  ChatUiSampleRoute: ChatUiSampleRoute,
   QuizshowIndexRoute: QuizshowIndexRoute,
 }
 export const routeTree = rootRouteImport

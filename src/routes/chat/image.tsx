@@ -1,12 +1,12 @@
 'use client';
 import { useCallback, useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import styles from './styles.module.css';
+import styles from './image.module.css';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import ChatInput from '@/components/ChatInput/ChatInput';
 import { ImageDisplay } from '@/components/ImageDisplay/ImageDisplay';
 
-export const Route = createFileRoute('/image/')({
+export const Route = createFileRoute('/chat/image')({
   component: Page,
 });
 

@@ -4,10 +4,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { createFileRoute } from '@tanstack/react-router';
 import ChatInput from "../../components/ChatInput/ChatInput";
-import styles from "./buzzer-connect.module.css";
+import styles from "./connect.module.css";
 import type { Socket } from "socket.io-client";
+import PushButton from "@/components/PushButton/PushButton";
 
-export const Route = createFileRoute('/buzzer-connect/')({
+export const Route = createFileRoute('/buzzer/connect')({
   component: BuzzerConnectPage,
 });
 
@@ -63,7 +64,7 @@ export default function BuzzerConnectPage() {
     setName(value);
   };
 
-  const handleJoin = async () => {
+  const handleJoin = () => {
     setWsError(null);
     setWsStatus("getrennt");
     if (socketRef.current) {
@@ -221,16 +222,26 @@ export default function BuzzerConnectPage() {
           />
         </div>
       ) : (
-        <button
-          className={styles.buzzerButton}
-          onClick={handleBuzz}
-          disabled={roomState?.state !== "free"}
-          style={{
-            opacity: roomState?.state === "free" ? 1 : 0.5,
-          }}
-        >
-          BUZZER
-        </button>
+        <>
+          <button
+            className={styles.buzzerButton}
+            onClick={handleBuzz}
+            disabled={roomState?.state !== "free"}
+            style={{
+              opacity: roomState?.state === "free" ? 1 : 0.5,
+            }}
+          >
+            BUZZER
+          </button>
+          <PushButton
+            className={styles.buzzerButton}
+            onClick={handleBuzz}
+            disabled={roomState?.state !== "free"}
+            style={{ opacity: roomState?.state === "free" ? 1 : 0.5 }}
+          >
+            BUZZER
+          </PushButton>
+        </>
       )}
     </main>
   );

@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useRef } from "react";
 
-type TextareaAutosizeProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
-
-export default function TextareaAutosize(props: TextareaAutosizeProps & { ref?: React.Ref<HTMLTextAreaElement> }) {
+export default function TextareaAutosize(props: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { ref?: React.Ref<HTMLTextAreaElement> }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { ref, ...restProps } = props;
 

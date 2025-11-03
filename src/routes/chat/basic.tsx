@@ -3,11 +3,11 @@ import { useChat } from '@ai-sdk/react';
 import { useCallback } from 'react';
 
 import { createFileRoute } from '@tanstack/react-router'
-import styles from './styles.module.css';
+import styles from './basic.module.css';
 import ChatMessages from '@/components/ChatMessages/ChatMessages';
 import ChatInput from '@/components/ChatInput/ChatInput';
 
-export const Route = createFileRoute('/chat-basic/')({
+export const Route = createFileRoute('/chat/basic')({
   component: Page,
 })
 
