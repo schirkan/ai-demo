@@ -14,6 +14,7 @@
     "clean:dist": "rm -rf dist"
   },
   "dependencies": {
+    "cross-env": "^10.1.0",
     "@ai-sdk/azure": "^2.0.0",
     "@ai-sdk/react": "^2.0.0",
     "@tanstack/react-devtools": "^0.8.0",
@@ -47,7 +48,6 @@
     "@types/react-dom": "^19",
     "@types/react-speech-recognition": "^3.9.6",
     "@vitejs/plugin-react": "^5.1.0",
-    "cross-env": "^10.1.0",
     "eslint": "^9",
     "typescript": "^5",
     "vite": "^7.1.12",
