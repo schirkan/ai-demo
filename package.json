@@ -8,7 +8,7 @@
     "//dev": "vite dev",
     "dev": "cross-env NODE_ENV=development tsx express-server.ts",
     "build": "vite build && tsc --noEmit",
-    "start": "cross-env NODE_ENV=production tsx express-server.ts",
+    "start": "tsx express-server.ts",
     "lint": "eslint .",
     "clean:npm": "rm -rf node_modules",
     "clean:dist": "rm -rf dist"
