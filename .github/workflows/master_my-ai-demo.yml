@@ -51,6 +51,9 @@ jobs:
         with:
           name: node-app
 
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -63,6 +66,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'my-ai-demo'
-          package: release.zip
+          package: .
           clean: true
           
