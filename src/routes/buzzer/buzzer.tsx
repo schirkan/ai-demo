@@ -55,7 +55,7 @@ export default function BuzzerPage() {
     let socket: Socket | null = null;
     let isMounted = true;
 
-    const connectSocket = async () => {
+    const connectSocket = () => {
       try {
         socket = io({ path: "/api/buzzer-socket" });
         socketRef.current = socket;

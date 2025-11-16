@@ -10,12 +10,12 @@ class SiriWaveProcessor extends AudioWorkletProcessor {
     const input = inputs[0];
     if (input && input[0]) {
       let amplitude = 0;
-      let frequency = 0;
+      const frequency = 0;
       const channelData = input[0];
 
       // Amplitudenberechnung (Peak)
-      for (let i = 0; i < channelData.length; i++) {
-        amplitude = Math.max(amplitude, Math.abs(channelData[i]));
+      for (const sample of channelData) {
+        amplitude = Math.max(amplitude, Math.abs(sample));
       }
 
       // Frequenzschätzung (sehr grob, für Demo-Zwecke)
