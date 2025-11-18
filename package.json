@@ -5,10 +5,9 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "//dev": "vite dev",
-    "dev": "cross-env NODE_ENV=development tsx express-server.ts",
+    "dev": "cross-env NODE_ENV=development tsx server.ts",
     "build": "vite build && tsc --noEmit",
-    "start": "tsx express-server.ts",
+    "start": "cross-env NODE_ENV=production tsx server.ts",
     "lint": "eslint .",
     "clean:npm": "rm -rf node_modules",
     "clean:dist": "rm -rf dist"
