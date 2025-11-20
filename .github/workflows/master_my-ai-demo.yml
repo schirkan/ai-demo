@@ -55,7 +55,7 @@ jobs:
         run: ls -la 
  
       - name: Unzip the Release Artifact 
-        run: unzip release.zip -d ./release-unzipped 
+        run: unzip -q release.zip -d ./release-unzipped 
  
       - name: List files after unzip 
         run: ls -la ./release-unzipped 
