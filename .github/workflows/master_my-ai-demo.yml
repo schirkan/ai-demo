@@ -28,11 +28,14 @@ jobs:
           npm install
           npm run build
 
+      - name: Zip artifact for deployment
+        run: zip release.zip . -qr
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,6 +51,15 @@ jobs:
         with:
           name: node-app
 
+      - name: List files after artifact download 
+        run: ls -la 
+ 
+      - name: Unzip the Release Artifact 
+        run: unzip release.zip -d ./release-unzipped 
+ 
+      - name: List files after unzip 
+        run: ls -la ./release-unzipped 
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -60,5 +72,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'my-ai-demo'
-          package: .
+          package: release-unzipped
           clean: true
