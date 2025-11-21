@@ -29,7 +29,7 @@ jobs:
           npm run build
 
       - name: Zip artifact for deployment
-        run: zip release.zip . -qr
+        run: zip release.zip . -qr -x 'node_modules/*
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -74,3 +74,4 @@ jobs:
           app-name: 'my-ai-demo'
           package: release-unzipped
           clean: true
+
