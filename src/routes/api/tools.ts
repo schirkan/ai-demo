@@ -1,6 +1,6 @@
 import { experimental_generateImage, tool } from 'ai';
 import { createAzure } from '@ai-sdk/azure';
-import { z } from 'zod';
+import { z } from 'zod/v3';
 import { imgbbUploader } from 'imgbb-uploader';
 import type { JSONValue } from 'ai';
 

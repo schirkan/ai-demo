@@ -32,7 +32,7 @@ export const Route = createFileRoute(('/api/custom-gpt'))({
           const result = streamText({
             model: azure('gpt-4.1'),
             system: systemPrompt,
-            messages: convertToModelMessages(messages),
+            messages: await convertToModelMessages(messages),
           });
 
           return result.toUIMessageStreamResponse();

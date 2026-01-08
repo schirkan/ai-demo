@@ -14,14 +14,14 @@ export const Route = createFileRoute('/api/chat-with-tools')({
         try {
           const { messages }: { messages: Array<UIMessage> } = await request.json();
 
-          const modelMessages = convertToModelMessages(messages);
+          const modelMessages = await convertToModelMessages(messages);
 
           // remove tool output from model messages to save tokens (optional)
           // modelMessages.filter(x => x.role === 'tool').forEach(x => {
           //   x.content[0].output = { type: 'text', value: '' };
           // });
 
-          const result = await streamText({
+          const result = streamText({
             model: azure('gpt-4.1'),
             system: `Du bist ein hilfsbereiter Chatbot.`,
             messages: modelMessages,

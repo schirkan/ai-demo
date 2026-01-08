@@ -24,7 +24,7 @@ if (DEVELOPMENT) {
     try {
       const { default: serverEntry } = await viteDevServer.ssrLoadModule('./src/server.ts');
       const handler = toNodeHandler(serverEntry.fetch);
-      await handler(req, res);
+      await handler(req as any, res as any);
     } catch (error) {
       if (typeof error === 'object' && error instanceof Error) {
         viteDevServer.ssrFixStacktrace(error);
@@ -38,7 +38,7 @@ if (DEVELOPMENT) {
   app.use(express.static('dist/client'));
   app.use(async (req, res, next) => {
     try {
-      await nodeHandler(req, res);
+      await nodeHandler(req as any, res as any);
     } catch (error) {
       next(error);
     }

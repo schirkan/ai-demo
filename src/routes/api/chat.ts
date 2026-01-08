@@ -15,7 +15,7 @@ export const Route = createFileRoute('/api/chat')({
           const result = streamText({
             model: azure('gpt-4.1'),
             system: `Du bist ein hilfsbereiter Chatbot.`,
-            messages: convertToModelMessages(messages),
+            messages: await convertToModelMessages(messages),
           });
           // toUIMessageStreamResponse() returns a Response-like streaming response
           return result.toUIMessageStreamResponse();
