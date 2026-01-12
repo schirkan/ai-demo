@@ -2,10 +2,11 @@ import { createFileRoute } from '@tanstack/react-router';
 import { azure } from '@ai-sdk/azure';
 import {
   APICallError,
+  Output,
   createIdGenerator,
   createUIMessageStream,
   createUIMessageStreamResponse,
-  streamObject,
+  streamText
 } from 'ai';
 import { quizShowSchema } from '../../data/quizshow/schema';
 import prompt from '../../data/quizshow/prompt.md?raw';
@@ -45,30 +46,52 @@ export const Route = createFileRoute('/api/quizshow')({
 
           const stream = createUIMessageStream({
             execute: async ({ writer }) => {
-              const result = streamObject({
+              const result = streamText({
                 model: azure('gpt-4.1'),
+                // https://github.com/vercel/ai/issues/8868
+                providerOptions: {
+                  openai: {
+                    structuredOutputs: true,
+                    strictJsonSchema: true,
+                  },
+                },
                 temperature: 0.95,
-                schema: quizShowSchema,
+                output: Output.object({ schema: quizShowSchema }),
                 system: prompt,
                 messages: convertObjectToModelMessages(messages),
                 maxRetries: 0,
               });
+              // const result = streamObject({
+              //   model: azure('gpt-4.1'),
+              //   temperature: 0.95,
+              //   schema: quizShowSchema,
+              //   system: prompt,
+              //   messages: convertObjectToModelMessages(messages),
+              //   maxRetries: 0,
+              // });
 
+              const outputStream = result.partialOutputStream;
               const fullStream = result.fullStream;
+
               let lastObject: DeepPartial<QuizShowType> = {};
 
               writer.write({ type: 'text-start', id });
+
+              // outputStream
+              for await (const chunk of outputStream) {
+                if (lastObject.speak !== chunk.speak) {
+                  writer.write({
+                    type: 'text-delta',
+                    id,
+                    delta: chunk.speak?.replace(lastObject.speak || '', '') || '',
+                  });
+                }
+                lastObject = chunk;
+              }
+
+              // errors from fullStream
               for await (const chunk of fullStream) {
-                if (chunk.type === 'object') {
-                  if (lastObject.speak !== chunk.object.speak) {
-                    writer.write({
-                      type: 'text-delta',
-                      id,
-                      delta: chunk.object.speak?.replace(lastObject.speak || '', '') || '',
-                    });
-                  }
-                  lastObject = chunk.object;
-                } else if (chunk.type === 'error') {
+                if (chunk.type === 'error') {
                   if (APICallError.isInstance(chunk.error)) {
                     const err = new APICallError(chunk.error);
                     writer.write({ type: 'error', errorText: JSON.stringify(err.message) });
@@ -77,10 +100,12 @@ export const Route = createFileRoute('/api/quizshow')({
                   }
                 }
               }
+
               writer.write({ type: 'text-end', id });
 
               // alles auf einmal - am Ende
-              const obj = await result.object;
+              const obj = lastObject;
+              // const obj = await result.output;
               writer.write({ type: 'data-quiz', data: obj });
 
               if (obj.imagePrompt) {
